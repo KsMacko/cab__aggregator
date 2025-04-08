@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: finance_service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/finance_db?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: asdfhcjsjffh
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  liquibase:
+    enabled: true
+server:
+  port: 8084
