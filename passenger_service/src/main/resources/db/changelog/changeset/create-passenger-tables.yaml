@@ -55,6 +55,16 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
                   name: activated_promo_code_id
                   type: bigint
         - createTable:
@@ -73,13 +83,18 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: created_at
-                  type: DATE
+                  name: author_id
+                  type: BIGINT
                   constraints:
                     nullable: false
               - column:
-                  name: author_id
-                  type: BIGINT
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
                   constraints:
                     nullable: false
               - column:

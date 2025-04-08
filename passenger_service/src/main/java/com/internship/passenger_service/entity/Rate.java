@@ -12,8 +12,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "rate")
@@ -28,9 +31,13 @@ public class Rate {
     @Column(nullable = false)
     private Byte value;
     @Column(nullable = false)
-    private LocalDate createdAt;
-    @Column(nullable = false)
     private Long authorId;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
     @ManyToOne
     @JoinColumn(name = "passenger_profile_id")
     private PassengerProfile passenger;
