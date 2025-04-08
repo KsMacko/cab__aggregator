@@ -1,0 +1,108 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-driver-account
+      author: KsMacko
+      changes:
+        - createTable:
+            tableName: user_account
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: hash_password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: profile
+            columns:
+              - column:
+                  name: profile_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: profile_id
+                    referencedTableName: user_account
+                    referencedColumnNames: id
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: car_number
+                  type: char(7)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: car_description
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fare_type
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: driver_status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: char(12)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - createTable:
+            tableName: rate
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: value
+                  type: TINYINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: driver_profile_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: driver_profile_id
+                    referencedTableName: profile
+                    referencedColumnNames: profile_id
