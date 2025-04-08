@@ -5,6 +5,7 @@ import com.internship.ride_service.enums.FareType;
 import com.internship.ride_service.enums.RideStatus;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @Document(collection = "rides")
 @Getter
 @Setter
+@FieldNameConstants
 public class Ride {
     @Id
     private String id;
