@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: ride_service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/ride_db
+  liquibase:
+    enabled: true
+    change-log: db/changelog/changelog.xml
+
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+server:
+  port: 8083
