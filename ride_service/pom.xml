@@ -16,6 +16,7 @@
         <java.version>17</java.version>
         <swagger-parser.version>2.1.25</swagger-parser.version>
         <liquibase.version>4.31.1</liquibase.version>
+        <mongo-java-driver.version>3.12.14</mongo-java-driver.version>
     </properties>
 
     <dependencies>
@@ -32,6 +33,11 @@
             <groupId>org.liquibase.ext</groupId>
             <artifactId>liquibase-mongodb</artifactId>
             <version>${liquibase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>${mongo-java-driver.version}</version>
         </dependency>
     </dependencies>
 </project>

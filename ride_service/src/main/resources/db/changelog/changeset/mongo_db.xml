@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd
+                            http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="fares_collection" author="KsMacko">
+        <ext:createCollection collectionName="fares">
+            <ext:indexes>
+                <ext:index>
+                    <ext:key>type</ext:key>
+                    <ext:unique>true</ext:unique>
+                </ext:index>
+            </ext:indexes>
+        </ext:createCollection>
+    </changeSet>
+
+
+    <changeSet id="promo_codes_collection" author="KsMacko">
+        <ext:createCollection collectionName="promo_codes">
+            <ext:indexes>
+                <ext:index>
+                    <ext:key>code</ext:key>
+                    <ext:unique>true</ext:unique>
+                </ext:index>
+            </ext:indexes>
+        </ext:createCollection>
+    </changeSet>
+
+
+    <changeSet id="rides_collection" author="KsMacko">
+        <ext:createCollection collectionName="rides">
+            <ext:indexes>
+                <ext:index>
+                    <ext:key>passengerId</ext:key>
+                </ext:index>
+                <ext:index>
+                    <ext:key>driverId</ext:key>
+                </ext:index>
+                <ext:index>
+                    <ext:key>status</ext:key>
+                </ext:index>
+                <ext:index>
+                    <ext:key>date</ext:key>
+                </ext:index>
+            </ext:indexes>
+        </ext:createCollection>
+    </changeSet>
+</databaseChangeLog>
