@@ -7,8 +7,6 @@ public interface Projection {
     Long getProfileId();
     String getFirstName();
     String getLastName();
-    String getCarNumber();
-    String getCarDescription();
     FareType getFareType();
     DriverStatus getDriverStatus();
     String getPhone();
