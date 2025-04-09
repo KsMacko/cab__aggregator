@@ -9,7 +9,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface PromoCodeMapper {
+public interface PromoCodeMapper extends AbstractMapper<PromoCodeDto, PromoCode> {
     PromoCodeMapper converter = Mappers.getMapper(PromoCodeMapper.class);
 
     PromoCodeDto handleEntity(PromoCode promoCode);
@@ -17,5 +17,5 @@ public interface PromoCodeMapper {
     PromoCode handleDto(PromoCodeDto promoCodeDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updatePromoCodeFromDto(PromoCodeDto dto, @MappingTarget PromoCode entity);
+    void updateEntity(PromoCodeDto dto, @MappingTarget PromoCode entity);
 }

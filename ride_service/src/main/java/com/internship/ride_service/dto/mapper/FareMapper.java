@@ -9,7 +9,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface FareMapper {
+public interface FareMapper extends AbstractMapper<FareDto, Fare> {
     FareMapper converter = Mappers.getMapper(FareMapper.class);
 
     Fare handleDto(FareDto fareDto);
@@ -17,5 +17,5 @@ public interface FareMapper {
     FareDto handleEntity(Fare fare);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateFareFromDto(FareDto dto, @MappingTarget Fare entity);
+    void updateEntity(FareDto dto, @MappingTarget Fare entity);
 }

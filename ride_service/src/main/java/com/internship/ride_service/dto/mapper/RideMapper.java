@@ -10,7 +10,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface RideMapper {
+public interface RideMapper extends AbstractMapper<RideDto, Ride> {
 
     RideMapper converter = Mappers.getMapper(RideMapper.class);
 
@@ -25,5 +25,5 @@ public interface RideMapper {
     RideDto handleEntity(Ride ride);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateRideFromDto(RideDto dto, @MappingTarget Ride entity);
+    void updateEntity(RideDto dto, @MappingTarget Ride entity);
 }
