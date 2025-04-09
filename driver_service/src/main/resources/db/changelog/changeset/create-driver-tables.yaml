@@ -73,6 +73,16 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     unique: true
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
         - createTable:
             tableName: rate
             columns:
@@ -96,6 +106,16 @@ databaseChangeLog:
               - column:
                   name: author_id
                   type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
                   constraints:
                     nullable: false
               - column:
