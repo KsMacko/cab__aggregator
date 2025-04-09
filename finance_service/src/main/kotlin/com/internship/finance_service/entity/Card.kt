@@ -27,13 +27,14 @@ class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private val id: Long? = null
-    private var lastFourDigits: String? = null
-    private var expirationDate: LocalDate? = null
-    private var owner: OwnerType? = null
+    private lateinit var lastFourDigits: String
+    private lateinit var expirationDate: LocalDate
+    @Enumerated(EnumType.STRING)
+    private lateinit var owner: OwnerType
     private var ownerId: Long? = null
 
     @Enumerated(EnumType.STRING)
-    private var cardType: CardType? = null
+    private lateinit var cardType: CardType
 
     @OneToMany(mappedBy = "card")
     private var financialOperation:List<FinancialOperation>? = null
