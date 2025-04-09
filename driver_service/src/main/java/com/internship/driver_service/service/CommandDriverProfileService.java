@@ -1,11 +1,16 @@
 package com.internship.driver_service.service;
 
 import com.internship.driver_service.dto.ProfileDto;
+import com.internship.driver_service.dto.RateDto;
+import com.internship.driver_service.dto.WrappedResponse;
 import com.internship.driver_service.dto.mapper.ProfileMapper;
+import com.internship.driver_service.dto.mapper.RateMapper;
 import com.internship.driver_service.entity.DriverAccount;
 import com.internship.driver_service.entity.DriverProfile;
+import com.internship.driver_service.enums.OperationResult;
 import com.internship.driver_service.repo.DriverAccountRepo;
 import com.internship.driver_service.repo.DriverProfileRepo;
+import com.internship.driver_service.repo.RateRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class CommandDriverProfileService {
     private final DriverProfileRepo driverProfileRepo;
     private final DriverAccountRepo driverAccountRepo;
+    private final RateRepo rateRepo;
 
     @Transactional
     public ProfileDto createProfile(ProfileDto profileDto) {
@@ -46,6 +52,20 @@ public class CommandDriverProfileService {
             throw new RuntimeException("driver.notFound");
         driverProfileRepo.deleteById(profileId);
         driverAccountRepo.deleteById(profileId);
+    }
+    @Transactional
+    public WrappedResponse<String> setNewRate(RateDto rateDto){
+        if(!driverProfileRepo.existsById(rateDto.driverId())){
+            throw new RuntimeException("driver.notFound");
+        }
+        rateRepo.save(RateMapper.converter.handleDto(rateDto));
+        return new WrappedResponse<>(OperationResult.SUCCESS.getValue());
+    }
+    @Transactional
+    public WrappedResponse<String> deleteRate(Long rateId){
+        if(!rateRepo.existsById(rateId))throw new RuntimeException("rate.notFound");
+        rateRepo.deleteById(rateId);
+        return new WrappedResponse<>(OperationResult.SUCCESS.getValue());
     }
 
 
