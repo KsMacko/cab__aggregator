@@ -10,7 +10,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface ProfileMapper {
+public interface ProfileMapper extends AbstractMapper<ProfileDto, DriverProfile> {
     ProfileMapper converter = Mappers.getMapper(ProfileMapper.class);
 
     DriverProfile handleDto(ProfileDto profileDto);
@@ -18,5 +18,5 @@ public interface ProfileMapper {
     ProfileDto handleEntity(DriverProfile driverProfile, Byte rating);
     ProfileDto handleEntity(DriverProfile driverProfile);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateProfileFromDto(ProfileDto dto, @MappingTarget DriverProfile entity);
+    void updateEntity(ProfileDto dto, @MappingTarget DriverProfile entity);
 }

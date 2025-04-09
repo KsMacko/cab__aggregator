@@ -40,7 +40,7 @@ public class CommandDriverProfileService {
         DriverProfile existingProfile = driverProfileRepo
                 .findById(profileDto.profileId())
                 .orElseThrow(() -> new RuntimeException("driver.notFound"));
-        ProfileMapper.converter.updateProfileFromDto(profileDto, existingProfile);
+        ProfileMapper.converter.updateEntity(profileDto, existingProfile);
 
         return ProfileMapper.converter.handleEntity( driverProfileRepo.save(existingProfile));
     }
