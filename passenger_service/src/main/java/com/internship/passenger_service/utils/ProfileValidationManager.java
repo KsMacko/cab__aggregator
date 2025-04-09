@@ -1,5 +1,8 @@
 package com.internship.passenger_service.utils;
 
+import static java.util.Objects.isNull;
+
+import com.internship.passenger_service.entity.PassengerProfile;
 import com.internship.passenger_service.repo.PassengerProfileRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,7 +17,11 @@ public class ProfileValidationManager {
         }
     }
     public void checkIfIdNotNull(Long profileId) {
-        if(profileId==null)
+        if(isNull(profileId))
             throw new RuntimeException("passenger.id.notNull");
+    }
+    public PassengerProfile getProfileByIdIfExists(Long profileId) {
+        return passengerProfileRepo.findById(profileId)
+                .orElseThrow(() -> new RuntimeException("passenger.notFound"));
     }
 }

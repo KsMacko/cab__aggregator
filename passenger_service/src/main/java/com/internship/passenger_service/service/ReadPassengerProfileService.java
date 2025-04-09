@@ -2,7 +2,6 @@ package com.internship.passenger_service.service;
 
 import com.internship.passenger_service.dto.ProfileDto;
 import com.internship.passenger_service.dto.Projection;
-import com.internship.passenger_service.dto.WrappedResult;
 import com.internship.passenger_service.dto.mapper.ProfileMapper;
 import com.internship.passenger_service.dto.transfer_objects.DataPackageDto;
 import com.internship.passenger_service.dto.transfer_objects.ProfileFilterRequest;
@@ -33,8 +32,7 @@ public class ReadPassengerProfileService {
     @Transactional(readOnly= true)
     public ProfileDto readPassengerProfile(Long id) {
         validationManager.checkIfIdNotNull(id);
-        PassengerProfile passengerProfile =  passengerProfileRepo.findById(id)
-                .orElseThrow(()-> new RuntimeException("passenger.notFound"));
+        PassengerProfile passengerProfile =  validationManager.getProfileByIdIfExists(id);
         Byte rate = rateRepo.findPassengerRatingByProfileId(id);
         return ProfileMapper.converter.handleEntity(passengerProfile, rate);
     }
@@ -45,12 +43,6 @@ public class ReadPassengerProfileService {
         Specification<PassengerProfile> spec = passengerProfileSpecification.filterBy(filter);
         Page<Projection> resultPage = passengerProfileRepo.findAllPassengers(spec, pageable);
         return convertToDataPackageDto(resultPage);
-    }
-    @Transactional(readOnly= true)
-    public WrappedResult<Byte> readPassengerRating(Long passengerId) {
-        validationManager.checkIfIdNotNull(passengerId);
-        validationManager.checkIfProfileExists(passengerId);
-        return new WrappedResult<>(rateRepo.findPassengerRatingByProfileId(passengerId));
     }
 
     public Pageable createPageableObject(ProfileFilterRequest filter) {
@@ -77,6 +69,4 @@ public class ReadPassengerProfileService {
                 .pageSize(resultPage.getSize())
                 .build();
     }
-
-
 }

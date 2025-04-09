@@ -2,7 +2,6 @@ package com.internship.passenger_service.service;
 
 import com.internship.passenger_service.dto.ProfileDto;
 import com.internship.passenger_service.dto.RateDto;
-import com.internship.passenger_service.dto.WrappedResult;
 import com.internship.passenger_service.dto.mapper.ProfileMapper;
 import com.internship.passenger_service.dto.mapper.RateMapper;
 import com.internship.passenger_service.entity.PassengerAccount;
@@ -41,8 +40,7 @@ public class CommandPassengerProfileService {
      @Transactional
      public ProfileDto updatePassengerProfile(ProfileDto profileDto) {
          profileValidationManager.checkIfProfileExists(profileDto.profileId());
-         PassengerProfile existingProfile = passengerProfileRepo.findById(profileDto.profileId())
-                 .orElseThrow(() -> new RuntimeException("passenger.notFound"));
+         PassengerProfile existingProfile = profileValidationManager.getProfileByIdIfExists(profileDto.profileId());
          ProfileMapper.converter.updateEntity(profileDto, existingProfile);
 
          return ProfileMapper.converter.handleEntity( passengerProfileRepo.save(existingProfile));
@@ -55,15 +53,13 @@ public class CommandPassengerProfileService {
         passengerAccountRepo.deleteById(profileId);
      }
      @Transactional
-     public WrappedResult<String> setNewRate(RateDto rateDto){
+     public RateDto setNewRate(RateDto rateDto){
          profileValidationManager.checkIfProfileExists(rateDto.passengerId());
-         rateRepo.save(RateMapper.converter.handleDto(rateDto));
-         return new WrappedResult<>(OperationResult.SUCCESS.getValue());
+         return RateMapper.converter.handleEntity(rateRepo.save(RateMapper.converter.handleDto(rateDto)));
      }
      @Transactional
-     public WrappedResult<String> deleteRate(Long rateId){
+     public void deleteRate(Long rateId){
         rateValidationManager.checkIfRateExists(rateId);
         rateRepo.deleteById(rateId);
-        return new WrappedResult<>(OperationResult.SUCCESS.getValue());
      }
 }
