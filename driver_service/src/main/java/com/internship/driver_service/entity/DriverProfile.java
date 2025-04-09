@@ -20,7 +20,7 @@ import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity
@@ -37,10 +37,6 @@ public class DriverProfile {
     private String firstName;
     @Column(nullable = false)
     private String lastName;
-    @Column(nullable = false, unique = true)
-    private String carNumber;
-    @Column(nullable = false)
-    private String carDescription;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private FareType fareType;
@@ -51,10 +47,10 @@ public class DriverProfile {
     private String phone;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     @OneToOne
     @MapsId
@@ -62,6 +58,6 @@ public class DriverProfile {
     private DriverAccount driverAccount;
     @OneToMany(mappedBy = "driver")
     private List<Rate> rates;
-
-
+    @OneToMany(mappedBy = "driverProfile")
+    private List<Car> car;
 }

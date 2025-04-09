@@ -2,15 +2,15 @@ package com.internship.driver_service.service;
 
 import com.internship.driver_service.dto.ProfileDto;
 import com.internship.driver_service.dto.RateDto;
-import com.internship.driver_service.dto.WrappedResponse;
 import com.internship.driver_service.dto.mapper.ProfileMapper;
 import com.internship.driver_service.dto.mapper.RateMapper;
 import com.internship.driver_service.entity.DriverAccount;
 import com.internship.driver_service.entity.DriverProfile;
-import com.internship.driver_service.enums.OperationResult;
 import com.internship.driver_service.repo.DriverAccountRepo;
 import com.internship.driver_service.repo.DriverProfileRepo;
 import com.internship.driver_service.repo.RateRepo;
+import com.internship.driver_service.utils.ProfileValidationManager;
+import com.internship.driver_service.utils.RateValidationManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 public class CommandDriverProfileService {
     private final DriverProfileRepo driverProfileRepo;
     private final DriverAccountRepo driverAccountRepo;
+    private final ProfileValidationManager profileValidationManager;
+    private final RateValidationManager rateValidationManager;
     private final RateRepo rateRepo;
 
     @Transactional
@@ -34,9 +36,7 @@ public class CommandDriverProfileService {
     }
     @Transactional
     public ProfileDto updateDriverProfile(ProfileDto profileDto) {
-        if (profileDto.profileId() == null) {
-            throw new RuntimeException("driver.id.notNull");
-        }
+        profileValidationManager.checkIfProfileIdNotNull(profileDto.profileId());
         DriverProfile existingProfile = driverProfileRepo
                 .findById(profileDto.profileId())
                 .orElseThrow(() -> new RuntimeException("driver.notFound"));
@@ -46,27 +46,19 @@ public class CommandDriverProfileService {
     }
     @Transactional
     public void deleteDriverProfile(Long profileId) {
-        if(profileId == null)
-            throw new RuntimeException("driver.id.notNull");
-        if(!driverProfileRepo.existsById(profileId))
-            throw new RuntimeException("driver.notFound");
+        profileValidationManager.checkIfProfileIdNotNull(profileId);
+        profileValidationManager.checkIfProfileExists(profileId);
         driverProfileRepo.deleteById(profileId);
         driverAccountRepo.deleteById(profileId);
     }
     @Transactional
-    public WrappedResponse<String> setNewRate(RateDto rateDto){
-        if(!driverProfileRepo.existsById(rateDto.driverId())){
-            throw new RuntimeException("driver.notFound");
-        }
-        rateRepo.save(RateMapper.converter.handleDto(rateDto));
-        return new WrappedResponse<>(OperationResult.SUCCESS.getValue());
+    public RateDto setNewRate(RateDto rateDto){
+        profileValidationManager.checkIfProfileExists(rateDto.driverId());
+        return RateMapper.converter.handleEntity(rateRepo.save(RateMapper.converter.handleDto(rateDto)));
     }
     @Transactional
-    public WrappedResponse<String> deleteRate(Long rateId){
-        if(!rateRepo.existsById(rateId))throw new RuntimeException("rate.notFound");
+    public void deleteRate(Long rateId){
+        rateValidationManager.checkRateExistsById(rateId);
         rateRepo.deleteById(rateId);
-        return new WrappedResponse<>(OperationResult.SUCCESS.getValue());
     }
-
-
 }

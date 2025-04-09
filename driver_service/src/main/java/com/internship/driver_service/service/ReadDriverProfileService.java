@@ -1,18 +1,21 @@
 package com.internship.driver_service.service;
 
+import com.internship.driver_service.dto.CarDto;
 import com.internship.driver_service.dto.Projection;
+import com.internship.driver_service.dto.mapper.CarMapper;
 import com.internship.driver_service.dto.transfer_objects.DataPackageDto;
 import com.internship.driver_service.dto.transfer_objects.DriverFilterRequest;
 import com.internship.driver_service.dto.ProfileDto;
-import com.internship.driver_service.dto.WrappedResponse;
 import com.internship.driver_service.dto.mapper.ProfileMapper;
+import com.internship.driver_service.entity.Car;
 import com.internship.driver_service.entity.DriverProfile;
-import com.internship.driver_service.enums.DriverStatus;
-import com.internship.driver_service.enums.FareType;
+import com.internship.driver_service.repo.CarRepo;
 import com.internship.driver_service.repo.DriverProfileRepo;
 import com.internship.driver_service.repo.RateRepo;
 import com.internship.driver_service.service.specification.DriverSpecificationService;
+import com.internship.driver_service.utils.CarValidationManager;
 import com.internship.driver_service.utils.ProfileValidationManager;
+import com.internship.driver_service.utils.RateValidationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,8 +32,10 @@ import java.util.List;
 public class ReadDriverProfileService {
     private final DriverProfileRepo driverProfileRepo;
     private final RateRepo rateRepo;
+    private final CarRepo carRepo;
     private final DriverSpecificationService specificationService;
-    private final ProfileValidationManager validationManager;
+    private final ProfileValidationManager profileValidationManager;
+    private final CarValidationManager carValidationManager;
 
     @Transactional(readOnly = true)
     public DataPackageDto readAllDrivers(DriverFilterRequest filter) {
@@ -40,7 +45,7 @@ public class ReadDriverProfileService {
     }
     @Transactional(readOnly = true)
     public ProfileDto readDriverProfileById(Long id) {
-        validationManager.checkIfUserExists(id);
+        profileValidationManager.checkIfProfileExists(id);
         DriverProfile driverProfile =  driverProfileRepo.findById(id)
                 .orElseThrow(()->new RuntimeException("driver.notFound"));
         Byte rate = rateRepo.findDriverRatingByProfileId(id);
@@ -48,22 +53,14 @@ public class ReadDriverProfileService {
 
     }
     @Transactional(readOnly = true)
-    public WrappedResponse<FareType> readDriverProfileFareTypeById(Long driverId) {
-        validationManager.checkIfUserExists(driverId);
-        return new WrappedResponse<>(driverProfileRepo.getFareTypeByProfileId(driverId));
+    public CarDto getCurrentCarByProfileId(Long profileId) {
+        profileValidationManager.checkIfProfileIdNotNull(profileId);
+        DriverProfile driverProfile = profileValidationManager.getDriverProfile(profileId);
+        Car car = carRepo.findByDriverProfileAndCurrent(driverProfile, true);
+        carValidationManager.checkCarNotNull(car);
+        return CarMapper.converter.handleEntity(car);
     }
     @Transactional(readOnly = true)
-    public WrappedResponse<DriverStatus> readDriverProfileStatusById(Long driverId) {
-        validationManager.checkIfUserExists(driverId);
-        return new WrappedResponse<>(driverProfileRepo.getDriverStatusByProfileId(driverId));
-    }
-    @Transactional(readOnly = true)
-    public WrappedResponse<Byte> readDriverProfileRatingById(Long driverId) {
-        validationManager.checkIfUserExists(driverId);
-        Byte rate = rateRepo.findDriverRatingByProfileId(driverId);
-        if(rate ==null) throw new RuntimeException("driver.profile.rating.notFound");
-        return new WrappedResponse<>(rate);
-    }
     public DataPackageDto createDataPackageDto(Page<Projection> resultPage) {
         List<ProfileDto> profiles = resultPage.getContent().stream()
                 .map(projection -> ProfileDto.builder()
@@ -72,8 +69,6 @@ public class ReadDriverProfileService {
                         .firstName(projection.getFirstName())
                         .lastName(projection.getLastName())
                         .driverStatus(projection.getDriverStatus())
-                        .carNumber(projection.getCarNumber())
-                        .carDescription(projection.getCarDescription())
                         .fareType(projection.getFareType())
                         .rate(projection.getRate())
                         .build())

@@ -11,8 +11,6 @@ public record ProfileDto(
         Long profileId,
         String firstName,
         String lastName,
-        String carNumber,
-        String carDescription,
         FareType fareType,
         DriverStatus driverStatus,
         String phone,
