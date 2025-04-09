@@ -1,10 +1,10 @@
 package com.internship.driver_service.service;
 
 import com.internship.driver_service.config.ValidationConstants;
-import com.internship.driver_service.dto.DataPackageDto;
-import com.internship.driver_service.dto.DriverFilterRequest;
+import com.internship.driver_service.dto.Projection;
+import com.internship.driver_service.dto.transfer_objects.DataPackageDto;
+import com.internship.driver_service.dto.transfer_objects.DriverFilterRequest;
 import com.internship.driver_service.dto.ProfileDto;
-import com.internship.driver_service.dto.RatingPerProfile;
 import com.internship.driver_service.dto.WrappedResponse;
 import com.internship.driver_service.dto.mapper.ProfileMapper;
 import com.internship.driver_service.entity.DriverProfile;
@@ -23,8 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,29 +35,16 @@ public class ReadDriverProfileService {
     public DataPackageDto readAllDrivers(DriverFilterRequest filter) {
         Pageable pageable = createPageableObject(filter);
         Specification<DriverProfile> spec = specificationService.createFilterSpecification(filter);
-        Page<DriverProfile> driverProfilePage = driverProfileRepo.findAll(spec, pageable);
-        List<Long> profileIds = driverProfilePage.getContent()
-                .stream()
-                .map(DriverProfile::getProfileId)
-                .toList();
-        Map<Long, Byte> ratingsMap = rateRepo.findRatingsByProfileIds(profileIds,
-                        ValidationConstants.LAST_AMOUNT_OF_RATES)
-                .stream()
-                .collect(Collectors.toMap(
-                        RatingPerProfile::profileId,
-                        RatingPerProfile::rating
-                ));
-        List<ProfileDto> driverProfilesDto = driverProfilePage.getContent()
-                .stream()
-                .map(driverProfile -> mapDriverProfileToDto(driverProfile, ratingsMap))
-                .toList();
-        return createDataPackageDto(driverProfilePage, driverProfilesDto);
+        return createDataPackageDto(driverProfileRepo.findAllDrivers(spec, pageable));
     }
     @Transactional(readOnly = true)
     public ProfileDto readDriverProfileById(Long id) {
-        return mapDriverProfileToDto (
-                driverProfileRepo.findById(id).orElseThrow(
-                        ()->new RuntimeException("driver.notFound")));
+        validateTheId(id);
+        DriverProfile driverProfile =  driverProfileRepo.findById(id)
+                .orElseThrow(()->new RuntimeException("driver.notFound"));
+        Byte rate = rateRepo.findDriverRatingByProfileId(id);
+        return ProfileMapper.converter.handleEntity(driverProfile, rate);
+
     }
     @Transactional(readOnly = true)
     public WrappedResponse<FareType> readDriverProfileFareTypeById(Long driverId) {
@@ -74,20 +59,30 @@ public class ReadDriverProfileService {
     @Transactional(readOnly = true)
     public WrappedResponse<Byte> readDriverProfileRatingById(Long driverId) {
         validateTheId(driverId);
-        Byte rate = rateRepo.findDriverRatingByProfileId(
-                driverId,
-                ValidationConstants.LAST_AMOUNT_OF_RATES);
+        Byte rate = rateRepo.findDriverRatingByProfileId(driverId);
         if(rate ==null) throw new RuntimeException("driver.profile.rating.notFound");
         return new WrappedResponse<>(rate);
     }
-    public DataPackageDto createDataPackageDto(Page<DriverProfile> driverProfilePage,
-                                               List<ProfileDto> driverProfilesDto) {
+    public DataPackageDto createDataPackageDto(Page<Projection> resultPage) {
+        List<ProfileDto> profiles = resultPage.getContent().stream()
+                .map(projection -> ProfileDto.builder()
+                        .profileId(projection.getProfileId())
+                        .phone(projection.getPhone())
+                        .firstName(projection.getFirstName())
+                        .lastName(projection.getLastName())
+                        .driverStatus(projection.getDriverStatus())
+                        .carNumber(projection.getCarNumber())
+                        .carDescription(projection.getCarDescription())
+                        .fareType(projection.getFareType())
+                        .rate(projection.getRate())
+                        .build())
+                .toList();
         return DataPackageDto.builder()
-                .profilesDto(driverProfilesDto)
-                .pageNumber(driverProfilePage.getNumber())
-                .pageSize(driverProfilePage.getSize())
-                .totalElements(driverProfilePage.getTotalElements())
-                .totalPages(driverProfilePage.getTotalPages())
+                .profilesDto(profiles)
+                .totalElements(resultPage.getTotalElements())
+                .pageNumber(resultPage.getNumber())
+                .totalPages(resultPage.getTotalPages())
+                .pageSize(resultPage.getSize())
                 .build();
     }
     private Pageable createPageableObject(DriverFilterRequest filterRequest) {
@@ -99,15 +94,6 @@ public class ReadDriverProfileService {
     private void validateTheId(Long id){
         if(driverProfileRepo.findById(id).isEmpty())
             throw new RuntimeException("driver.notFound");
-    }
-    private ProfileDto mapDriverProfileToDto(DriverProfile driverProfile) {
-        Byte rating = rateRepo.findDriverRatingByProfileId(driverProfile.getProfileId(),
-                ValidationConstants.LAST_AMOUNT_OF_RATES);
-        return ProfileMapper.converter.handleEntity(driverProfile, rating);
-    }
-    private ProfileDto mapDriverProfileToDto(DriverProfile driverProfile, Map<Long, Byte> ratingsMap) {
-        Byte rating = ratingsMap.get(driverProfile.getProfileId());
-        return ProfileMapper.converter.handleEntity(driverProfile, rating);
     }
 
 }

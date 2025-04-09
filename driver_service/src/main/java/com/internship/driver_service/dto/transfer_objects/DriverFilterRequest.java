@@ -1,4 +1,4 @@
-package com.internship.driver_service.dto;
+package com.internship.driver_service.dto.transfer_objects;
 
 import com.internship.driver_service.enums.DriverStatus;
 import com.internship.driver_service.enums.FareType;

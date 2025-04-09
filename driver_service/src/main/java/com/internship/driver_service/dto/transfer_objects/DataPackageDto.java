@@ -1,5 +1,6 @@
-package com.internship.driver_service.dto;
+package com.internship.driver_service.dto.transfer_objects;
 
+import com.internship.driver_service.dto.ProfileDto;
 import lombok.Builder;
 
 import java.util.List;
