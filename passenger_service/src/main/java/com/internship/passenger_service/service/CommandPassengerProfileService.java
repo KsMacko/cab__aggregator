@@ -11,6 +11,8 @@ import com.internship.passenger_service.enums.OperationResult;
 import com.internship.passenger_service.repo.PassengerAccountRepo;
 import com.internship.passenger_service.repo.PassengerProfileRepo;
 import com.internship.passenger_service.repo.RateRepo;
+import com.internship.passenger_service.utils.ProfileValidationManager;
+import com.internship.passenger_service.utils.RateValidationManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,11 @@ public class CommandPassengerProfileService {
     private final PassengerProfileRepo passengerProfileRepo;
     private final PassengerAccountRepo passengerAccountRepo;
     private final RateRepo rateRepo;
+    private final ProfileValidationManager profileValidationManager;
+    private final RateValidationManager rateValidationManager;
     @Transactional
     public ProfileDto createNewPassengerProfile(ProfileDto profileDto) {
-        if (profileDto.profileId() == null) {
-            throw new RuntimeException("passenger.id.notNull");
-        }
+        profileValidationManager.checkIfIdNotNull(profileDto.profileId());
         PassengerAccount account = passengerAccountRepo.findById(profileDto.profileId())
                 .orElseThrow(() -> new RuntimeException("passenger.account.notExists"));
 
@@ -38,37 +40,29 @@ public class CommandPassengerProfileService {
     }
      @Transactional
      public ProfileDto updatePassengerProfile(ProfileDto profileDto) {
-         if (profileDto.profileId() == null) {
-             throw new RuntimeException("passenger.id.notNull");
-         }
+         profileValidationManager.checkIfProfileExists(profileDto.profileId());
          PassengerProfile existingProfile = passengerProfileRepo.findById(profileDto.profileId())
                  .orElseThrow(() -> new RuntimeException("passenger.notFound"));
-         ProfileMapper.converter.updateProfileFromDto(profileDto, existingProfile);
+         ProfileMapper.converter.updateEntity(profileDto, existingProfile);
 
          return ProfileMapper.converter.handleEntity( passengerProfileRepo.save(existingProfile));
     }
     @Transactional
      public void deletePassengerProfile(Long profileId) {
-        if (profileId == null) {
-            throw new RuntimeException("passenger.id.notNull");
-        }
-        if(!passengerProfileRepo.existsById(profileId)){
-            throw new RuntimeException("passenger.notFound");
-        }
+        profileValidationManager.checkIfProfileExists(profileId);
+        profileValidationManager.checkIfProfileExists(profileId);
         passengerProfileRepo.deleteById(profileId);
         passengerAccountRepo.deleteById(profileId);
      }
      @Transactional
      public WrappedResult<String> setNewRate(RateDto rateDto){
-         if(!passengerProfileRepo.existsById(rateDto.passengerId())){
-             throw new RuntimeException("passenger.notFound");
-         }
+         profileValidationManager.checkIfProfileExists(rateDto.passengerId());
          rateRepo.save(RateMapper.converter.handleDto(rateDto));
-         return new WrappedResult<String>(OperationResult.SUCCESS.getValue());
+         return new WrappedResult<>(OperationResult.SUCCESS.getValue());
      }
      @Transactional
      public WrappedResult<String> deleteRate(Long rateId){
-        if(!rateRepo.existsById(rateId))throw new RuntimeException("rate.notFound");
+        rateValidationManager.checkIfRateExists(rateId);
         rateRepo.deleteById(rateId);
         return new WrappedResult<>(OperationResult.SUCCESS.getValue());
      }

@@ -12,7 +12,7 @@ import org.mapstruct.factory.Mappers;
 import static com.internship.passenger_service.dto.ProfileDto.Fields.rate;
 
 @Mapper
-public interface ProfileMapper {
+public interface ProfileMapper extends AbstractMapper<ProfileDto, PassengerProfile> {
     ProfileMapper converter = Mappers.getMapper(ProfileMapper.class);
 
     PassengerProfile handleDto(ProfileDto profileDto);
@@ -20,5 +20,5 @@ public interface ProfileMapper {
     @Mapping(target = rate, source = "rate")
     ProfileDto handleEntity(PassengerProfile passengerProfile, Byte rate);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateProfileFromDto(ProfileDto dto, @MappingTarget PassengerProfile entity);
+    void updateEntity(ProfileDto dto, @MappingTarget PassengerProfile entity);
 }

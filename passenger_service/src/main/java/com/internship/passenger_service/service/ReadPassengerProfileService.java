@@ -10,6 +10,7 @@ import com.internship.passenger_service.entity.PassengerProfile;
 import com.internship.passenger_service.repo.PassengerProfileRepo;
 import com.internship.passenger_service.repo.RateRepo;
 import com.internship.passenger_service.service.specification.PassengerProfileSpecification;
+import com.internship.passenger_service.utils.ProfileValidationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,12 +28,11 @@ public class ReadPassengerProfileService {
     private final PassengerProfileRepo passengerProfileRepo;
     private final PassengerProfileSpecification passengerProfileSpecification;
     private final RateRepo rateRepo;
+    private final ProfileValidationManager validationManager;
 
     @Transactional(readOnly= true)
     public ProfileDto readPassengerProfile(Long id) {
-        if(id==null) {
-            throw new RuntimeException("passenger.id.notNull");
-        }
+        validationManager.checkIfIdNotNull(id);
         PassengerProfile passengerProfile =  passengerProfileRepo.findById(id)
                 .orElseThrow(()-> new RuntimeException("passenger.notFound"));
         Byte rate = rateRepo.findPassengerRatingByProfileId(id);
@@ -48,12 +48,8 @@ public class ReadPassengerProfileService {
     }
     @Transactional(readOnly= true)
     public WrappedResult<Byte> readPassengerRating(Long passengerId) {
-        if(passengerId==null) {
-            throw new RuntimeException("passenger.id.notNull");
-        }
-        if(!passengerProfileRepo.existsById(passengerId)){
-            throw new RuntimeException("passenger.notFound");
-        }
+        validationManager.checkIfIdNotNull(passengerId);
+        validationManager.checkIfProfileExists(passengerId);
         return new WrappedResult<>(rateRepo.findPassengerRatingByProfileId(passengerId));
     }
 
