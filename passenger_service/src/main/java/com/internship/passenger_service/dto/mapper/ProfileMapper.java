@@ -15,10 +15,6 @@ import static com.internship.passenger_service.dto.ProfileDto.Fields.rate;
 public interface ProfileMapper extends AbstractMapper<ProfileDto, PassengerProfile> {
     ProfileMapper converter = Mappers.getMapper(ProfileMapper.class);
 
-    PassengerProfile handleDto(ProfileDto profileDto);
-    ProfileDto handleEntity(PassengerProfile passengerProfile);
     @Mapping(target = rate, source = "rate")
     ProfileDto handleEntity(PassengerProfile passengerProfile, Byte rate);
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntity(ProfileDto dto, @MappingTarget PassengerProfile entity);
 }

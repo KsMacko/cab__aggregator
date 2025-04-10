@@ -3,8 +3,8 @@ package com.internship.passenger_service.service;
 import com.internship.passenger_service.dto.ProfileDto;
 import com.internship.passenger_service.dto.Projection;
 import com.internship.passenger_service.dto.mapper.ProfileMapper;
-import com.internship.passenger_service.dto.transfer_objects.DataPackageDto;
-import com.internship.passenger_service.dto.transfer_objects.ProfileFilterRequest;
+import com.internship.passenger_service.dto.transfer.DataPackageDto;
+import com.internship.passenger_service.dto.transfer.ProfileFilterRequest;
 import com.internship.passenger_service.entity.PassengerProfile;
 import com.internship.passenger_service.repo.PassengerProfileRepo;
 import com.internship.passenger_service.repo.RateRepo;
@@ -29,15 +29,15 @@ public class ReadPassengerProfileService {
     private final RateRepo rateRepo;
     private final ProfileValidationManager validationManager;
 
-    @Transactional(readOnly= true)
+    @Transactional(readOnly = true)
     public ProfileDto readPassengerProfile(Long id) {
         validationManager.checkIfIdNotNull(id);
-        PassengerProfile passengerProfile =  validationManager.getProfileByIdIfExists(id);
+        PassengerProfile passengerProfile = validationManager.getProfileByIdIfExists(id);
         Byte rate = rateRepo.findPassengerRatingByProfileId(id);
         return ProfileMapper.converter.handleEntity(passengerProfile, rate);
     }
 
-    @Transactional(readOnly= true)
+    @Transactional(readOnly = true)
     public DataPackageDto readPassengerProfiles(ProfileFilterRequest filter) {
         Pageable pageable = createPageableObject(filter);
         Specification<PassengerProfile> spec = passengerProfileSpecification.filterBy(filter);
@@ -47,11 +47,12 @@ public class ReadPassengerProfileService {
 
     public Pageable createPageableObject(ProfileFilterRequest filter) {
         Sort sort = Sort.by(Sort.Direction.fromString(
-                filter.order().toString()),
+                        filter.order().toString()),
                 filter.sortBy().toString());
         return PageRequest.of(filter.page(), filter.size(), sort);
     }
-    public DataPackageDto convertToDataPackageDto(Page<Projection> resultPage){
+
+    public DataPackageDto convertToDataPackageDto(Page<Projection> resultPage) {
         List<ProfileDto> profiles = resultPage.getContent().stream()
                 .map(projection -> ProfileDto.builder()
                         .profileId(projection.getProfileId())

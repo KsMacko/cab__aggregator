@@ -11,4 +11,5 @@ public record ProfileDto(
         String email,
         String phone,
         Byte rate
-){}
+) {
+}

@@ -1,9 +1,9 @@
-package com.internship.passenger_service.dto.transfer_objects;
+package com.internship.passenger_service.dto.transfer;
 
 import com.internship.passenger_service.enums.FieldsToSort;
 import com.internship.passenger_service.enums.OrderDirection;
 
-public record ProfileFilterRequest (
+public record ProfileFilterRequest(
 
         String email,
         String phone,
@@ -12,4 +12,5 @@ public record ProfileFilterRequest (
         int size,
         FieldsToSort sortBy,
         OrderDirection order
-){ }
+) {
+}

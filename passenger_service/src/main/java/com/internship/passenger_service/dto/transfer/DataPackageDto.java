@@ -1,4 +1,4 @@
-package com.internship.passenger_service.dto.transfer_objects;
+package com.internship.passenger_service.dto.transfer;
 
 
 import com.internship.passenger_service.dto.ProfileDto;
@@ -13,4 +13,5 @@ public record DataPackageDto(
         int pageNumber,
         int pageSize,
         int totalPages
-) {}
+) {
+}
