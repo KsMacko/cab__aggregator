@@ -1,12 +1,12 @@
 package com.internship.driver_service.service;
 
 import com.internship.driver_service.dto.CarDto;
+import com.internship.driver_service.dto.ProfileDto;
 import com.internship.driver_service.dto.Projection;
 import com.internship.driver_service.dto.mapper.CarMapper;
-import com.internship.driver_service.dto.transfer_objects.DataPackageDto;
-import com.internship.driver_service.dto.transfer_objects.DriverFilterRequest;
-import com.internship.driver_service.dto.ProfileDto;
 import com.internship.driver_service.dto.mapper.ProfileMapper;
+import com.internship.driver_service.dto.transfer.DataPackageDto;
+import com.internship.driver_service.dto.transfer.DriverFilterRequest;
 import com.internship.driver_service.entity.Car;
 import com.internship.driver_service.entity.DriverProfile;
 import com.internship.driver_service.repo.CarRepo;
@@ -15,7 +15,6 @@ import com.internship.driver_service.repo.RateRepo;
 import com.internship.driver_service.service.specification.DriverSpecificationService;
 import com.internship.driver_service.utils.CarValidationManager;
 import com.internship.driver_service.utils.ProfileValidationManager;
-import com.internship.driver_service.utils.RateValidationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,15 +42,17 @@ public class ReadDriverProfileService {
         Specification<DriverProfile> spec = specificationService.createFilterSpecification(filter);
         return createDataPackageDto(driverProfileRepo.findAllDrivers(spec, pageable));
     }
+
     @Transactional(readOnly = true)
     public ProfileDto readDriverProfileById(Long id) {
         profileValidationManager.checkIfProfileExists(id);
-        DriverProfile driverProfile =  driverProfileRepo.findById(id)
-                .orElseThrow(()->new RuntimeException("driver.notFound"));
+        DriverProfile driverProfile = driverProfileRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("driver.notFound"));
         Byte rate = rateRepo.findDriverRatingByProfileId(id);
         return ProfileMapper.converter.handleEntity(driverProfile, rate);
 
     }
+
     @Transactional(readOnly = true)
     public CarDto getCurrentCarByProfileId(Long profileId) {
         profileValidationManager.checkIfProfileIdNotNull(profileId);
@@ -60,6 +61,7 @@ public class ReadDriverProfileService {
         carValidationManager.checkCarNotNull(car);
         return CarMapper.converter.handleEntity(car);
     }
+
     @Transactional(readOnly = true)
     public DataPackageDto createDataPackageDto(Page<Projection> resultPage) {
         List<ProfileDto> profiles = resultPage.getContent().stream()
@@ -81,9 +83,10 @@ public class ReadDriverProfileService {
                 .pageSize(resultPage.getSize())
                 .build();
     }
+
     private Pageable createPageableObject(DriverFilterRequest filterRequest) {
         Sort sort = Sort.by(Sort.Direction.fromString(
-                filterRequest.order().toString()),
+                        filterRequest.order().toString()),
                 filterRequest.sortBy().getFieldName());
         return PageRequest.of(filterRequest.page(), filterRequest.size(), sort);
     }

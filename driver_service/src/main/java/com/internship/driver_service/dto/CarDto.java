@@ -5,4 +5,5 @@ public record CarDto(
         String carNumber,
         String brand,
         String color
-) { }
+) {
+}

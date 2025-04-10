@@ -1,4 +1,4 @@
-package com.internship.driver_service.dto.transfer_objects;
+package com.internship.driver_service.dto.transfer;
 
 import com.internship.driver_service.enums.DriverStatus;
 import com.internship.driver_service.enums.FareType;
@@ -18,4 +18,5 @@ public record DriverFilterRequest(
         int size,
         FieldFilter sortBy,
         OrderDirection order
-) {}
+) {
+}

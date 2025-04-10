@@ -1,9 +1,6 @@
 package com.internship.driver_service.service.specification;
 
-import static com.internship.driver_service.entity.DriverProfile.Fields.*;
-import static com.internship.driver_service.entity.Rate.Fields.*;
-import static com.internship.driver_service.entity.Car.Fields.*;
-import com.internship.driver_service.dto.transfer_objects.DriverFilterRequest;
+import com.internship.driver_service.dto.transfer.DriverFilterRequest;
 import com.internship.driver_service.entity.Car;
 import com.internship.driver_service.entity.DriverProfile;
 import com.internship.driver_service.entity.Rate;
@@ -20,6 +17,17 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.internship.driver_service.entity.Car.Fields.carNumber;
+import static com.internship.driver_service.entity.DriverProfile.Fields.car;
+import static com.internship.driver_service.entity.DriverProfile.Fields.driverStatus;
+import static com.internship.driver_service.entity.DriverProfile.Fields.fareType;
+import static com.internship.driver_service.entity.DriverProfile.Fields.firstName;
+import static com.internship.driver_service.entity.DriverProfile.Fields.lastName;
+import static com.internship.driver_service.entity.DriverProfile.Fields.phone;
+import static com.internship.driver_service.entity.DriverProfile.Fields.profileId;
+import static com.internship.driver_service.entity.Rate.Fields.driver;
+import static com.internship.driver_service.entity.Rate.Fields.value;
 
 @Service
 public class DriverSpecificationService {
@@ -60,6 +68,7 @@ public class DriverSpecificationService {
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
+
     private void addLikePredicate(List<Predicate> predicates,
                                   CriteriaBuilder cb,
                                   Expression<String> expression,
@@ -67,6 +76,7 @@ public class DriverSpecificationService {
         Optional.ofNullable(value)
                 .ifPresent(val -> predicates.add(cb.like(expression, "%" + val + "%")));
     }
+
     private <T> void addEqualPredicate(List<Predicate> predicates,
                                        CriteriaBuilder cb,
                                        Expression<T> expression,
@@ -82,6 +92,7 @@ public class DriverSpecificationService {
         Optional.ofNullable(rateToFilter)
                 .ifPresent(rate -> predicates.add(cb.equal(cb.floor(subquery.getSelection()), rate)));
     }
+
     private Expression<Double> getAverageRateSubquery(CriteriaBuilder cb,
                                                       Subquery<Double> subquery) {
         return cb.floor(subquery.getSelection());

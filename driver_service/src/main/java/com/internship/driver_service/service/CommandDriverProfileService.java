@@ -27,13 +27,14 @@ public class CommandDriverProfileService {
     @Transactional
     public ProfileDto createProfile(ProfileDto profileDto) {
         DriverAccount driverAccount = driverAccountRepo.findById(profileDto.profileId())
-                .orElseThrow(()->new RuntimeException("driver.account.notExists"));
+                .orElseThrow(() -> new RuntimeException("driver.account.notExists"));
         DriverProfile driverProfile = ProfileMapper.converter.handleDto(profileDto);
         driverProfile.setDriverAccount(driverAccount);
         driverProfile.setProfileId(null);
         driverAccount.setDriverProfile(driverProfile);
         return ProfileMapper.converter.handleEntity(driverProfileRepo.save(driverProfile));
     }
+
     @Transactional
     public ProfileDto updateDriverProfile(ProfileDto profileDto) {
         profileValidationManager.checkIfProfileIdNotNull(profileDto.profileId());
@@ -42,8 +43,9 @@ public class CommandDriverProfileService {
                 .orElseThrow(() -> new RuntimeException("driver.notFound"));
         ProfileMapper.converter.updateEntity(profileDto, existingProfile);
 
-        return ProfileMapper.converter.handleEntity( driverProfileRepo.save(existingProfile));
+        return ProfileMapper.converter.handleEntity(driverProfileRepo.save(existingProfile));
     }
+
     @Transactional
     public void deleteDriverProfile(Long profileId) {
         profileValidationManager.checkIfProfileIdNotNull(profileId);
@@ -51,13 +53,15 @@ public class CommandDriverProfileService {
         driverProfileRepo.deleteById(profileId);
         driverAccountRepo.deleteById(profileId);
     }
+
     @Transactional
-    public RateDto setNewRate(RateDto rateDto){
+    public RateDto setNewRate(RateDto rateDto) {
         profileValidationManager.checkIfProfileExists(rateDto.driverId());
         return RateMapper.converter.handleEntity(rateRepo.save(RateMapper.converter.handleDto(rateDto)));
     }
+
     @Transactional
-    public void deleteRate(Long rateId){
+    public void deleteRate(Long rateId) {
         rateValidationManager.checkRateExistsById(rateId);
         rateRepo.deleteById(rateId);
     }

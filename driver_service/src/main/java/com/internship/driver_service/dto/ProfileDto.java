@@ -15,4 +15,5 @@ public record ProfileDto(
         DriverStatus driverStatus,
         String phone,
         Byte rate
-) {}
+) {
+}

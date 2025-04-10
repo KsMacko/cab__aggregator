@@ -8,7 +8,4 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface RateMapper extends AbstractMapper<RateDto, Rate> {
     RateMapper converter = Mappers.getMapper(RateMapper.class);
-
-    Rate handleDto(RateDto dto);
-    RateDto handleEntity(Rate rate);
 }
