@@ -1,6 +1,5 @@
 package com.internship.ride_service.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.internship.ride_service.enums.FareType;
 import com.internship.ride_service.enums.RideStatus;
 import lombok.Getter;
@@ -10,8 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.List;
 
 @Document(collection = "rides")
@@ -26,13 +25,10 @@ public class Ride {
     private String promoCode;
     private String startLocation;
     private List<String> endLocation;
-    private LocalDate date;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-    private LocalTime startWaitingTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-    private LocalTime startTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-    private LocalTime endTime;
+    private OffsetDateTime createdAt;
+    private OffsetTime startWaitingTime;
+    private OffsetTime startTime;
+    private OffsetTime endTime;
     private Float distance;
     private RideStatus status;
     private FareType fareType;

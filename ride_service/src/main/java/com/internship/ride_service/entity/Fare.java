@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 @Document(collection = "fares")
 @Getter
@@ -21,4 +22,5 @@ public class Fare {
     private BigDecimal paidWaitingPrice;
     private BigDecimal pricePerKm;
     private BigDecimal pricePerMin;
+    private OffsetDateTime createdAt;
 }

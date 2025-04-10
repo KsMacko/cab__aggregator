@@ -6,5 +6,4 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface RideRepo extends MongoRepository<Ride, String> {
-    Page<Ride> findByPromoCodeIsNotNull(Pageable pageable);
 }

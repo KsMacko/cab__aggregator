@@ -4,8 +4,8 @@ import com.internship.ride_service.enums.FareType;
 import com.internship.ride_service.enums.RideStatus;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.List;
 
 public record RideDto(
@@ -15,10 +15,10 @@ public record RideDto(
         String promoCode,
         String startLocation,
         List<String> endLocation,
-        LocalDate date,
-        LocalTime startWaitingTime,
-        LocalTime startTime,
-        LocalTime endTime,
+        OffsetDateTime createdAt,
+        OffsetTime startWaitingTime,
+        OffsetTime startTime,
+        OffsetTime endTime,
         Float distance,
         RideStatus status,
         FareType fareType,

@@ -1,4 +1,4 @@
-package com.internship.ride_service.dto.transfer_objects;
+package com.internship.ride_service.dto.transfer;
 
 import com.internship.ride_service.dto.PromoCodeDto;
 

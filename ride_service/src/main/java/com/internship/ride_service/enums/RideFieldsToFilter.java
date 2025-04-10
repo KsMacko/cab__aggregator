@@ -7,7 +7,7 @@ import static com.internship.ride_service.entity.Ride.Fields.*;
 @Getter
 @AllArgsConstructor
 public enum RideFieldsToFilter {
-    DATE(date),
+    DATE(createdAt),
     START_TIME(startTime),
     END_TIME(endTime),
     DISTANCE(distance),
