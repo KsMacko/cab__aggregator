@@ -5,7 +5,7 @@ import com.internship.finance_service.entity.DriverWallet
 import jakarta.persistence.criteria.Predicate
 import org.springframework.data.jpa.domain.Specification
 
-class DriverWalletSpecification: AbstractSpecification() {
+class DriverWalletSpecification : AbstractSpecification() {
 
     companion object {
         fun createFilterSpecification(filter: WalletFilterRequest): Specification<DriverWallet> {

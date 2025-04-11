@@ -22,7 +22,7 @@ class ReadCardService @Autowired constructor(
     private var cardRepo: CardRepo,
     private var cardValidationManager: CardValidationManager,
     private var cardMapper: CardMapper
-){
+) {
     @Transactional(readOnly = true)
     fun findAllCards(filter: CardFilterRequest): CardPackageDto {
         val spec = CardSpecification.createFilterSpecification(filter)
@@ -39,10 +39,12 @@ class ReadCardService @Autowired constructor(
             totalElements = page.totalElements
         )
     }
+
     @Transactional(readOnly = true)
-    fun findCardById(id: Long): CardDto{
+    fun findCardById(id: Long): CardDto {
         return cardMapper.toDto(cardValidationManager.getCardIfExists(id))
     }
+
     fun createPageableObject(filter: CardFilterRequest): Pageable {
         val sort = Sort.by(
             if (filter.orderDirection == OrderDirection.ASC) Sort.Direction.ASC else Sort.Direction.DESC,

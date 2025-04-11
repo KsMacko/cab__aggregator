@@ -24,6 +24,7 @@ class WalletValidationManager @Autowired constructor(
             }
         }
     }
+
     fun getWalletIfExistsByDriverId(driverId: Long): DriverWallet {
         return walletRepo.findByDriverId(driverId)
             ?: throw RuntimeException("wallet.notFound")

@@ -32,6 +32,7 @@ class CommandFinanceOperationService @Autowired constructor(
         }
         return paymentMapper.toDto(paymentRepo.save(payment))
     }
+
     @Transactional
     fun deletePayment(id: Long) {
         financeValidationManager.getPaymentOperationIfExists(id)
@@ -47,14 +48,16 @@ class CommandFinanceOperationService @Autowired constructor(
         }
         return walletTransferMapper.toDto(walletTransferRepo.save(walletTransfer))
     }
+
     @Transactional
     fun deleteWalletTransfer(id: Long) {
         financeValidationManager.getWalletTransferOperationIfExists(id)
         walletTransferRepo.deleteById(id)
     }
+
     private fun createFinancialOperation(amount: BigDecimal): FinancialOperation {
         val financialOperation = FinancialOperation()
-        financialOperation.amount= amount
+        financialOperation.amount = amount
         return financialOperationRepo.save(financialOperation)
     }
 }

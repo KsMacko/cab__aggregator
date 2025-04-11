@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 import java.math.BigDecimal
 
 @Component
-interface WalletTransferMapper: AbstractMapper<WalletTransfer, WalletTransferDto> {
+interface WalletTransferMapper : AbstractMapper<WalletTransfer, WalletTransferDto> {
     override fun toDto(entity: WalletTransfer): WalletTransferDto {
         val financialOperation = entity.financialOperation
         val driverWallet = entity.wallet

@@ -21,6 +21,7 @@ class Card {
     val id: Long? = null
     lateinit var lastFourDigits: String
     lateinit var expirationDate: LocalDate
+
     @Enumerated(EnumType.STRING)
     lateinit var owner: OwnerType
     var ownerId: Long? = null
@@ -29,7 +30,8 @@ class Card {
     lateinit var cardType: CardType
 
     @OneToMany(mappedBy = "card")
-    var financialOperation:List<FinancialOperation>? = null
+    var financialOperation: List<FinancialOperation>? = null
+
     companion object Fields {
         const val ID = "id"
         const val LAST_FOUR_DIGITS = "lastFourDigits"

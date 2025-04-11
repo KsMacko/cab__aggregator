@@ -11,7 +11,7 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "wallet_transfer")
-class WalletTransfer{
+class WalletTransfer {
     @Id
     val id: Long? = null
 
@@ -23,6 +23,7 @@ class WalletTransfer{
     @JoinColumn(name = "financial_operation_id")
     @MapsId
     var financialOperation: FinancialOperation? = null
+
     companion object Fields {
         const val ID = "id"
         const val WALLET = "wallet"

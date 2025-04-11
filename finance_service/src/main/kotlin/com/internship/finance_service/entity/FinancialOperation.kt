@@ -18,6 +18,7 @@ class FinancialOperation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
+
     @CreationTimestamp
     val createdAt: LocalDateTime? = null
     var amount: BigDecimal? = null

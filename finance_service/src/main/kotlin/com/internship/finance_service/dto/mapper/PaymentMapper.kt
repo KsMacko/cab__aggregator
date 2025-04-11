@@ -5,7 +5,7 @@ import com.internship.finance_service.entity.Payment
 import org.springframework.stereotype.Component
 
 @Component
-interface PaymentMapper: AbstractMapper<Payment, PaymentDto>{
+interface PaymentMapper : AbstractMapper<Payment, PaymentDto> {
     override fun toDto(entity: Payment): PaymentDto {
         val financialOperation = entity.financialOperation
 

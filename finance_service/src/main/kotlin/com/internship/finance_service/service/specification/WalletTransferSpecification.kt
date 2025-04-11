@@ -19,13 +19,15 @@ class WalletTransferSpecification : AbstractSpecification() {
                     criteriaBuilder,
                     root.join<WalletTransfer, FinancialOperation>(WalletTransfer.FINANCIAL_OPERATION, JoinType.INNER),
                     FinancialOperation.CREATED_AT,
-                    filter.createdAt)
+                    filter.createdAt
+                )
                 addPredicateIfNotNull(
                     predicates,
                     criteriaBuilder,
                     driverWalletJoin,
                     DriverWallet.DRIVER_ID,
-                    filter.driverId)
+                    filter.driverId
+                )
 
                 criteriaBuilder.and(*predicates.toTypedArray())
             }

@@ -8,19 +8,19 @@ import org.springframework.stereotype.Component
 @Component
 class CardValidationManager @Autowired constructor(
     private val cardRepo: CardRepo
-){
+) {
     fun getCardIfExists(id: Long?): Card {
-        id?:
-            throw RuntimeException("card.id.notNull")
+        id ?: throw RuntimeException("card.id.notNull")
         return cardRepo.findById(id).orElseThrow { RuntimeException("card.notFound") }
     }
+
     fun checkCardIfExists(id: Long) {
-        if(!cardRepo.existsById(id))
+        if (!cardRepo.existsById(id))
             throw RuntimeException("card.id.notFound")
     }
+
     fun validateCardExistsForOwner(ownerId: Long?) {
-        ownerId?:
-            throw RuntimeException("owner.id.notNull")
+        ownerId ?: throw RuntimeException("owner.id.notNull")
         if (!cardRepo.existsCardByOwnerId(ownerId)) {
             throw RuntimeException("card.id.notFound")
         }

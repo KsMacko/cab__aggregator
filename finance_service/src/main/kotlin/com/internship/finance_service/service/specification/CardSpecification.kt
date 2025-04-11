@@ -5,7 +5,7 @@ import com.internship.finance_service.entity.Card
 import jakarta.persistence.criteria.Predicate
 import org.springframework.data.jpa.domain.Specification
 
-class CardSpecification: AbstractSpecification(){
+class CardSpecification : AbstractSpecification() {
     companion object {
         fun createFilterSpecification(filter: CardFilterRequest): Specification<Card> {
             return Specification { root, _, criteriaBuilder ->

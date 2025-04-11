@@ -5,8 +5,8 @@ import com.internship.finance_service.dto.WalletTransferDto
 import com.internship.finance_service.dto.mapper.PaymentMapper
 import com.internship.finance_service.dto.mapper.WalletTransferMapper
 import com.internship.finance_service.dto.transfer.request.PaymentFilterRequest
-import com.internship.finance_service.dto.transfer.response.PaymentPackageDto
 import com.internship.finance_service.dto.transfer.request.WalletTransferFilterRequest
+import com.internship.finance_service.dto.transfer.response.PaymentPackageDto
 import com.internship.finance_service.dto.transfer.response.WalletTransferPackageDto
 import com.internship.finance_service.entity.Payment
 import com.internship.finance_service.entity.WalletTransfer
@@ -37,7 +37,7 @@ class ReadFinanceOperationService @Autowired constructor(
     fun findAllPayments(filter: PaymentFilterRequest): PaymentPackageDto {
         val spec = PaymentSpecification.createFilterSpecification(filter)
 
-        val pageable = createPageableObject(filter.page,filter.size,filter.sortBy.toString(), filter.orderDirection)
+        val pageable = createPageableObject(filter.page, filter.size, filter.sortBy.toString(), filter.orderDirection)
         val page: Page<Payment> = paymentRepo.findAll(spec, pageable)
         val paymentsDto = page.content.map(paymentMapper::toDto)
 
@@ -54,7 +54,7 @@ class ReadFinanceOperationService @Autowired constructor(
     fun findAllWalletTransfers(filter: WalletTransferFilterRequest): WalletTransferPackageDto {
         val spec = WalletTransferSpecification.createFilterSpecification(filter)
 
-        val pageable = createPageableObject(filter.page,filter.size,filter.sortBy.toString(), filter.orderDirection)
+        val pageable = createPageableObject(filter.page, filter.size, filter.sortBy.toString(), filter.orderDirection)
         val page: Page<WalletTransfer> = walletTransferRepo.findAll(spec, pageable)
         val walletTransfersDto = page.content.map(walletTransferMapper::toDto)
 
@@ -83,9 +83,12 @@ class ReadFinanceOperationService @Autowired constructor(
         sortByField: String,
         orderDirection: OrderDirection
     ): Pageable {
-        val sort = Sort.by(Sort.Direction.fromString(
-            orderDirection.toString()),
-            sortByField)
+        val sort = Sort.by(
+            Sort.Direction.fromString(
+                orderDirection.toString()
+            ),
+            sortByField
+        )
         return PageRequest.of(page, size, sort)
     }
 }

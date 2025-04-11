@@ -12,12 +12,13 @@ import jakarta.persistence.Table
 class Payment {
     @Id
     val id: Long? = null
-    var passengerId : Long? = null
-    var paymentType : PaymentType? = null
+    var passengerId: Long? = null
+    var paymentType: PaymentType? = null
 
     @OneToOne
     @MapsId
     var financialOperation: FinancialOperation? = null
+
     companion object Fields {
         const val ID = "id"
         const val PASSENGER_ID = "passengerId"

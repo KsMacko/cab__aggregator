@@ -14,19 +14,21 @@ class CommandCardService @Autowired constructor(
     private var cardRepo: CardRepo,
     private var cardValidationManager: CardValidationManager,
     private var cardMapper: CardMapper
-){
+) {
     @Transactional
-    fun createCard(cardDto: CardDto):CardDto{
+    fun createCard(cardDto: CardDto): CardDto {
         return cardMapper.toDto(cardRepo.save(cardMapper.toEntity(cardDto)))
     }
+
     @Transactional
-    fun updateCard(cardDto: CardDto):CardDto{
+    fun updateCard(cardDto: CardDto): CardDto {
         val card: Card = cardValidationManager.getCardIfExists(cardDto.id)
         cardMapper.updateEntity(card, cardDto)
         return cardMapper.toDto(card)
     }
+
     @Transactional
-    fun deleteCard(id:Long){
+    fun deleteCard(id: Long) {
         cardValidationManager.checkCardIfExists(id)
         cardRepo.deleteById(id)
     }

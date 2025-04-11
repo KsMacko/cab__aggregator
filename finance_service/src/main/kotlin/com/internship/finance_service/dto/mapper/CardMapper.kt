@@ -5,4 +5,4 @@ import com.internship.finance_service.entity.Card
 import org.springframework.stereotype.Component
 
 @Component
-interface CardMapper: AbstractMapper<Card, CardDto> {}
+interface CardMapper : AbstractMapper<Card, CardDto> {}

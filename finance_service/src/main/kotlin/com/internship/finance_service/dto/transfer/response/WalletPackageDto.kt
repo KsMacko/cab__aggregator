@@ -4,8 +4,8 @@ import com.internship.finance_service.dto.WalletDto
 
 data class WalletPackageDto(
     val wallets: List<WalletDto>,
-    val page: Int=0,
-    val size: Int=10,
-    val totalPages: Int=0,
-    val totalElements: Long=0
+    val page: Int = 0,
+    val size: Int = 10,
+    val totalPages: Int = 0,
+    val totalElements: Long = 0
 )

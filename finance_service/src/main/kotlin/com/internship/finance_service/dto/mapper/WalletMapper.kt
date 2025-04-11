@@ -5,5 +5,5 @@ import com.internship.finance_service.entity.DriverWallet
 import org.springframework.stereotype.Component
 
 @Component
-interface WalletMapper: AbstractMapper<DriverWallet, WalletDto> {
+interface WalletMapper : AbstractMapper<DriverWallet, WalletDto> {
 }

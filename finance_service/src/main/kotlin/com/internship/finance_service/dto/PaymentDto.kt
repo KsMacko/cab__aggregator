@@ -5,11 +5,11 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-data class PaymentDto (
+data class PaymentDto(
     val id: Long? = null,
     val passengerId: Long? = null,
     var date: LocalDateTime? = null,
     var time: LocalTime? = null,
     var amount: BigDecimal? = null,
-    var paymentType : PaymentType? = null
+    var paymentType: PaymentType? = null
 )

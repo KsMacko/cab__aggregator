@@ -21,14 +21,16 @@ class CommandWalletTransferService @Autowired constructor(
         val wallet = walletMapper.toEntity(walletDto)
         return walletMapper.toDto(walletRepo.save(wallet))
     }
+
     @Transactional
     fun updateWallet(walletDto: WalletDto): WalletDto {
         val wallet: DriverWallet = walletValidatorManager.getWalletIfExists(walletDto.id)
         walletMapper.updateEntity(wallet, walletDto)
         return walletMapper.toDto(wallet)
     }
+
     @Transactional
-    fun deleteWallet(id:Long){
+    fun deleteWallet(id: Long) {
         walletValidatorManager.getWalletIfExists(id)
         walletRepo.deleteById(id)
     }
