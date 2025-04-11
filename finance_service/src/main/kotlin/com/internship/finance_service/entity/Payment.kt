@@ -6,24 +6,22 @@ import jakarta.persistence.Id
 import jakarta.persistence.MapsId
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
-import lombok.AllArgsConstructor
-import lombok.Getter
-import lombok.NoArgsConstructor
-import lombok.Setter
 
 @Entity
 @Table(name = "payment")
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 class Payment {
     @Id
-    private val id: Long? = null
-    private var passengerId : Long? = null
-    private var paymentType : PaymentType? = null
+    val id: Long? = null
+    var passengerId : Long? = null
+    var paymentType : PaymentType? = null
 
     @OneToOne
     @MapsId
-    private var financialOperation: FinancialOperation? = null
+    var financialOperation: FinancialOperation? = null
+    companion object Fields {
+        const val ID = "id"
+        const val PASSENGER_ID = "passengerId"
+        const val PAYMENT_TYPE = "paymentType"
+        const val FINANCIAL_OPERATION = "financialOperation"
+    }
 }
