@@ -23,4 +23,5 @@ public record RideDto(
         RideStatus status,
         FareType fareType,
         BigDecimal price
-) {}
+) {
+}

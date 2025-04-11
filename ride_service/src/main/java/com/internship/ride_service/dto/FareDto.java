@@ -12,4 +12,5 @@ public record FareDto(
         BigDecimal paidWaitingPrice,
         BigDecimal pricePerKm,
         BigDecimal pricePerMin
-) {}
+) {
+}

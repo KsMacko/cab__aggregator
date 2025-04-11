@@ -13,14 +13,16 @@ public class FareValidationManager {
 
     public Fare getFareIfExists(FareType fareType) {
         return fareRepo.findFareByType(fareType)
-                .orElseThrow(()-> new RuntimeException("fare.notFound"));
+                .orElseThrow(() -> new RuntimeException("fare.notFound"));
     }
+
     public void checkForDuplicateType(FareType fareType) {
-        if(fareRepo.existsById(fareType))
+        if (fareRepo.existsById(fareType))
             throw new RuntimeException("fare.alreadyExists");
     }
+
     public void checkIfNotExistsByType(FareType fareType) {
-        if(!fareRepo.existsById(fareType))
+        if (!fareRepo.existsById(fareType))
             throw new RuntimeException("fare.notFound");
     }
 }

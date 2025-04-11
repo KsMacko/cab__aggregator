@@ -1,8 +1,5 @@
 package com.internship.ride_service.service.query;
 
-import static java.util.Objects.nonNull;
-import static com.internship.ride_service.entity.PromoCode.Fields.createdAt;
-import static com.internship.ride_service.entity.PromoCode.Fields.validUntil;
 import com.internship.ride_service.dto.PromoCodeDto;
 import com.internship.ride_service.dto.mapper.PromoCodeMapper;
 import com.internship.ride_service.dto.transfer.PromoCodeFilterRequest;
@@ -21,6 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.internship.ride_service.entity.PromoCode.Fields.createdAt;
+import static com.internship.ride_service.entity.PromoCode.Fields.validUntil;
+import static java.util.Objects.nonNull;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +53,7 @@ public class ReadPromoCodeService {
     public PromoCodeDto getPromoCodeById(String id) {
         return PromoCodeMapper.converter.handleEntity(promoCodeValidationManager.getPromoCodeByIdIfExists(id));
     }
+
     @Transactional(readOnly = true)
     public PromoCodeDto getPromoCodeCurrentByCode(String code) {
         return PromoCodeMapper.converter.handleEntity(promoCodeValidationManager.getCurrentPromoCode(code));
@@ -63,10 +65,12 @@ public class ReadPromoCodeService {
         addCriteriaIfNotNull(criteria, validUntil, filterRequest.validDate());
         return new Query(criteria);
     }
+
     private void addCriteriaIfNotNull(Criteria criteria, String fieldName, Object value) {
         if (nonNull(value))
             criteria.and(fieldName).is(value);
     }
+
     private Pageable createPageableObject(PromoCodeFilterRequest filterRequest) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(filterRequest.order().toString()),

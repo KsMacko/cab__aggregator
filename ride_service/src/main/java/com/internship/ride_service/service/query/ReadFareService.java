@@ -25,6 +25,7 @@ public class ReadFareService {
                 .map(FareMapper.converter::handleEntity)
                 .toList();
     }
+
     @Transactional(readOnly = true)
     public FareDto getFareById(FareType type) {
         Fare fare = fareValidationManager.getFareIfExists(type);

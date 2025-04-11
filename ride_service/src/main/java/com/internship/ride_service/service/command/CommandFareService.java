@@ -23,6 +23,7 @@ public class CommandFareService {
         Fare savedFare = fareRepo.save(fare);
         return FareMapper.converter.handleEntity(savedFare);
     }
+
     @Transactional
     public void deleteFare(FareType type) {
         fareValidationManager.checkIfNotExistsByType(type);

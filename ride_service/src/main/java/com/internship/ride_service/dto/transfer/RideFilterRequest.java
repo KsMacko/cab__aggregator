@@ -17,4 +17,5 @@ public record RideFilterRequest(
         int size,
         RideFieldsToFilter sortBy,
         OrderDirection order
-) {}
+) {
+}
