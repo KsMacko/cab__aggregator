@@ -1,20 +1,15 @@
-package com.internship.driver_service.service;
+package com.internship.driver_service.service.query;
 
-import com.internship.driver_service.dto.CarDto;
 import com.internship.driver_service.dto.ProfileDto;
 import com.internship.driver_service.dto.Projection;
-import com.internship.driver_service.dto.mapper.CarMapper;
 import com.internship.driver_service.dto.mapper.ProfileMapper;
-import com.internship.driver_service.dto.transfer.DataPackageDto;
 import com.internship.driver_service.dto.transfer.DriverFilterRequest;
-import com.internship.driver_service.entity.Car;
+import com.internship.driver_service.dto.transfer.ProfilePackageDto;
 import com.internship.driver_service.entity.DriverProfile;
-import com.internship.driver_service.repo.CarRepo;
 import com.internship.driver_service.repo.DriverProfileRepo;
 import com.internship.driver_service.repo.RateRepo;
 import com.internship.driver_service.service.specification.DriverSpecificationService;
-import com.internship.driver_service.utils.CarValidationManager;
-import com.internship.driver_service.utils.ProfileValidationManager;
+import com.internship.driver_service.utils.validation.ProfileValidationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,18 +21,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.internship.driver_service.utils.validation.ValidationConstants.DEFAULT_PAGE_SIZE;
+import static com.internship.driver_service.utils.validation.ValidationConstants.DEFAULT_PAGE_VALUE;
+import static java.util.Objects.isNull;
+
 @Service
 @RequiredArgsConstructor
 public class ReadDriverProfileService {
     private final DriverProfileRepo driverProfileRepo;
     private final RateRepo rateRepo;
-    private final CarRepo carRepo;
     private final DriverSpecificationService specificationService;
     private final ProfileValidationManager profileValidationManager;
-    private final CarValidationManager carValidationManager;
 
     @Transactional(readOnly = true)
-    public DataPackageDto readAllDrivers(DriverFilterRequest filter) {
+    public ProfilePackageDto readAllDrivers(DriverFilterRequest filter) {
+        if (isNull(filter.getPage()))
+            filter.setPage(DEFAULT_PAGE_VALUE);
+        if (isNull(filter.getSize()))
+            filter.setSize(DEFAULT_PAGE_SIZE);
         Pageable pageable = createPageableObject(filter);
         Specification<DriverProfile> spec = specificationService.createFilterSpecification(filter);
         return createDataPackageDto(driverProfileRepo.findAllDrivers(spec, pageable));
@@ -46,36 +47,26 @@ public class ReadDriverProfileService {
     @Transactional(readOnly = true)
     public ProfileDto readDriverProfileById(Long id) {
         profileValidationManager.checkIfProfileExists(id);
-        DriverProfile driverProfile = driverProfileRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("driver.notFound"));
+        DriverProfile driverProfile = profileValidationManager.getDriverProfile(id);
         Byte rate = rateRepo.findDriverRatingByProfileId(id);
         return ProfileMapper.converter.handleEntity(driverProfile, rate);
 
     }
 
     @Transactional(readOnly = true)
-    public CarDto getCurrentCarByProfileId(Long profileId) {
-        profileValidationManager.checkIfProfileIdNotNull(profileId);
-        DriverProfile driverProfile = profileValidationManager.getDriverProfile(profileId);
-        Car car = carRepo.findByDriverProfileAndCurrent(driverProfile, true);
-        carValidationManager.checkCarNotNull(car);
-        return CarMapper.converter.handleEntity(car);
-    }
-
-    @Transactional(readOnly = true)
-    public DataPackageDto createDataPackageDto(Page<Projection> resultPage) {
+    public ProfilePackageDto createDataPackageDto(Page<Projection> resultPage) {
         List<ProfileDto> profiles = resultPage.getContent().stream()
                 .map(projection -> ProfileDto.builder()
                         .profileId(projection.getProfileId())
                         .phone(projection.getPhone())
                         .firstName(projection.getFirstName())
                         .lastName(projection.getLastName())
-                        .driverStatus(projection.getDriverStatus())
-                        .fareType(projection.getFareType())
+                        .driverStatus(projection.getDriverStatus().toString())
+                        .fareType(projection.getFareType().toString())
                         .rate(projection.getRate())
                         .build())
                 .toList();
-        return DataPackageDto.builder()
+        return ProfilePackageDto.builder()
                 .profilesDto(profiles)
                 .totalElements(resultPage.getTotalElements())
                 .pageNumber(resultPage.getNumber())
@@ -86,9 +77,9 @@ public class ReadDriverProfileService {
 
     private Pageable createPageableObject(DriverFilterRequest filterRequest) {
         Sort sort = Sort.by(Sort.Direction.fromString(
-                        filterRequest.order().toString()),
-                filterRequest.sortBy().getFieldName());
-        return PageRequest.of(filterRequest.page(), filterRequest.size(), sort);
+                        filterRequest.getOrder()),
+                filterRequest.getSortBy());
+        return PageRequest.of(filterRequest.getPage(), filterRequest.getSize(), sort);
     }
 
 }

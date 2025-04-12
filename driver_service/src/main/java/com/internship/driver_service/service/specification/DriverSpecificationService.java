@@ -4,6 +4,8 @@ import com.internship.driver_service.dto.transfer.DriverFilterRequest;
 import com.internship.driver_service.entity.Car;
 import com.internship.driver_service.entity.DriverProfile;
 import com.internship.driver_service.entity.Rate;
+import com.internship.driver_service.enums.DriverStatus;
+import com.internship.driver_service.enums.FareType;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
@@ -28,6 +30,7 @@ import static com.internship.driver_service.entity.DriverProfile.Fields.phone;
 import static com.internship.driver_service.entity.DriverProfile.Fields.profileId;
 import static com.internship.driver_service.entity.Rate.Fields.driver;
 import static com.internship.driver_service.entity.Rate.Fields.value;
+import static java.util.Objects.nonNull;
 
 @Service
 public class DriverSpecificationService {
@@ -36,24 +39,25 @@ public class DriverSpecificationService {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            addLikePredicate(predicates, cb, root.get(phone), filter.phone());
-            addLikePredicate(predicates, cb, root.get(firstName), filter.firstName());
-            addLikePredicate(predicates, cb, root.get(lastName), filter.lastName());
+            addLikePredicate(predicates, cb, root.get(phone), filter.getPhone());
+            addLikePredicate(predicates, cb, root.get(firstName), filter.getFirstName());
+            addLikePredicate(predicates, cb, root.get(lastName), filter.getLastName());
 
-            Optional.ofNullable(filter.carNumber()).ifPresent(carNumberToFilter -> {
+            Optional.ofNullable(filter.getCarNumber()).ifPresent(carNumberToFilter -> {
                 Join<DriverProfile, Car> carJoin = root.join(car, JoinType.LEFT);
                 predicates.add(cb.like(carJoin.get(carNumber), "%" + carNumberToFilter + "%"));
             });
-
-            addEqualPredicate(predicates, cb, root.get(driverStatus), filter.status());
-            addEqualPredicate(predicates, cb, root.get(fareType), filter.fareType());
+            if (nonNull(filter.getStatus()))
+                addEqualPredicate(predicates, cb, root.get(driverStatus), DriverStatus.valueOf(filter.getStatus()));
+            if (nonNull(filter.getFareType()))
+                addEqualPredicate(predicates, cb, root.get(fareType), FareType.valueOf(filter.getFareType()));
 
             Subquery<Double> subquery = query.subquery(Double.class);
             Root<Rate> rateRoot = subquery.from(Rate.class);
             subquery.select(cb.avg(rateRoot.get(value)))
                     .where(cb.equal(rateRoot.get(driver).get(profileId), root.get(profileId)));
 
-            addRatePredicate(predicates, cb, subquery, filter.rate());
+            addRatePredicate(predicates, cb, subquery, filter.getRate());
 
             query.multiselect(
                     root.get(profileId),
@@ -81,8 +85,7 @@ public class DriverSpecificationService {
                                        CriteriaBuilder cb,
                                        Expression<T> expression,
                                        T value) {
-        Optional.ofNullable(value)
-                .ifPresent(val -> predicates.add(cb.equal(expression, val)));
+        predicates.add(cb.equal(expression, value));
     }
 
     private void addRatePredicate(List<Predicate> predicates,

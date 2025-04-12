@@ -12,10 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "car")
@@ -35,13 +31,7 @@ public class Car {
     @Column(nullable = false)
     private String color;
     @Column(nullable = false)
-    private Boolean current;
-
-    @CreationTimestamp
-    private OffsetDateTime createdAt;
-
-    @UpdateTimestamp
-    private OffsetDateTime updatedAt;
+    private Boolean isCurrent;
 
     @ManyToOne
     private DriverProfile driverProfile;

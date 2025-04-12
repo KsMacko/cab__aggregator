@@ -1,4 +1,4 @@
-package com.internship.driver_service.service;
+package com.internship.driver_service.service.command;
 
 import com.internship.driver_service.dto.ProfileDto;
 import com.internship.driver_service.dto.RateDto;
@@ -9,11 +9,11 @@ import com.internship.driver_service.entity.DriverProfile;
 import com.internship.driver_service.repo.DriverAccountRepo;
 import com.internship.driver_service.repo.DriverProfileRepo;
 import com.internship.driver_service.repo.RateRepo;
-import com.internship.driver_service.utils.ProfileValidationManager;
-import com.internship.driver_service.utils.RateValidationManager;
-import jakarta.transaction.Transactional;
+import com.internship.driver_service.utils.validation.ProfileValidationManager;
+import com.internship.driver_service.utils.validation.RateValidationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,10 +38,8 @@ public class CommandDriverProfileService {
     @Transactional
     public ProfileDto updateDriverProfile(ProfileDto profileDto) {
         profileValidationManager.checkIfProfileIdNotNull(profileDto.profileId());
-        DriverProfile existingProfile = driverProfileRepo
-                .findById(profileDto.profileId())
-                .orElseThrow(() -> new RuntimeException("driver.notFound"));
-        ProfileMapper.converter.updateEntity(profileDto, existingProfile);
+        DriverProfile existingProfile = profileValidationManager.getDriverProfile(profileDto.profileId());
+        ProfileMapper.converter.updateProfileFromDto(profileDto, existingProfile);
 
         return ProfileMapper.converter.handleEntity(driverProfileRepo.save(existingProfile));
     }
