@@ -3,7 +3,12 @@ package com.internship.driver_service.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import static com.internship.driver_service.entity.DriverProfile.Fields.*;
+import static com.internship.driver_service.entity.DriverProfile.Fields.driverStatus;
+import static com.internship.driver_service.entity.DriverProfile.Fields.fareType;
+import static com.internship.driver_service.entity.DriverProfile.Fields.firstName;
+import static com.internship.driver_service.entity.DriverProfile.Fields.lastName;
+import static com.internship.driver_service.entity.DriverProfile.Fields.phone;
+import static com.internship.driver_service.entity.Car.Fields.carNumber;
 
 @Getter
 @AllArgsConstructor

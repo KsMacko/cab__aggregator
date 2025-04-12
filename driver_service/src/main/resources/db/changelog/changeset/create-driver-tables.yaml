@@ -32,7 +32,7 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     primaryKey: true
-                    foreignKeyName: profile_id
+                    foreignKeyName: fk_profile_user_account
                     referencedTableName: user_account
                     referencedColumnNames: id
                     nullable: false
@@ -44,17 +44,6 @@ databaseChangeLog:
               - column:
                   name: last_name
                   type: varchar(30)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: car_number
-                  type: char(7)
-                  constraints:
-                    nullable: false
-                    unique: true
-              - column:
-                  name: car_description
-                  type: varchar(20)
                   constraints:
                     nullable: false
               - column:
@@ -73,36 +62,85 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     unique: true
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: car
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: car_number
+                  type: char(7)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: brand
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: color
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: current
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: driver_profile_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_car_profile
+                    referencedTableName: profile
+                    referencedColumnNames: profile_id
         - createTable:
             tableName: rate
             columns:
               - column:
                   name: id
-                  type: BIGINT
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: value
-                  type: TINYINT
+                  type: tinyint
                   constraints:
                     nullable: false
               - column:
                   name: created_at
-                  type: DATE
+                  type: datetime
                   constraints:
                     nullable: false
               - column:
-                  name: author_id
-                  type: BIGINT
+                  name: updated_at
+                  type: datetime
                   constraints:
                     nullable: false
               - column:
                   name: driver_profile_id
-                  type: BIGINT
+                  type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: driver_profile_id
+                    foreignKeyName: fk_rate_profile
                     referencedTableName: profile
                     referencedColumnNames: profile_id

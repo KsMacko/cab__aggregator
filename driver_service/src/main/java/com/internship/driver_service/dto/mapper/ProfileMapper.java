@@ -2,18 +2,14 @@ package com.internship.driver_service.dto.mapper;
 
 import com.internship.driver_service.dto.ProfileDto;
 import com.internship.driver_service.entity.DriverProfile;
-import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface ProfileMapper {
+public interface ProfileMapper extends AbstractMapper<ProfileDto, DriverProfile> {
     ProfileMapper converter = Mappers.getMapper(ProfileMapper.class);
 
-    DriverProfile handleDto(ProfileDto profileDto);
-    ProfileDto handleEntity(DriverProfile driverProfile);
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateProfileFromDto(ProfileDto dto, @MappingTarget DriverProfile entity);
+    @Mapping(target = ProfileDto.Fields.rate, source = "rating")
+    ProfileDto handleEntity(DriverProfile driverProfile, Byte rating);
 }

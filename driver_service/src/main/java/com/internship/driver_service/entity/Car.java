@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -19,25 +18,32 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "rate")
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "car")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @FieldNameConstants
-public class Rate {
+public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, unique = true)
+    private String carNumber;
     @Column(nullable = false)
-    private Byte value;
+    private String brand;
     @Column(nullable = false)
-    private Long authorId;
+    private String color;
+    @Column(nullable = false)
+    private Boolean current;
+
     @CreationTimestamp
     private OffsetDateTime createdAt;
+
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
+
     @ManyToOne
-    @JoinColumn(name = "driver_profile_id")
-    private DriverProfile driver;
+    private DriverProfile driverProfile;
+
 }
