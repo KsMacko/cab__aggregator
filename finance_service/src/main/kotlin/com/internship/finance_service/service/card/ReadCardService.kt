@@ -7,6 +7,7 @@ import com.internship.finance_service.dto.transfer.response.CardPackageDto
 import com.internship.finance_service.entity.Card
 import com.internship.finance_service.enums.sort.OrderDirection
 import com.internship.finance_service.repo.CardRepo
+import com.internship.finance_service.service.PageableObjectCreator
 import com.internship.finance_service.service.specification.CardSpecification
 import com.internship.finance_service.utils.CardValidationManager
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,12 +23,12 @@ class ReadCardService @Autowired constructor(
     private var cardRepo: CardRepo,
     private var cardValidationManager: CardValidationManager,
     private var cardMapper: CardMapper
-) {
+): PageableObjectCreator(){
     @Transactional(readOnly = true)
     fun findAllCards(filter: CardFilterRequest): CardPackageDto {
         val spec = CardSpecification.createFilterSpecification(filter)
 
-        val pageable = createPageableObject(filter)
+        val pageable = createPageableObjectByFilter(filter)
         val page: Page<Card> = cardRepo.findAll(spec, pageable)
         val cardsDto = page.content.map(cardMapper::toDto)
 
@@ -43,13 +44,5 @@ class ReadCardService @Autowired constructor(
     @Transactional(readOnly = true)
     fun findCardById(id: Long): CardDto {
         return cardMapper.toDto(cardValidationManager.getCardIfExists(id))
-    }
-
-    fun createPageableObject(filter: CardFilterRequest): Pageable {
-        val sort = Sort.by(
-            if (filter.orderDirection == OrderDirection.ASC) Sort.Direction.ASC else Sort.Direction.DESC,
-            filter.sortBy.field
-        )
-        return PageRequest.of(filter.page, filter.size, sort)
     }
 }

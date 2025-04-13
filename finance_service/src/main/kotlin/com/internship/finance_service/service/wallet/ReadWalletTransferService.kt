@@ -6,6 +6,7 @@ import com.internship.finance_service.dto.transfer.request.WalletFilterRequest
 import com.internship.finance_service.dto.transfer.response.WalletPackageDto
 import com.internship.finance_service.entity.DriverWallet
 import com.internship.finance_service.repo.DriverWalletRepo
+import com.internship.finance_service.service.PageableObjectCreator
 import com.internship.finance_service.service.specification.DriverWalletSpecification
 import com.internship.finance_service.utils.WalletValidationManager
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,13 +21,13 @@ class ReadWalletTransferService @Autowired constructor(
     private val walletRepo: DriverWalletRepo,
     private val walletMapper: WalletMapper,
     private val walletValidatorManager: WalletValidationManager
-) {
+): PageableObjectCreator() {
 
     @Transactional(readOnly = true)
     fun findAllWallets(filter: WalletFilterRequest): WalletPackageDto {
         val spec = DriverWalletSpecification.createFilterSpecification(filter)
 
-        val pageable = createPageableObject(
+        val pageable = createPageableObjectByAllFields(
             page = filter.page,
             size = filter.size
         )
@@ -46,13 +47,5 @@ class ReadWalletTransferService @Autowired constructor(
     fun getWalletById(id: Long): WalletDto {
         val wallet = walletValidatorManager.getWalletIfExists(id)
         return walletMapper.toDto(wallet)
-    }
-
-
-    private fun createPageableObject(
-        page: Int,
-        size: Int
-    ): Pageable {
-        return PageRequest.of(page, size)
     }
 }
