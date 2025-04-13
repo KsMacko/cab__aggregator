@@ -2,6 +2,7 @@ package com.internship.finance_service.entity
 
 import com.internship.finance_service.enums.PaymentType
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.Id
 import jakarta.persistence.MapsId
 import jakarta.persistence.OneToOne
@@ -15,7 +16,7 @@ class Payment {
     var passengerId: Long? = null
     var paymentType: PaymentType? = null
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @MapsId
     var financialOperation: FinancialOperation? = null
 

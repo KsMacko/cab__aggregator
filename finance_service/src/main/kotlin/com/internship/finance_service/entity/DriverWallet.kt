@@ -21,5 +21,6 @@ class DriverWallet {
         const val ID = "id"
         const val BALANCE = "balance"
         const val DRIVER_ID = "driverId"
+        const val TRANSFERS = "transfers"
     }
 }

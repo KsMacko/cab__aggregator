@@ -2,12 +2,15 @@ package com.internship.finance_service.dto.mapper
 
 import com.internship.finance_service.dto.WalletTransferDto
 import com.internship.finance_service.entity.WalletTransfer
-import org.springframework.stereotype.Component
+import org.mapstruct.Mapper
+import org.mapstruct.Mapping
+import org.mapstruct.MappingConstants
 import java.math.BigDecimal
 
-@Component
-interface WalletTransferMapper : AbstractMapper<WalletTransfer, WalletTransferDto> {
-    override fun toDto(entity: WalletTransfer): WalletTransferDto {
+
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+interface WalletTransferMapper {
+    fun toDto(entity: WalletTransfer): WalletTransferDto {
         val financialOperation = entity.financialOperation
         val driverWallet = entity.wallet
 
@@ -19,4 +22,9 @@ interface WalletTransferMapper : AbstractMapper<WalletTransfer, WalletTransferDt
             remainingAmount = driverWallet?.balance?.minus(financialOperation?.amount ?: BigDecimal.ZERO)
         )
     }
+
+    @Mapping(target = WalletTransfer.ID, ignore = true)
+    @Mapping(target = WalletTransfer.WALLET, ignore = true)
+    @Mapping(target = WalletTransfer.FINANCIAL_OPERATION, ignore = true)
+    fun toEntity(dto: WalletTransferDto): WalletTransfer
 }
