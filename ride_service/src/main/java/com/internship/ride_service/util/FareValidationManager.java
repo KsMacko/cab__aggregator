@@ -6,6 +6,9 @@ import com.internship.ride_service.repo.FareRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static com.internship.ride_service.util.exceptions.ExceptionCodes.FARE_ALREADY_EXISTS;
+import static com.internship.ride_service.util.exceptions.ExceptionCodes.FARE_NOT_FOUND;
+
 @Component
 @RequiredArgsConstructor
 public class FareValidationManager {
@@ -13,16 +16,18 @@ public class FareValidationManager {
 
     public Fare getFareIfExists(FareType fareType) {
         return fareRepo.findFareByType(fareType)
-                .orElseThrow(() -> new RuntimeException("fare.notFound"));
+                .orElseThrow(() -> new RuntimeException(FARE_NOT_FOUND.getCode()));
     }
 
     public void checkForDuplicateType(FareType fareType) {
-        if (fareRepo.existsById(fareType))
-            throw new RuntimeException("fare.alreadyExists");
+        if (fareRepo.existsById(fareType)) {
+            throw new RuntimeException(FARE_ALREADY_EXISTS.getCode());
+        }
     }
 
     public void checkIfNotExistsByType(FareType fareType) {
-        if (!fareRepo.existsById(fareType))
-            throw new RuntimeException("fare.notFound");
+        if (!fareRepo.existsById(fareType)) {
+            throw new RuntimeException(FARE_NOT_FOUND.getCode());
+        }
     }
 }

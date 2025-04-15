@@ -36,7 +36,9 @@ public class CalculatePriceService {
                     BigDecimal.ONE.subtract(
                             BigDecimal.valueOf(promoCode.getDiscount())
                                     .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)));
-        } else totalPrice = maxPrice;
+        } else {
+            totalPrice = maxPrice;
+        }
         long waitingTime = Duration.between(ride.getStartWaitingTime(), ride.getStartTime()).toMinutes();
         if (waitingTime > fare.getFreeWaiting()) {
             totalPrice = totalPrice.add(fare.getPaidWaitingPrice()

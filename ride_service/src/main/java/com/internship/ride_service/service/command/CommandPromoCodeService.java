@@ -14,12 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommandPromoCodeService {
     private final PromoCodeRepo promoCodeRepo;
     private final PromoCodeValidationManager promoCodeValidationManager;
+    private final PromoCodeMapper promoCodeMapper;
 
     @Transactional
     public PromoCodeDto createPromoCode(PromoCodeDto promoCodeDto) {
-        promoCodeValidationManager.checkForCreationPromoCodeValidity(promoCodeDto.id(), promoCodeDto.promoCode());
-        PromoCode promoCode = PromoCodeMapper.converter.handleDto(promoCodeDto);
-        return PromoCodeMapper.converter.handleEntity(promoCodeRepo.save(promoCode));
+        promoCodeValidationManager.checkForCreationPromoCodeValidity(promoCodeDto.promoCode());
+        PromoCode promoCode = promoCodeMapper.handleDto(promoCodeDto);
+        return promoCodeMapper.handleEntity(promoCodeRepo.save(promoCode));
     }
 
     @Transactional
@@ -31,7 +32,7 @@ public class CommandPromoCodeService {
     @Transactional
     public PromoCodeDto updatePromoCode(PromoCodeDto promoCodeDto) {
         PromoCode existingPromoCode = promoCodeValidationManager.getPromoCodeByIdIfExists(promoCodeDto.id());
-        PromoCodeMapper.converter.updateEntity(promoCodeDto, existingPromoCode);
-        return PromoCodeMapper.converter.handleEntity(promoCodeRepo.save(existingPromoCode));
+        promoCodeMapper.updateEntity(promoCodeDto, existingPromoCode);
+        return promoCodeMapper.handleEntity(promoCodeRepo.save(existingPromoCode));
     }
 }

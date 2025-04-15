@@ -5,7 +5,6 @@ import com.internship.ride_service.dto.mapper.RideMapper;
 import com.internship.ride_service.dto.transfer.RideFilterRequest;
 import com.internship.ride_service.dto.transfer.RidePackageDto;
 import com.internship.ride_service.entity.Ride;
-import com.internship.ride_service.repo.RideRepo;
 import com.internship.ride_service.util.RideValidationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -32,7 +31,7 @@ import static java.util.Objects.nonNull;
 public class ReadRideService {
 
     private final MongoTemplate mongoTemplate;
-    private final RideRepo rideRepo;
+    private final RideMapper rideMapper;
     private final RideValidationManager rideValidationManager;
 
     @Transactional(readOnly = true)
@@ -42,7 +41,7 @@ public class ReadRideService {
 
         List<RideDto> rides = mongoTemplate.find(query, Ride.class)
                 .stream()
-                .map(RideMapper.converter::handleEntity)
+                .map(rideMapper::handleEntity)
                 .toList();
         long totalElements = mongoTemplate.count(query, Ride.class);
 
@@ -52,7 +51,7 @@ public class ReadRideService {
     @Transactional(readOnly = true)
     public RideDto getRideById(String id) {
         Ride ride = rideValidationManager.getRideByIdIfExists(id);
-        return RideMapper.converter.handleEntity(ride);
+        return rideMapper.handleEntity(ride);
     }
 
     private Query buildQuery(RideFilterRequest filterRequest) {
@@ -62,14 +61,16 @@ public class ReadRideService {
         addCriteriaIfNotNull(criteria, passengerId, filterRequest.passengerId());
         addCriteriaIfNotNull(criteria, status, filterRequest.status());
         addCriteriaIfNotNull(criteria, fareType, filterRequest.fareType());
-        if (filterRequest.sortBy() != null)
+        if (filterRequest.sortBy() != null) {
             criteria.and(filterRequest.sortBy().getFieldName()).ne(null);
+        }
         return new Query(criteria);
     }
 
     private void addCriteriaIfNotNull(Criteria criteria, String fieldName, Object value) {
-        if (nonNull(value))
+        if (nonNull(value)) {
             criteria.and(fieldName).is(value);
+        }
     }
 
     private Pageable createPageableObject(RideFilterRequest filterRequest) {

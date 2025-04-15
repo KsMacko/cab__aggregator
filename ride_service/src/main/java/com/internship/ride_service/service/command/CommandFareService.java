@@ -15,13 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommandFareService {
     private final FareRepo fareRepo;
     private final FareValidationManager fareValidationManager;
+    private final FareMapper fareMapper;
 
     @Transactional
     public FareDto createFare(FareDto fareDto) {
         fareValidationManager.checkForDuplicateType(fareDto.type());
-        Fare fare = FareMapper.converter.handleDto(fareDto);
+        Fare fare = fareMapper.handleDto(fareDto);
         Fare savedFare = fareRepo.save(fare);
-        return FareMapper.converter.handleEntity(savedFare);
+        return fareMapper.handleEntity(savedFare);
     }
 
     @Transactional
@@ -33,8 +34,8 @@ public class CommandFareService {
     @Transactional
     public FareDto updateFare(FareDto fareDto) {
         Fare existingFare = fareValidationManager.getFareIfExists(fareDto.type());
-        FareMapper.converter.updateEntity(fareDto, existingFare);
+        fareMapper.updateEntity(fareDto, existingFare);
         Fare updatedFare = fareRepo.save(existingFare);
-        return FareMapper.converter.handleEntity(updatedFare);
+        return fareMapper.handleEntity(updatedFare);
     }
 }

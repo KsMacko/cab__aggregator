@@ -5,7 +5,6 @@ import com.internship.ride_service.dto.mapper.PromoCodeMapper;
 import com.internship.ride_service.dto.transfer.PromoCodeFilterRequest;
 import com.internship.ride_service.dto.transfer.PromoCodePackageDto;
 import com.internship.ride_service.entity.PromoCode;
-import com.internship.ride_service.repo.PromoCodeRepo;
 import com.internship.ride_service.util.PromoCodeValidationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +25,7 @@ import static java.util.Objects.nonNull;
 @Service
 @RequiredArgsConstructor
 public class ReadPromoCodeService {
-    private final PromoCodeRepo promoCodeRepo;
+    private final PromoCodeMapper promoCodeMapper;
     private final MongoTemplate mongoTemplate;
     private final PromoCodeValidationManager promoCodeValidationManager;
 
@@ -37,7 +36,7 @@ public class ReadPromoCodeService {
         List<PromoCode> promoCodes = mongoTemplate.find(query, PromoCode.class);
         long totalElements = mongoTemplate.count(query, PromoCode.class);
         List<PromoCodeDto> promoCodesDto = promoCodes.stream()
-                .map(PromoCodeMapper.converter::handleEntity)
+                .map(promoCodeMapper::handleEntity)
                 .toList();
 
         return new PromoCodePackageDto(
@@ -51,12 +50,12 @@ public class ReadPromoCodeService {
 
     @Transactional(readOnly = true)
     public PromoCodeDto getPromoCodeById(String id) {
-        return PromoCodeMapper.converter.handleEntity(promoCodeValidationManager.getPromoCodeByIdIfExists(id));
+        return promoCodeMapper.handleEntity(promoCodeValidationManager.getPromoCodeByIdIfExists(id));
     }
 
     @Transactional(readOnly = true)
     public PromoCodeDto getPromoCodeCurrentByCode(String code) {
-        return PromoCodeMapper.converter.handleEntity(promoCodeValidationManager.getCurrentPromoCode(code));
+        return promoCodeMapper.handleEntity(promoCodeValidationManager.getCurrentPromoCode(code));
     }
 
     private Query buildQuery(PromoCodeFilterRequest filterRequest) {
@@ -67,8 +66,9 @@ public class ReadPromoCodeService {
     }
 
     private void addCriteriaIfNotNull(Criteria criteria, String fieldName, Object value) {
-        if (nonNull(value))
+        if (nonNull(value)) {
             criteria.and(fieldName).is(value);
+        }
     }
 
     private Pageable createPageableObject(PromoCodeFilterRequest filterRequest) {
