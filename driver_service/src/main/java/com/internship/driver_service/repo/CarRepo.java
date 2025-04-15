@@ -11,6 +11,7 @@ public interface CarRepo extends JpaRepository<Car, Long>, JpaSpecificationExecu
     Car findByDriverProfileAndIsCurrent(DriverProfile driverProfile, Boolean current);
 
     List<Car> findAllByDriverProfile_ProfileId(Long profileId);
+
     boolean existsByCarNumberIgnoreCase(String carNumber);
 
 }

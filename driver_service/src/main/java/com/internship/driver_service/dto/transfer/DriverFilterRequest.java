@@ -55,15 +55,15 @@ public class DriverFilterRequest {
 
     @PositiveOrZero(message = "page.positive")
     @Max(value = MAX_PAGE_VALUE, message = "page.max")
-    private Integer page=DEFAULT_PAGE_VALUE;
+    private Integer page = DEFAULT_PAGE_VALUE;
 
     @PositiveOrZero(message = "size.positive")
     @Max(value = MAX_PAGE_SIZE, message = "size.max")
-    private Integer size=DEFAULT_PAGE_SIZE;
+    private Integer size = DEFAULT_PAGE_SIZE;
 
     @Pattern(regexp = PROFILE_SORT_FIELDS, message = "sort.by.invalidInput")
-    private String sortBy= FieldFilter.FIRST_NAME.toString();
+    private String sortBy = FieldFilter.FIRST_NAME.toString();
 
     @Pattern(regexp = ORDER_DIRECTION, message = "order.direction.invalidInput")
-    private String order= OrderDirection.ASC.toString();
+    private String order = OrderDirection.ASC.toString();
 }

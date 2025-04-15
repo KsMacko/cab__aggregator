@@ -63,7 +63,7 @@ public class ReadDriverProfileService {
     }
 
     private Pageable createPageableObject(DriverFilterRequest filterRequest) {
-        if(isNull(filterRequest.getSortBy())) filterRequest.setSortBy(FieldFilter.FIRST_NAME.getFieldName());
+        if (isNull(filterRequest.getSortBy())) filterRequest.setSortBy(FieldFilter.FIRST_NAME.getFieldName());
 
         Sort sort = Sort.by(Sort.Direction.fromString(
                         filterRequest.getOrder()),

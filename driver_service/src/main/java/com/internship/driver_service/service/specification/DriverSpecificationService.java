@@ -1,6 +1,5 @@
 package com.internship.driver_service.service.specification;
 
-import com.internship.driver_service.dto.ProfileDto;
 import com.internship.driver_service.dto.transfer.DriverFilterRequest;
 import com.internship.driver_service.entity.Car;
 import com.internship.driver_service.entity.DriverProfile;
@@ -31,7 +30,6 @@ import static com.internship.driver_service.entity.DriverProfile.Fields.phone;
 import static com.internship.driver_service.entity.DriverProfile.Fields.profileId;
 import static com.internship.driver_service.entity.Rate.Fields.driver;
 import static com.internship.driver_service.entity.Rate.Fields.value;
-import static java.util.Objects.nonNull;
 
 @Service
 public class DriverSpecificationService {
@@ -75,6 +73,7 @@ public class DriverSpecificationService {
         Optional.ofNullable(rateToFilter)
                 .ifPresent(rate -> predicates.add(cb.equal(cb.floor(subquery.getSelection()), rate)));
     }
+
     private <T extends Enum<T>> void addEnumPredicate(List<Predicate> predicates,
                                                       CriteriaBuilder cb,
                                                       Expression<T> expression,

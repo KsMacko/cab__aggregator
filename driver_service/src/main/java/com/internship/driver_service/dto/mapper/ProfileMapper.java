@@ -13,6 +13,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ProfileMapper {
     ProfileMapper converter = Mappers.getMapper(ProfileMapper.class);
+
     @Mapping(target = "profileId", ignore = true)
     DriverProfile handleDto(ProfileDto dto);
 
