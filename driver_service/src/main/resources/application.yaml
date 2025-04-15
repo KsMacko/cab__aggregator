@@ -1,15 +1,18 @@
 spring:
   application:
-    name: ${SPRING_APPLICATION_NAME}
+    name: driver-service
   datasource:
-    driver-class-name: ${DB_DRIVER_CLASS_NAME}
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/driver_db?useSSL=false&serverTimezone=UTC
+    username: root
+    password: asdfhcjsjffh
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: ${JPA_HIBERNATE_DDL_AUTO}
-    show-sql: ${JPA_SHOW_SQL}
+      ddl-auto: none
+    show-sql: true
+  messages:
+    basename: messages
+    encoding: UTF-8
 server:
-  port: ${SERVER_PORT}
+  port: 8082

@@ -4,6 +4,8 @@ import com.internship.driver_service.dto.transfer.DriverFilterRequest;
 import com.internship.driver_service.entity.Car;
 import com.internship.driver_service.entity.DriverProfile;
 import com.internship.driver_service.entity.Rate;
+import com.internship.driver_service.enums.DriverStatus;
+import com.internship.driver_service.enums.FareType;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
@@ -35,35 +37,22 @@ public class DriverSpecificationService {
     public Specification<DriverProfile> createFilterSpecification(DriverFilterRequest filter) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
+            addLikePredicate(predicates, cb, root.get(phone), filter.getPhone());
+            addLikePredicate(predicates, cb, root.get(firstName), filter.getFirstName());
+            addLikePredicate(predicates, cb, root.get(lastName), filter.getLastName());
 
-            addLikePredicate(predicates, cb, root.get(phone), filter.phone());
-            addLikePredicate(predicates, cb, root.get(firstName), filter.firstName());
-            addLikePredicate(predicates, cb, root.get(lastName), filter.lastName());
-
-            Optional.ofNullable(filter.carNumber()).ifPresent(carNumberToFilter -> {
-                Join<DriverProfile, Car> carJoin = root.join(car, JoinType.LEFT);
-                predicates.add(cb.like(carJoin.get(carNumber), "%" + carNumberToFilter + "%"));
-            });
-
-            addEqualPredicate(predicates, cb, root.get(driverStatus), filter.status());
-            addEqualPredicate(predicates, cb, root.get(fareType), filter.fareType());
-
+            Optional.ofNullable(filter.getCarNumber())
+                    .ifPresent(carNumberToFilter -> {
+                        Join<DriverProfile, Car> carJoin = root.join(car, JoinType.LEFT);
+                        predicates.add(cb.like(carJoin.get(carNumber), "%" + carNumberToFilter + "%"));
+                    });
+            addEnumPredicate(predicates, cb, root.get(driverStatus), filter.getStatus(), DriverStatus.class);
+            addEnumPredicate(predicates, cb, root.get(fareType), filter.getFareType(), FareType.class);
             Subquery<Double> subquery = query.subquery(Double.class);
             Root<Rate> rateRoot = subquery.from(Rate.class);
             subquery.select(cb.avg(rateRoot.get(value)))
                     .where(cb.equal(rateRoot.get(driver).get(profileId), root.get(profileId)));
-
-            addRatePredicate(predicates, cb, subquery, filter.rate());
-
-            query.multiselect(
-                    root.get(profileId),
-                    root.get(firstName),
-                    root.get(lastName),
-                    root.get(phone),
-                    root.get(fareType),
-                    root.get(driverStatus),
-                    getAverageRateSubquery(cb, subquery)
-            );
+            addRatePredicate(predicates, cb, subquery, filter.getRate());
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };
@@ -77,14 +66,6 @@ public class DriverSpecificationService {
                 .ifPresent(val -> predicates.add(cb.like(expression, "%" + val + "%")));
     }
 
-    private <T> void addEqualPredicate(List<Predicate> predicates,
-                                       CriteriaBuilder cb,
-                                       Expression<T> expression,
-                                       T value) {
-        Optional.ofNullable(value)
-                .ifPresent(val -> predicates.add(cb.equal(expression, val)));
-    }
-
     private void addRatePredicate(List<Predicate> predicates,
                                   CriteriaBuilder cb,
                                   Subquery<Double> subquery,
@@ -93,8 +74,15 @@ public class DriverSpecificationService {
                 .ifPresent(rate -> predicates.add(cb.equal(cb.floor(subquery.getSelection()), rate)));
     }
 
-    private Expression<Double> getAverageRateSubquery(CriteriaBuilder cb,
-                                                      Subquery<Double> subquery) {
-        return cb.floor(subquery.getSelection());
+    private <T extends Enum<T>> void addEnumPredicate(List<Predicate> predicates,
+                                                      CriteriaBuilder cb,
+                                                      Expression<T> expression,
+                                                      String filterValue,
+                                                      Class<T> enumClass) {
+        Optional.ofNullable(filterValue)
+                .ifPresent(value -> {
+                    T enumValue = Enum.valueOf(enumClass, value);
+                    predicates.add(cb.equal(expression, enumValue));
+                });
     }
 }

@@ -1,47 +1,38 @@
-package com.internship.driver_service.service;
+package com.internship.driver_service.service.command;
 
 import com.internship.driver_service.dto.ProfileDto;
 import com.internship.driver_service.dto.RateDto;
 import com.internship.driver_service.dto.mapper.ProfileMapper;
 import com.internship.driver_service.dto.mapper.RateMapper;
-import com.internship.driver_service.entity.DriverAccount;
 import com.internship.driver_service.entity.DriverProfile;
-import com.internship.driver_service.repo.DriverAccountRepo;
 import com.internship.driver_service.repo.DriverProfileRepo;
 import com.internship.driver_service.repo.RateRepo;
-import com.internship.driver_service.utils.ProfileValidationManager;
-import com.internship.driver_service.utils.RateValidationManager;
-import jakarta.transaction.Transactional;
+import com.internship.driver_service.utils.validation.ProfileValidationManager;
+import com.internship.driver_service.utils.validation.RateValidationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class CommandDriverProfileService {
     private final DriverProfileRepo driverProfileRepo;
-    private final DriverAccountRepo driverAccountRepo;
     private final ProfileValidationManager profileValidationManager;
     private final RateValidationManager rateValidationManager;
     private final RateRepo rateRepo;
 
     @Transactional
     public ProfileDto createProfile(ProfileDto profileDto) {
-        DriverAccount driverAccount = driverAccountRepo.findById(profileDto.profileId())
-                .orElseThrow(() -> new RuntimeException("driver.account.notExists"));
+        profileValidationManager.checkIfPhoneUnique(profileDto.phone());
         DriverProfile driverProfile = ProfileMapper.converter.handleDto(profileDto);
-        driverProfile.setDriverAccount(driverAccount);
-        driverProfile.setProfileId(null);
-        driverAccount.setDriverProfile(driverProfile);
         return ProfileMapper.converter.handleEntity(driverProfileRepo.save(driverProfile));
     }
 
     @Transactional
     public ProfileDto updateDriverProfile(ProfileDto profileDto) {
         profileValidationManager.checkIfProfileIdNotNull(profileDto.profileId());
-        DriverProfile existingProfile = driverProfileRepo
-                .findById(profileDto.profileId())
-                .orElseThrow(() -> new RuntimeException("driver.notFound"));
-        ProfileMapper.converter.updateEntity(profileDto, existingProfile);
+        DriverProfile existingProfile = profileValidationManager.getDriverProfile(profileDto.profileId());
+        ProfileMapper.converter.updateProfileFromDto(profileDto, existingProfile);
 
         return ProfileMapper.converter.handleEntity(driverProfileRepo.save(existingProfile));
     }
@@ -51,7 +42,6 @@ public class CommandDriverProfileService {
         profileValidationManager.checkIfProfileIdNotNull(profileId);
         profileValidationManager.checkIfProfileExists(profileId);
         driverProfileRepo.deleteById(profileId);
-        driverAccountRepo.deleteById(profileId);
     }
 
     @Transactional

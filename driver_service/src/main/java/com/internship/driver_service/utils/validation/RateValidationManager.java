@@ -1,23 +1,19 @@
-package com.internship.driver_service.utils;
+package com.internship.driver_service.utils.validation;
 
 import com.internship.driver_service.repo.RateRepo;
+import com.internship.driver_service.utils.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static java.util.Objects.isNull;
+import static com.internship.driver_service.utils.exceptions.ExceptionCodes.RATE_NOT_FOUND;
 
 @Component
 @RequiredArgsConstructor
 public class RateValidationManager {
     private final RateRepo rateRepo;
 
-    public void checkRateNotNull(Byte rate) {
-        if (isNull(rate))
-            throw new RuntimeException("driver.profile.rating.notFound");
-    }
-
     public void checkRateExistsById(Long id) {
         if (!rateRepo.existsById(id))
-            throw new RuntimeException("rate.notFound");
+            throw new ResourceNotFoundException(RATE_NOT_FOUND.getCode());
     }
 }

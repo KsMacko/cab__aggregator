@@ -9,6 +9,5 @@ public interface RateRepo extends JpaRepository<Rate, Long> {
     @Query("select FLOOR(AVG(r.value)) " +
             "from Rate r " +
             "where r.driver.profileId=:profileId ")
-    Byte findDriverRatingByProfileId(@Param("profileId") Long profileId);
-
+    Integer findDriverRatingByProfileId(@Param("profileId") Long profileId);
 }

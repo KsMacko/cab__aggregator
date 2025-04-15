@@ -30,7 +30,7 @@ public class Rate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private Byte value;
+    private Integer value;
     @Column(nullable = false)
     private Long authorId;
     @CreationTimestamp
@@ -38,6 +38,6 @@ public class Rate {
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
     @ManyToOne
-    @JoinColumn(name = "driver_profile_id")
+    @JoinColumn(name = "driver_profile_profile_id")
     private DriverProfile driver;
 }
