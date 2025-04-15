@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class ReadWalletTransferService @Autowired constructor(
+class ReadWalletTransferService (
     private val walletRepo: DriverWalletRepo,
     private val walletMapper: WalletMapper,
     private val walletValidatorManager: WalletValidationManager
@@ -44,8 +44,6 @@ class ReadWalletTransferService @Autowired constructor(
     }
 
     @Transactional(readOnly = true)
-    fun getWalletById(id: Long): WalletDto {
-        val wallet = walletValidatorManager.getWalletIfExists(id)
-        return walletMapper.toDto(wallet)
-    }
+    fun getWalletById(id: Long): WalletDto =
+        walletMapper.toDto(walletValidatorManager.getWalletIfExists(id))
 }

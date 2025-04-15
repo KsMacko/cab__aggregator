@@ -9,21 +9,23 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.MapsId
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
+import java.math.BigDecimal
 
 @Entity
 @Table(name = "wallet_transfer")
 class WalletTransfer {
     @Id
     val id: Long? = null
+    lateinit var remainingAmount: BigDecimal
 
     @ManyToOne
     @JoinColumn(name = "driver_wallet_id")
-    var wallet: DriverWallet? = null
+    lateinit var wallet: DriverWallet
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "financial_operation_id")
     @MapsId
-    var financialOperation: FinancialOperation? = null
+    lateinit var financialOperation: FinancialOperation
 
     companion object Fields {
         const val ID = "id"

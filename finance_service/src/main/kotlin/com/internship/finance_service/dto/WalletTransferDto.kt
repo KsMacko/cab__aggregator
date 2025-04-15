@@ -5,8 +5,8 @@ import java.time.LocalDateTime
 
 data class WalletTransferDto(
     val id: Long? = null,
-    val driverId: Long? = null,
+    val driverId: Long,
     var date: LocalDateTime? = null,
-    var amount: BigDecimal? = null,
-    var remainingAmount: BigDecimal? = null
+    var amount: BigDecimal,
+    var remainingAmount: BigDecimal
 )

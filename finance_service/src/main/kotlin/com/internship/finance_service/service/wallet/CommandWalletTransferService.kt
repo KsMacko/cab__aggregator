@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class CommandWalletTransferService @Autowired constructor(
+class CommandWalletTransferService(
     private val walletRepo: DriverWalletRepo,
-    private var walletValidatorManager: WalletValidationManager,
-    private var walletMapper: WalletMapper
+    private val walletValidatorManager: WalletValidationManager,
+    private val walletMapper: WalletMapper
 ) {
     @Transactional
     fun createWallet(walletDto: WalletDto): WalletDto {
@@ -21,14 +21,6 @@ class CommandWalletTransferService @Autowired constructor(
         val wallet = walletMapper.toEntity(walletDto)
         return walletMapper.toDto(walletRepo.save(wallet))
     }
-
-    @Transactional
-    fun updateWallet(walletDto: WalletDto): WalletDto {
-        val wallet: DriverWallet = walletValidatorManager.getWalletIfExists(walletDto.id)
-        walletMapper.updateEntity(wallet, walletDto)
-        return walletMapper.toDto(wallet)
-    }
-
     @Transactional
     fun deleteWallet(id: Long) {
         walletValidatorManager.getWalletIfExists(id)

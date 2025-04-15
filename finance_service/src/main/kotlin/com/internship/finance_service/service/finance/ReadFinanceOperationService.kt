@@ -26,12 +26,12 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class ReadFinanceOperationService @Autowired constructor(
-    private var paymentRepo: PaymentRepo,
-    private var walletTransferRepo: WalletTransferRepo,
-    private var financeValidationManager: FinanceValidationManager,
-    private var paymentMapper: PaymentMapper,
-    private var walletTransferMapper: WalletTransferMapper
+class ReadFinanceOperationService(
+    private val paymentRepo: PaymentRepo,
+    private val walletTransferRepo: WalletTransferRepo,
+    private val financeValidationManager: FinanceValidationManager,
+    private val paymentMapper: PaymentMapper,
+    private val walletTransferMapper: WalletTransferMapper
 ): PageableObjectCreator(){
 
     @Transactional(readOnly = true)
@@ -69,12 +69,10 @@ class ReadFinanceOperationService @Autowired constructor(
     }
 
     @Transactional(readOnly = true)
-    fun getPaymentById(id: Long): PaymentDto {
-        return paymentMapper.toDto(financeValidationManager.getPaymentOperationIfExists(id))
-    }
+    fun getPaymentById(id: Long): PaymentDto =
+        paymentMapper.toDto(financeValidationManager.getPaymentOperationIfExists(id))
 
     @Transactional(readOnly = true)
-    fun getWalletTransferById(id: Long): WalletTransferDto {
-        return walletTransferMapper.toDto(financeValidationManager.getWalletTransferOperationIfExists(id))
-    }
+    fun getWalletTransferById(id: Long): WalletTransferDto =
+        walletTransferMapper.toDto(financeValidationManager.getWalletTransferOperationIfExists(id))
 }

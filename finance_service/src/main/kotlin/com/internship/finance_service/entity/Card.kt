@@ -12,6 +12,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import java.time.LocalDate
+import kotlin.properties.Delegates
 
 @Entity
 @Table(name = "card")
@@ -24,7 +25,7 @@ class Card {
 
     @Enumerated(EnumType.STRING)
     lateinit var owner: OwnerType
-    var ownerId: Long? = null
+    val ownerId: Long = 0
 
     @Enumerated(EnumType.STRING)
     lateinit var cardType: CardType

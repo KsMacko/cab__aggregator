@@ -10,18 +10,15 @@ class WalletValidationManager @Autowired constructor(
     private val walletRepo: DriverWalletRepo
 ) {
 
-    fun getWalletIfExists(id: Long?): DriverWallet {
-        id ?: throw RuntimeException("card.id.notNull")
+    fun getWalletIfExists(id: Long): DriverWallet {
         return walletRepo.findById(id).orElseThrow {
             IllegalArgumentException("wallet.notFound")
         }
     }
 
-    fun validateDriverIdUniqueness(driverId: Long?) {
-        driverId?.let {
-            if (walletRepo.existsByDriverId(it)) {
-                throw IllegalArgumentException("wallet.alreadyExists")
-            }
+    fun validateDriverIdUniqueness(driverId: Long) {
+        if (walletRepo.existsByDriverId(driverId)) {
+            throw IllegalArgumentException("wallet.alreadyExists")
         }
     }
 

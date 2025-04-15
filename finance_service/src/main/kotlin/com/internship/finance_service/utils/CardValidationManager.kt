@@ -9,8 +9,7 @@ import org.springframework.stereotype.Component
 class CardValidationManager @Autowired constructor(
     private val cardRepo: CardRepo
 ) {
-    fun getCardIfExists(id: Long?): Card {
-        id ?: throw RuntimeException("card.id.notNull")
+    fun getCardIfExists(id: Long): Card {
         return cardRepo.findById(id).orElseThrow { RuntimeException("card.notFound") }
     }
 
@@ -19,8 +18,7 @@ class CardValidationManager @Autowired constructor(
             throw RuntimeException("card.id.notFound")
     }
 
-    fun validateCardExistsForOwner(ownerId: Long?) {
-        ownerId ?: throw RuntimeException("owner.id.notNull")
+    fun validateCardExistsForOwner(ownerId: Long) {
         if (!cardRepo.existsCardByOwnerId(ownerId)) {
             throw RuntimeException("card.id.notFound")
         }

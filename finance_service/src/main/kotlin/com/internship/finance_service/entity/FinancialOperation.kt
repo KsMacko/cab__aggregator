@@ -14,14 +14,17 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "finance_operation")
-class FinancialOperation {
+class FinancialOperation (){
+    constructor(amount: BigDecimal) : this() {
+        this.amount = amount
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
     @CreationTimestamp
-    val createdAt: LocalDateTime? = null
-    var amount: BigDecimal? = null
+    val createdAt: LocalDateTime = LocalDateTime.now()
+    var amount: BigDecimal = BigDecimal.ZERO
 
     @OneToOne(mappedBy = "financialOperation")
     var walletTransfer: WalletTransfer? = null

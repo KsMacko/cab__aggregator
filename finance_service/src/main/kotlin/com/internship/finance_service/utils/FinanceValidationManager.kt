@@ -2,6 +2,7 @@ package com.internship.finance_service.utils
 
 import com.internship.finance_service.dto.PaymentDto
 import com.internship.finance_service.dto.WalletTransferDto
+import com.internship.finance_service.entity.DriverWallet
 import com.internship.finance_service.entity.Payment
 import com.internship.finance_service.entity.WalletTransfer
 import com.internship.finance_service.enums.PaymentType
@@ -25,10 +26,7 @@ class FinanceValidationManager @Autowired constructor(
         }
     }
 
-    fun getPaymentOperationIfExists(id: Long?): Payment {
-        if (id == null) {
-            throw RuntimeException("operation.id.notNull")
-        }
+    fun getPaymentOperationIfExists(id: Long): Payment {
         return paymentRepo.findById(id).orElseThrow {
             RuntimeException("operation.payment.notFound")
         }
@@ -43,22 +41,23 @@ class FinanceValidationManager @Autowired constructor(
         }
     }
 
-    fun validateOperationIdUniqueness(id: Long?) {
-        if (id != null && financialOperationRepo.existsById(id)) {
+    fun validateOperationIdUniqueness(id: Long) {
+        if (financialOperationRepo.existsById(id)) {
             throw RuntimeException("operation.id.alreadyExists")
         }
     }
 
     fun validatePayment(paymentDto: PaymentDto) {
         if (paymentDto.paymentType == PaymentType.CARD) {
-            cardValidationManager.validateCardExistsForOwner(paymentDto.passengerId!!)
+            cardValidationManager.validateCardExistsForOwner(paymentDto.passengerId)
         }
     }
 
-    fun validateWalletTransfer(walletTransferDto: WalletTransferDto) {
-        val wallet = walletValidationManager.getWalletIfExistsByDriverId(walletTransferDto.driverId!!)
-        if (wallet.balance < walletTransferDto.amount!!) {
+    fun validateWalletTransfer(walletTransferDto: WalletTransferDto): DriverWallet {
+        val wallet = walletValidationManager.getWalletIfExistsByDriverId(walletTransferDto.driverId)
+        if (wallet.balance < walletTransferDto.amount) {
             throw RuntimeException("wallet.transfer.invalidAmount")
         }
+        return wallet
     }
 }

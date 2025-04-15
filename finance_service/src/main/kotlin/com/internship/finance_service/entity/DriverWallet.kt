@@ -12,7 +12,7 @@ class DriverWallet {
     @Id
     val id: Long? = null
     var balance: BigDecimal = BigDecimal.ZERO
-    var driverId: Long? = null
+    val driverId: Long = 0
 
     @OneToMany(mappedBy = "wallet")
     var transfers: List<WalletTransfer>? = null

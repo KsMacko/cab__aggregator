@@ -13,12 +13,12 @@ import jakarta.persistence.Table
 class Payment {
     @Id
     val id: Long? = null
-    var passengerId: Long? = null
-    var paymentType: PaymentType? = null
+    var passengerId: Long = 0
+    lateinit var paymentType: PaymentType
 
     @OneToOne(fetch = FetchType.EAGER)
     @MapsId
-    var financialOperation: FinancialOperation? = null
+    lateinit var financialOperation: FinancialOperation
 
     companion object Fields {
         const val ID = "id"

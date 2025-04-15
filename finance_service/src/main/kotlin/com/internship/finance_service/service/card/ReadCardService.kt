@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class ReadCardService @Autowired constructor(
-    private var cardRepo: CardRepo,
-    private var cardValidationManager: CardValidationManager,
-    private var cardMapper: CardMapper
+class ReadCardService(
+    private val cardRepo: CardRepo,
+    private val cardValidationManager: CardValidationManager,
+    private val cardMapper: CardMapper
 ): PageableObjectCreator(){
     @Transactional(readOnly = true)
     fun findAllCards(filter: CardFilterRequest): CardPackageDto {
@@ -42,7 +42,6 @@ class ReadCardService @Autowired constructor(
     }
 
     @Transactional(readOnly = true)
-    fun findCardById(id: Long): CardDto {
-        return cardMapper.toDto(cardValidationManager.getCardIfExists(id))
-    }
+    fun findCardById(id: Long): CardDto =
+        cardMapper.toDto(cardValidationManager.getCardIfExists(id))
 }

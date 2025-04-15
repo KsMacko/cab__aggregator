@@ -10,22 +10,14 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class CommandCardService @Autowired constructor(
-    private var cardRepo: CardRepo,
-    private var cardValidationManager: CardValidationManager,
-    private var cardMapper: CardMapper
+class CommandCardService(
+    private val cardRepo: CardRepo,
+    private val cardValidationManager: CardValidationManager,
+    private val cardMapper: CardMapper
 ) {
     @Transactional
-    fun createCard(cardDto: CardDto): CardDto {
-        return cardMapper.toDto(cardRepo.save(cardMapper.toEntity(cardDto)))
-    }
-
-    @Transactional
-    fun updateCard(cardDto: CardDto): CardDto {
-        val card: Card = cardValidationManager.getCardIfExists(cardDto.id)
-        cardMapper.updateEntity(card, cardDto)
-        return cardMapper.toDto(card)
-    }
+    fun createCard(cardDto: CardDto): CardDto =
+        cardMapper.toDto(cardRepo.save(cardMapper.toEntity(cardDto)))
 
     @Transactional
     fun deleteCard(id: Long) {

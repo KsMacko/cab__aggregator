@@ -7,8 +7,8 @@ import java.time.LocalTime
 
 data class PaymentDto(
     val id: Long? = null,
-    val passengerId: Long? = null,
-    var createdAt: LocalDateTime? = null,
-    var amount: BigDecimal? = null,
-    var paymentType: PaymentType? = null
+    val passengerId: Long,
+    var createdAt: LocalDateTime,
+    var amount: BigDecimal,
+    var paymentType: PaymentType
 )
