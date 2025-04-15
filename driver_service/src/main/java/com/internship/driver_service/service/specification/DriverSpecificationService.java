@@ -1,5 +1,6 @@
 package com.internship.driver_service.service.specification;
 
+import com.internship.driver_service.dto.ProfileDto;
 import com.internship.driver_service.dto.transfer.DriverFilterRequest;
 import com.internship.driver_service.entity.Car;
 import com.internship.driver_service.entity.DriverProfile;
@@ -38,7 +39,6 @@ public class DriverSpecificationService {
     public Specification<DriverProfile> createFilterSpecification(DriverFilterRequest filter) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-
             addLikePredicate(predicates, cb, root.get(phone), filter.getPhone());
             addLikePredicate(predicates, cb, root.get(firstName), filter.getFirstName());
             addLikePredicate(predicates, cb, root.get(lastName), filter.getLastName());
@@ -56,18 +56,7 @@ public class DriverSpecificationService {
             Root<Rate> rateRoot = subquery.from(Rate.class);
             subquery.select(cb.avg(rateRoot.get(value)))
                     .where(cb.equal(rateRoot.get(driver).get(profileId), root.get(profileId)));
-
             addRatePredicate(predicates, cb, subquery, filter.getRate());
-
-            query.multiselect(
-                    root.get(profileId),
-                    root.get(firstName),
-                    root.get(lastName),
-                    root.get(phone),
-                    root.get(fareType),
-                    root.get(driverStatus),
-                    getAverageRateSubquery(cb, subquery)
-            );
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };

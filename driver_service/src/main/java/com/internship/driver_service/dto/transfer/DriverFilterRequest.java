@@ -1,5 +1,7 @@
 package com.internship.driver_service.dto.transfer;
 
+import com.internship.driver_service.enums.FieldFilter;
+import com.internship.driver_service.enums.OrderDirection;
 import com.internship.driver_service.utils.validation.ValidationConstants;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -11,6 +13,8 @@ import lombok.Setter;
 
 import static com.internship.driver_service.utils.validation.ValidationConstants.CAR_NUM_PATTERN;
 import static com.internship.driver_service.utils.validation.ValidationConstants.CYRILLIC_REGEX;
+import static com.internship.driver_service.utils.validation.ValidationConstants.DEFAULT_PAGE_SIZE;
+import static com.internship.driver_service.utils.validation.ValidationConstants.DEFAULT_PAGE_VALUE;
 import static com.internship.driver_service.utils.validation.ValidationConstants.DRIVER_STATUS_PATTERN;
 import static com.internship.driver_service.utils.validation.ValidationConstants.FARE_TYPE_PATTERN;
 import static com.internship.driver_service.utils.validation.ValidationConstants.MAX_PAGE_SIZE;
@@ -51,15 +55,15 @@ public class DriverFilterRequest {
 
     @PositiveOrZero(message = "page.positive")
     @Max(value = MAX_PAGE_VALUE, message = "page.max")
-    private Integer page;
+    private Integer page=DEFAULT_PAGE_VALUE;
 
     @PositiveOrZero(message = "size.positive")
     @Max(value = MAX_PAGE_SIZE, message = "size.max")
-    private Integer size;
+    private Integer size=DEFAULT_PAGE_SIZE;
 
     @Pattern(regexp = PROFILE_SORT_FIELDS, message = "sort.by.invalidInput")
-    private String sortBy;
+    private String sortBy= FieldFilter.FIRST_NAME.toString();
 
     @Pattern(regexp = ORDER_DIRECTION, message = "order.direction.invalidInput")
-    private String order;
+    private String order= OrderDirection.ASC.toString();
 }

@@ -9,6 +9,7 @@ import com.internship.driver_service.entity.DriverProfile;
 import com.internship.driver_service.repo.DriverAccountRepo;
 import com.internship.driver_service.repo.DriverProfileRepo;
 import com.internship.driver_service.repo.RateRepo;
+import com.internship.driver_service.utils.exceptions.ResourceNotFoundException;
 import com.internship.driver_service.utils.validation.ProfileValidationManager;
 import com.internship.driver_service.utils.validation.RateValidationManager;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class CommandDriverProfileService {
     @Transactional
     public ProfileDto createProfile(ProfileDto profileDto) {
         DriverAccount driverAccount = driverAccountRepo.findById(profileDto.profileId())
-                .orElseThrow(() -> new RuntimeException("driver.account.notExists"));
+                .orElseThrow(() -> new ResourceNotFoundException("driver.account.notExists"));
         DriverProfile driverProfile = ProfileMapper.converter.handleDto(profileDto);
         driverProfile.setDriverAccount(driverAccount);
         driverProfile.setProfileId(null);

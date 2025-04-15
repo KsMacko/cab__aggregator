@@ -4,9 +4,10 @@ import com.internship.driver_service.dto.CarDto;
 import com.internship.driver_service.entity.Car;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CarMapper {
     CarMapper converter = Mappers.getMapper(CarMapper.class);
 

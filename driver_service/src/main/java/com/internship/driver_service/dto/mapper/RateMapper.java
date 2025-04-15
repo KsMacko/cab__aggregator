@@ -3,9 +3,10 @@ package com.internship.driver_service.dto.mapper;
 import com.internship.driver_service.dto.RateDto;
 import com.internship.driver_service.entity.Rate;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface RateMapper {
     RateMapper converter = Mappers.getMapper(RateMapper.class);
 

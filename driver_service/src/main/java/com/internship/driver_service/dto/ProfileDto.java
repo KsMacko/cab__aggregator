@@ -43,9 +43,6 @@ public record ProfileDto(
 
         @Pattern(regexp = PHONE_PATTERN, message = "phone.invalidInput")
         @NotBlank(message = "phone.notBlank")
-        String phone,
-
-        @Schema(hidden = true)
-        Byte rate
+        String phone
 ) {
 }

@@ -64,12 +64,12 @@ databaseChangeLog:
                     unique: true
               - column:
                   name: created_at
-                  type: timestamp with time zone
+                  type: timestamp
                   constraints:
                     nullable: false
               - column:
                   name: updated_at
-                  type: timestamp with time zone
+                  type: timestamp
                   constraints:
                     nullable: false
         - createTable:
@@ -99,12 +99,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: current
+                  name: is_current
                   type: boolean
                   constraints:
                     nullable: false
               - column:
-                  name: driver_profile_id
+                  name: driver_profile_profile_id
                   type: bigint
                   constraints:
                     nullable: false
@@ -127,17 +127,22 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: author_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
                   name: created_at
-                  type: datetime
+                  type: timestamp
                   constraints:
                     nullable: false
               - column:
                   name: updated_at
-                  type: datetime
+                  type: timestamp
                   constraints:
                     nullable: false
               - column:
-                  name: driver_profile_id
+                  name: driver_profile_profile_id
                   type: bigint
                   constraints:
                     nullable: false
