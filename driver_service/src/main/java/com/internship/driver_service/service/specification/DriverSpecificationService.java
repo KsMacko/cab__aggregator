@@ -43,15 +43,13 @@ public class DriverSpecificationService {
             addLikePredicate(predicates, cb, root.get(firstName), filter.getFirstName());
             addLikePredicate(predicates, cb, root.get(lastName), filter.getLastName());
 
-            Optional.ofNullable(filter.getCarNumber()).ifPresent(carNumberToFilter -> {
-                Join<DriverProfile, Car> carJoin = root.join(car, JoinType.LEFT);
-                predicates.add(cb.like(carJoin.get(carNumber), "%" + carNumberToFilter + "%"));
-            });
-            if (nonNull(filter.getStatus()))
-                addEqualPredicate(predicates, cb, root.get(driverStatus), DriverStatus.valueOf(filter.getStatus()));
-            if (nonNull(filter.getFareType()))
-                addEqualPredicate(predicates, cb, root.get(fareType), FareType.valueOf(filter.getFareType()));
-
+            Optional.ofNullable(filter.getCarNumber())
+                    .ifPresent(carNumberToFilter -> {
+                        Join<DriverProfile, Car> carJoin = root.join(car, JoinType.LEFT);
+                        predicates.add(cb.like(carJoin.get(carNumber), "%" + carNumberToFilter + "%"));
+                    });
+            addEnumPredicate(predicates, cb, root.get(driverStatus), filter.getStatus(), DriverStatus.class);
+            addEnumPredicate(predicates, cb, root.get(fareType), filter.getFareType(), FareType.class);
             Subquery<Double> subquery = query.subquery(Double.class);
             Root<Rate> rateRoot = subquery.from(Rate.class);
             subquery.select(cb.avg(rateRoot.get(value)))
@@ -70,13 +68,6 @@ public class DriverSpecificationService {
                 .ifPresent(val -> predicates.add(cb.like(expression, "%" + val + "%")));
     }
 
-    private <T> void addEqualPredicate(List<Predicate> predicates,
-                                       CriteriaBuilder cb,
-                                       Expression<T> expression,
-                                       T value) {
-        predicates.add(cb.equal(expression, value));
-    }
-
     private void addRatePredicate(List<Predicate> predicates,
                                   CriteriaBuilder cb,
                                   Subquery<Double> subquery,
@@ -84,9 +75,15 @@ public class DriverSpecificationService {
         Optional.ofNullable(rateToFilter)
                 .ifPresent(rate -> predicates.add(cb.equal(cb.floor(subquery.getSelection()), rate)));
     }
-
-    private Expression<Double> getAverageRateSubquery(CriteriaBuilder cb,
-                                                      Subquery<Double> subquery) {
-        return cb.floor(subquery.getSelection());
+    private <T extends Enum<T>> void addEnumPredicate(List<Predicate> predicates,
+                                                      CriteriaBuilder cb,
+                                                      Expression<T> expression,
+                                                      String filterValue,
+                                                      Class<T> enumClass) {
+        Optional.ofNullable(filterValue)
+                .ifPresent(value -> {
+                    T enumValue = Enum.valueOf(enumClass, value);
+                    predicates.add(cb.equal(expression, enumValue));
+                });
     }
 }

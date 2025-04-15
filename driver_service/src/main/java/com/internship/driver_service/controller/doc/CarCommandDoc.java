@@ -32,7 +32,7 @@ public interface CarCommandDoc {
     )
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "204",
+                    responseCode = "200",
                     description = "Car set as current successfully"
             ),
             @ApiResponse(
@@ -47,7 +47,7 @@ public interface CarCommandDoc {
             )
     })
     @PatchMapping("/cars/{id}")
-    ResponseEntity<Void> setCurrentCar(
+    CarDto setCurrentCar(
             @Parameter(description = "Unique identifier of the car", example = "1", required = true)
             @PositiveOrZero(message = "id.positive")
             @Max(value = ValidationConstants.MAX_ID_VALUE, message = "id.maxValue")

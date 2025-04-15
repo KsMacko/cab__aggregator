@@ -36,11 +36,11 @@ public class CommandCarService {
     }
 
     @Transactional
-    public void setCurrentCar(Long carId) {
+    public CarDto setCurrentCar(Long carId) {
         Car car = carValidationManager.getIfExistsById(carId);
         resetCurrentCarForDriver(car.getDriverProfile().getProfileId());
         car.setIsCurrent(true);
-        carRepo.save(car);
+        return CarMapper.converter.handleEntity(carRepo.save(car));
     }
 
     private void resetCurrentCarForDriver(Long driverId) {

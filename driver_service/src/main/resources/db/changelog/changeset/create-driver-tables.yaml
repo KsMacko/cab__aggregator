@@ -4,37 +4,14 @@ databaseChangeLog:
       author: KsMacko
       changes:
         - createTable:
-            tableName: user_account
-            columns:
-              - column:
-                  name: id
-                  type: bigint
-                  autoIncrement: true
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-              - column:
-                  name: username
-                  type: varchar(50)
-                  constraints:
-                    unique: true
-                    nullable: false
-              - column:
-                  name: hash_password
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-        - createTable:
             tableName: profile
             columns:
               - column:
                   name: profile_id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
-                    foreignKeyName: fk_profile_user_account
-                    referencedTableName: user_account
-                    referencedColumnNames: id
                     nullable: false
               - column:
                   name: first_name

@@ -17,9 +17,8 @@ public class CommandCarController implements CarCommandDoc {
     private final CommandCarService commandCarService;
 
     @Override
-    public ResponseEntity<Void> setCurrentCar(@PathVariable Long id) {
-        commandCarService.setCurrentCar(id);
-        return ResponseEntity.noContent().build();
+    public CarDto setCurrentCar(@PathVariable Long id) {
+        return commandCarService.setCurrentCar(id);
     }
 
     @Override

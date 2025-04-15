@@ -10,8 +10,7 @@ import java.util.List;
 public interface CarRepo extends JpaRepository<Car, Long>, JpaSpecificationExecutor<Car> {
     Car findByDriverProfileAndIsCurrent(DriverProfile driverProfile, Boolean current);
 
-    Boolean existsByCarNumber(String carNumber);
-
     List<Car> findAllByDriverProfile_ProfileId(Long profileId);
+    boolean existsByCarNumberIgnoreCase(String carNumber);
 
 }

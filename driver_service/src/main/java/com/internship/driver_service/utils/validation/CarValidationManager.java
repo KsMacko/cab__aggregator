@@ -22,8 +22,7 @@ public class CarValidationManager {
     }
 
     public void validateCarNumberUniqueness(String carNumber) {
-        String lowerCaseCarNumber = carNumber.toLowerCase();
-        if (carRepo.existsByCarNumber(lowerCaseCarNumber)) {
+        if (carRepo.existsByCarNumberIgnoreCase(carNumber)) {
             throw new InvalidInputException(CAR_NUMBER_ALREADY_EXISTS.getCode());
         }
     }

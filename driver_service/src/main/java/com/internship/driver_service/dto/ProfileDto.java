@@ -1,12 +1,10 @@
 package com.internship.driver_service.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
 import lombok.experimental.FieldNameConstants;
 
 import static com.internship.driver_service.utils.validation.ValidationConstants.CYRILLIC_REGEX;
@@ -17,7 +15,6 @@ import static com.internship.driver_service.utils.validation.ValidationConstants
 import static com.internship.driver_service.utils.validation.ValidationConstants.PHONE_PATTERN;
 
 @FieldNameConstants
-@Builder
 public record ProfileDto(
         @PositiveOrZero(message = "id.positive")
         @Max(value = MAX_ID_VALUE, message = "profile.id.maxValue")
