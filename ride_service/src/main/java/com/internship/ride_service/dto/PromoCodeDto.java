@@ -1,10 +1,12 @@
 package com.internship.ride_service.dto;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
-public record PromoCodeDto (
-        String code,
+public record PromoCodeDto(
+        String promoCode,
+        String id,
         Byte discount,
-        LocalDate validUntil,
-        LocalDate createdAt
-){}
+        OffsetDateTime validUntil,
+        OffsetDateTime createdAt
+) {
+}

@@ -1,14 +1,14 @@
-package com.internship.ride_service.dto.transfer_objects;
+package com.internship.ride_service.dto.transfer;
 
 import com.internship.ride_service.enums.FareType;
 import com.internship.ride_service.enums.OrderDirection;
 import com.internship.ride_service.enums.RideFieldsToFilter;
 import com.internship.ride_service.enums.RideStatus;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 public record RideFilterRequest(
-        LocalDate date,
+        OffsetDateTime createdAt,
         Long driverId,
         Long passengerId,
         RideStatus status,
@@ -17,4 +17,5 @@ public record RideFilterRequest(
         int size,
         RideFieldsToFilter sortBy,
         OrderDirection order
-) {}
+) {
+}

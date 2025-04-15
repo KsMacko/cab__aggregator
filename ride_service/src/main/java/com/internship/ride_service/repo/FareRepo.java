@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface FareRepo extends MongoRepository<Fare, FareType> {
     Optional<Fare> findFareByType(FareType fareType);
+
     void deleteFareByType(FareType fareType);
 }
