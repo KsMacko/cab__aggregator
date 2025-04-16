@@ -11,12 +11,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import static com.internship.passenger_service.utils.ValidationConstants.MAX_ID_VALUE;
 
 @Tag(
         name = "Operations with passenger data",
@@ -64,7 +68,10 @@ public interface CommandDoc {
             )
     })
     @PutMapping
-    ProfileDto updatePassenger(ProfileDto profileDto);
+    ProfileDto updatePassenger(
+            @RequestBody
+            @Valid
+            ProfileDto profileDto);
 
     @Operation(
             summary = "Delete passenger",
@@ -90,5 +97,7 @@ public interface CommandDoc {
     @DeleteMapping("/{id}")
     void deletePassenger(
             @Parameter(description = "Unique identifier of the passenger", example = "1", required = true)
+            @Positive(message = "id.positive")
+            @Max(value = MAX_ID_VALUE, message = "profile.id.maxValue")
             @PathVariable Long id);
 }

@@ -21,6 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+
+import static com.internship.passenger_service.utils.ValidationConstants.DEFAULT_PAGE_SIZE;
+import static com.internship.passenger_service.utils.ValidationConstants.DEFAULT_PAGE_VALUE;
 
 @Service
 @RequiredArgsConstructor
@@ -44,10 +48,12 @@ public class ReadPassengerProfileService {
         return convertToDataPackageDto(resultPage);
     }
     public Pageable createPageableObject(ProfileFilterRequest filter) {
+        int page = Optional.ofNullable(filter.getPage()).orElse(DEFAULT_PAGE_VALUE);
+        int size = Optional.ofNullable(filter.getSize()).orElse(DEFAULT_PAGE_SIZE);
         Sort sort = Sort.by(Sort.Direction.fromString(
                 filter.getOrder()),
                 FieldsToSort.valueOf(filter.getSortBy()).getFieldName());
-        return PageRequest.of(filter.getPage(), filter.getSize(), sort);
+        return PageRequest.of(page, size, sort);
     }
 
     public DataPackageDto convertToDataPackageDto(Page<PassengerProfile> resultPage) {

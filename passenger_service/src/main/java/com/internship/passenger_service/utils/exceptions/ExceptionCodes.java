@@ -12,6 +12,7 @@ public enum ExceptionCodes {
     ERROR_INVALID_INPUT("error.input.invalid"),
     ERROR_NOT_READABLE("error.notReadable"),
     PHONE_ALREADY_EXISTS("phone.alreadyExists"),
-    EMAIL_ALREADY_EXISTS("email.alreadyExists"),;
+    EMAIL_ALREADY_EXISTS("email.alreadyExists"),
+    TYPE_MISMATCH("type.mismatch"),;
     private final String code;
 }

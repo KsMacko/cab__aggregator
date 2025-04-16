@@ -50,7 +50,7 @@ public class CommandPassengerProfileService {
 
     @Transactional
     public RateDto setNewRate(RateDto rateDto) {
-        profileValidationManager.checkIfProfileExists(rateDto.passengerId());
+        profileValidationManager.checkIfProfileExists(rateDto.id());
         return rateMapper.handleEntity(rateRepo.save(rateMapper.handleDto(rateDto)));
     }
 

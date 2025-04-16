@@ -19,5 +19,5 @@ public record RateDto(
         Long authorId,
         @Positive(message = "id.positive")
         @Max(value = MAX_ID_VALUE, message = "profile.id.maxValue")
-        Long passengerId) {
+        Long id) {
 }

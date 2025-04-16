@@ -24,7 +24,6 @@ public class ProfileValidationManager {
             throw new ResourceNotFoundException(PASSENGER_NOT_FOUND.getCode());
         }
     }
-
     public PassengerProfile getProfileByIdIfExists(Long profileId) {
         return passengerProfileRepo.findById(profileId)
                 .orElseThrow(() -> new ResourceNotFoundException(PASSENGER_NOT_FOUND.getCode()));

@@ -10,6 +10,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Arrays;
+
 import static com.internship.passenger_service.utils.ValidationConstants.DEFAULT_PAGE_SIZE;
 import static com.internship.passenger_service.utils.ValidationConstants.DEFAULT_PAGE_VALUE;
 import static com.internship.passenger_service.utils.ValidationConstants.EMAIL_PATTERN;
@@ -21,6 +23,7 @@ import static com.internship.passenger_service.utils.ValidationConstants.MIN_RAT
 import static com.internship.passenger_service.utils.ValidationConstants.ORDER_DIRECTION;
 import static com.internship.passenger_service.utils.ValidationConstants.PHONE_PATTERN;
 import static com.internship.passenger_service.utils.ValidationConstants.PROFILE_SORT_FIELDS;
+import static java.util.Objects.nonNull;
 
 @Getter
 @Setter

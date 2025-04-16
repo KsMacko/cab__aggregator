@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface PassengerProfileRepo extends JpaRepository<PassengerProfile, Long>, JpaSpecificationExecutor<PassengerProfile> {
 
     @Query("SELECT p.activatedPromoCodeId FROM PassengerProfile p WHERE p.profileId = :passengerId")
-    Optional<Long> findActivatedPromoCodeIdByPassenger(@Param("passengerId") Long passengerId);
+    Optional<Long> findActivatedPromoCodeIdByPassenger(@Param("id") Long passengerId);
     Boolean existsByPhoneIgnoreCase(String phone);
     Boolean existsByEmailIgnoreCase(String email);
 }

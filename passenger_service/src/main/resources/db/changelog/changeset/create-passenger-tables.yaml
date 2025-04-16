@@ -42,7 +42,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: activated_promo_code_id
-                  type: bigint
+                  type: varchar(20)
         - createTable:
             tableName: rate
             columns:

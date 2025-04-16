@@ -12,11 +12,16 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ProfileMapper{
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "rates", ignore = true)
     PassengerProfile handleDto(ProfileDto dto);
-
     ProfileDto handleEntity(PassengerProfile passengerProfile);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "rates", ignore = true)
     void updateEntity(ProfileDto dto, @MappingTarget PassengerProfile entity);
 
 

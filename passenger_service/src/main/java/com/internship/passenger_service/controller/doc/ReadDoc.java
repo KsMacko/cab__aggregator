@@ -12,9 +12,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Positive;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import static com.internship.passenger_service.utils.ValidationConstants.MAX_ID_VALUE;
 
 @Tag(
         name = "Operations for reading passenger data",
@@ -44,6 +50,8 @@ public interface ReadDoc {
     @GetMapping("/{id}")
     ProfileDto readPassengerById(
             @Parameter(description = "Unique identifier of the passenger", example = "1", required = true)
+            @Positive(message = "id.positive")
+            @Max(value = MAX_ID_VALUE, message = "profile.id.maxValue")
             @PathVariable Long id);
     @Operation(
             summary = "Get all profiles with filters",
@@ -63,5 +71,5 @@ public interface ReadDoc {
     })
 
     @GetMapping
-    DataPackageDto readAllProfiles(@ParameterObject ProfileFilterRequest filterRequest);
+    DataPackageDto readAllProfiles(@Valid @ModelAttribute ProfileFilterRequest filterRequest);
 }

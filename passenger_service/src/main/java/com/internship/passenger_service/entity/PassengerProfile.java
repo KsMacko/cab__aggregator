@@ -32,7 +32,7 @@ public class PassengerProfile {
     private String email;
     @Column(nullable = false, unique = true)
     private String phone;
-    private Long activatedPromoCodeId;
+    private String activatedPromoCodeId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
