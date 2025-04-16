@@ -5,16 +5,19 @@ import com.internship.passenger_service.entity.PassengerProfile;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.factory.Mappers;
 
-import static com.internship.passenger_service.dto.ProfileDto.Fields.rate;
 
-@Mapper
-public interface ProfileMapper extends AbstractMapper<ProfileDto, PassengerProfile> {
-    ProfileMapper converter = Mappers.getMapper(ProfileMapper.class);
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface ProfileMapper{
+    PassengerProfile handleDto(ProfileDto dto);
 
-    @Mapping(target = rate, source = "rate")
-    ProfileDto handleEntity(PassengerProfile passengerProfile, Byte rate);
+    ProfileDto handleEntity(PassengerProfile passengerProfile);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateEntity(ProfileDto dto, @MappingTarget PassengerProfile entity);
+
+
 }

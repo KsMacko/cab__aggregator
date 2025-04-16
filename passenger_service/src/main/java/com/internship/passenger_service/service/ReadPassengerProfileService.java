@@ -1,11 +1,12 @@
 package com.internship.passenger_service.service;
 
 import com.internship.passenger_service.dto.ProfileDto;
-import com.internship.passenger_service.dto.Projection;
+import com.internship.passenger_service.dto.RateDto;
 import com.internship.passenger_service.dto.mapper.ProfileMapper;
 import com.internship.passenger_service.dto.transfer.DataPackageDto;
 import com.internship.passenger_service.dto.transfer.ProfileFilterRequest;
 import com.internship.passenger_service.entity.PassengerProfile;
+import com.internship.passenger_service.enums.FieldsToSort;
 import com.internship.passenger_service.repo.PassengerProfileRepo;
 import com.internship.passenger_service.repo.RateRepo;
 import com.internship.passenger_service.service.specification.PassengerProfileSpecification;
@@ -26,41 +27,32 @@ import java.util.List;
 public class ReadPassengerProfileService {
     private final PassengerProfileRepo passengerProfileRepo;
     private final PassengerProfileSpecification passengerProfileSpecification;
-    private final RateRepo rateRepo;
     private final ProfileValidationManager validationManager;
+    private final ProfileMapper profileMapper;
 
     @Transactional(readOnly = true)
     public ProfileDto readPassengerProfile(Long id) {
-        validationManager.checkIfIdNotNull(id);
         PassengerProfile passengerProfile = validationManager.getProfileByIdIfExists(id);
-        Byte rate = rateRepo.findPassengerRatingByProfileId(id);
-        return ProfileMapper.converter.handleEntity(passengerProfile, rate);
+        return profileMapper.handleEntity(passengerProfile);
     }
 
     @Transactional(readOnly = true)
     public DataPackageDto readPassengerProfiles(ProfileFilterRequest filter) {
         Pageable pageable = createPageableObject(filter);
         Specification<PassengerProfile> spec = passengerProfileSpecification.filterBy(filter);
-        Page<Projection> resultPage = passengerProfileRepo.findAllPassengers(spec, pageable);
+        Page<PassengerProfile> resultPage = passengerProfileRepo.findAll(spec, pageable);
         return convertToDataPackageDto(resultPage);
     }
-
     public Pageable createPageableObject(ProfileFilterRequest filter) {
         Sort sort = Sort.by(Sort.Direction.fromString(
-                        filter.order().toString()),
-                filter.sortBy().toString());
-        return PageRequest.of(filter.page(), filter.size(), sort);
+                filter.getOrder()),
+                FieldsToSort.valueOf(filter.getSortBy()).getFieldName());
+        return PageRequest.of(filter.getPage(), filter.getSize(), sort);
     }
 
-    public DataPackageDto convertToDataPackageDto(Page<Projection> resultPage) {
+    public DataPackageDto convertToDataPackageDto(Page<PassengerProfile> resultPage) {
         List<ProfileDto> profiles = resultPage.getContent().stream()
-                .map(projection -> ProfileDto.builder()
-                        .profileId(projection.getProfileId())
-                        .phone(projection.getPhone())
-                        .firstName(projection.getFirstName())
-                        .email(projection.getEmail())
-                        .rate(projection.getRate())
-                        .build())
+                .map(profileMapper::handleEntity)
                 .toList();
         return DataPackageDto.builder()
                 .profiles(profiles)

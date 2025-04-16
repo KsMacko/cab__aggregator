@@ -1,6 +1,5 @@
 package com.internship.passenger_service.repo;
 
-import com.internship.passenger_service.dto.Projection;
 import com.internship.passenger_service.entity.PassengerProfile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +15,6 @@ public interface PassengerProfileRepo extends JpaRepository<PassengerProfile, Lo
 
     @Query("SELECT p.activatedPromoCodeId FROM PassengerProfile p WHERE p.profileId = :passengerId")
     Optional<Long> findActivatedPromoCodeIdByPassenger(@Param("passengerId") Long passengerId);
-
-    Page<Projection> findAllPassengers(Specification<PassengerProfile> spec, Pageable pageable);
+    Boolean existsByPhoneIgnoreCase(String phone);
+    Boolean existsByEmailIgnoreCase(String email);
 }

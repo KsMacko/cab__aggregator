@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.internship.passenger_service.entity.PassengerProfile.Fields.email;
-import static com.internship.passenger_service.entity.PassengerProfile.Fields.firstName;
 import static com.internship.passenger_service.entity.PassengerProfile.Fields.phone;
 import static com.internship.passenger_service.entity.PassengerProfile.Fields.profileId;
 import static com.internship.passenger_service.entity.Rate.Fields.passenger;
@@ -30,24 +29,15 @@ public class PassengerProfileSpecification {
 
             List<Predicate> predicates = new ArrayList<>();
 
-            addEqualPredicate(predicates, criteriaBuilder, root.get(email), filter.email());
-            addEqualPredicate(predicates, criteriaBuilder, root.get(phone), filter.phone());
+            addEqualPredicate(predicates, criteriaBuilder, root.get(email), filter.getEmail());
+            addEqualPredicate(predicates, criteriaBuilder, root.get(phone), filter.getPhone());
 
             Subquery<Double> subquery = query.subquery(Double.class);
             Root<Rate> rateRoot = subquery.from(Rate.class);
             subquery.select(criteriaBuilder.avg(rateRoot.get(value)))
                     .where(criteriaBuilder.equal(rateRoot.get(passenger).get(profileId), root.get(profileId)));
 
-            addRatePredicate(predicates, criteriaBuilder, subquery, filter.rate());
-
-
-            query.multiselect(
-                    root.get(profileId),
-                    root.get(firstName),
-                    root.get(email),
-                    root.get(phone),
-                    getAverageRateSubquery(criteriaBuilder, subquery)
-            );
+            addRatePredicate(predicates, criteriaBuilder, subquery, filter.getRate());
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
@@ -67,10 +57,5 @@ public class PassengerProfileSpecification {
                                   Byte rateToFilter) {
         Optional.ofNullable(rateToFilter)
                 .ifPresent(rate -> predicates.add(cb.equal(cb.floor(subquery.getSelection()), rate)));
-    }
-
-    private Expression<Double> getAverageRateSubquery(CriteriaBuilder cb,
-                                                      Subquery<Double> subquery) {
-        return cb.floor(subquery.getSelection());
     }
 }
