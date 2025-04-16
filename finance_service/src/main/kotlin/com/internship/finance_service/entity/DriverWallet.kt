@@ -4,23 +4,23 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
-import lombok.AllArgsConstructor
-import lombok.Getter
-import lombok.NoArgsConstructor
-import lombok.Setter
 import java.math.BigDecimal
 
 @Entity
 @Table(name = "driver_wallets")
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 class DriverWallet {
     @Id
-    private val id: Long? = null
-    private var balance: BigDecimal = BigDecimal.ZERO
+    val id: Long? = null
+    var balance: BigDecimal = BigDecimal.ZERO
+    val driverId: Long = 0
 
     @OneToMany(mappedBy = "wallet")
-    private var transfers: List<WalletTransfer>? = null
+    var transfers: List<WalletTransfer>? = null
+
+    companion object Fields {
+        const val ID = "id"
+        const val BALANCE = "balance"
+        const val DRIVER_ID = "driverId"
+        const val TRANSFERS = "transfers"
+    }
 }

@@ -8,35 +8,37 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
-import lombok.AllArgsConstructor
-import lombok.Getter
-import lombok.NoArgsConstructor
-import lombok.Setter
 import org.hibernate.annotations.CreationTimestamp
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Entity
 @Table(name = "finance_operation")
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-class FinancialOperation {
+class FinancialOperation (){
+    constructor(amount: BigDecimal) : this() {
+        this.amount = amount
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long? = null
+    val id: Long? = null
+
     @CreationTimestamp
-    private var createdAt: LocalDateTime? = null
-    private var amount: BigDecimal? = null
+    val createdAt: LocalDateTime = LocalDateTime.now()
+    var amount: BigDecimal = BigDecimal.ZERO
 
     @OneToOne(mappedBy = "financialOperation")
-    private var walletTransfer: WalletTransfer? = null
+    var walletTransfer: WalletTransfer? = null
 
     @OneToOne(mappedBy = "financialOperation")
-    private var payment: Payment? = null
+    var payment: Payment? = null
 
     @ManyToOne
     @JoinColumn(name = "card_id")
-    private var card: Card? = null
+    var card: Card? = null
+
+    companion object Fields {
+        const val ID = "id"
+        const val CREATED_AT = "createdAt"
+        const val AMOUNT = "amount"
+    }
 }

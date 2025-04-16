@@ -8,49 +8,54 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: BIGINT
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: last_four_digits
-                  type: VARCHAR(4)
+                  type: char(4)
                   constraints:
-                    nullable: true
+                    nullable: false
               - column:
                   name: expiration_date
-                  type: DATE
+                  type: date
                   constraints:
-                    nullable: true
+                    nullable: false
               - column:
                   name: owner
-                  type: VARCHAR(20)
+                  type: varchar(10)
                   constraints:
-                    nullable: true
+                    nullable: false
               - column:
                   name: owner_id
-                  type: BIGINT
+                  type: bigint
                   constraints:
-                    nullable: true
+                    nullable: false
               - column:
                   name: card_type
-                  type: VARCHAR(20)
+                  type: varchar(20)
                   constraints:
-                    nullable: true
+                    nullable: false
         - createTable:
             tableName: driver_wallets
             columns:
               - column:
                   name: id
-                  type: BIGINT
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: balance
-                  type: DECIMAL(10, 2)
+                  type: decimal(10, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: driver_id
+                  type: bigint
                   constraints:
                     nullable: false
         - createTable:
@@ -58,24 +63,24 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: BIGINT
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: created_at
-                  type: TIMESTAMP
+                  type: timestamp
                   constraints:
-                    nullable: true
+                    nullable: false
               - column:
                   name: amount
-                  type: DECIMAL(5, 2)
+                  type: decimal(5, 2)
                   constraints:
-                    nullable: true
+                    nullable: false
               - column:
                   name: card_id
-                  type: BIGINT
+                  type: bigint
                   constraints:
                     nullable: true
                     foreignKeyName: fk_financial_operation_card
@@ -85,7 +90,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: financial_operation_id
-                  type: BIGINT
+                  type: bigint
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -93,36 +98,29 @@ databaseChangeLog:
                     references: finance_operation(id)
               - column:
                   name: passenger_id
-                  type: BIGINT
+                  type: bigint
                   constraints:
-                    nullable: true
+                    nullable: false
               - column:
                   name: payment_type
-                  type: VARCHAR(20)
+                  type: varchar(4)
                   constraints:
-                    nullable: true
+                    nullable: false
         - createTable:
             tableName: wallet_transfer
             columns:
               - column:
-                  name: id
-                  type: BIGINT
-                  autoIncrement: true
+                  name: financial_operation_id
+                  type: bigint
                   constraints:
                     primaryKey: true
                     nullable: false
+                    foreignKeyName: fk_wallet_transfer_financial_operation
+                    references: finance_operation(id)
               - column:
                   name: driver_wallet_id
-                  type: BIGINT
+                  type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_wallet_transfer_driver_wallet
                     references: driver_wallets(id)
-              - column:
-                  name: financial_operation_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-                    foreignKeyName: fk_wallet_transfer_financial_operation
-                    references: finance_operation(id)

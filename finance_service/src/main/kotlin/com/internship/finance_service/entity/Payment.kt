@@ -2,28 +2,28 @@ package com.internship.finance_service.entity
 
 import com.internship.finance_service.enums.PaymentType
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.Id
 import jakarta.persistence.MapsId
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
-import lombok.AllArgsConstructor
-import lombok.Getter
-import lombok.NoArgsConstructor
-import lombok.Setter
 
 @Entity
 @Table(name = "payment")
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 class Payment {
     @Id
-    private val id: Long? = null
-    private var passengerId : Long? = null
-    private var paymentType : PaymentType? = null
+    val id: Long? = null
+    var passengerId: Long = 0
+    lateinit var paymentType: PaymentType
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @MapsId
-    private var financialOperation: FinancialOperation? = null
+    lateinit var financialOperation: FinancialOperation
+
+    companion object Fields {
+        const val ID = "id"
+        const val PASSENGER_ID = "passengerId"
+        const val PAYMENT_TYPE = "paymentType"
+        const val FINANCIAL_OPERATION = "financialOperation"
+    }
 }

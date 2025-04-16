@@ -11,31 +11,35 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
-import lombok.AllArgsConstructor
-import lombok.Getter
-import lombok.NoArgsConstructor
-import lombok.Setter
 import java.time.LocalDate
+import kotlin.properties.Delegates
 
 @Entity
 @Table(name = "card")
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long? = null
-    private lateinit var lastFourDigits: String
-    private lateinit var expirationDate: LocalDate
-    @Enumerated(EnumType.STRING)
-    private lateinit var owner: OwnerType
-    private var ownerId: Long? = null
+    val id: Long? = null
+    lateinit var lastFourDigits: String
+    lateinit var expirationDate: LocalDate
 
     @Enumerated(EnumType.STRING)
-    private lateinit var cardType: CardType
+    lateinit var owner: OwnerType
+    val ownerId: Long = 0
+
+    @Enumerated(EnumType.STRING)
+    lateinit var cardType: CardType
 
     @OneToMany(mappedBy = "card")
-    private var financialOperation:List<FinancialOperation>? = null
+    var financialOperation: List<FinancialOperation>? = null
+
+    companion object Fields {
+        const val ID = "id"
+        const val LAST_FOUR_DIGITS = "lastFourDigits"
+        const val EXPIRATION_DATE = "expirationDate"
+        const val OWNER = "owner"
+        const val OWNER_ID = "ownerId"
+        const val CARD_TYPE = "cardType"
+        const val FINANCIAL_OPERATION = "financialOperation"
+    }
 }
