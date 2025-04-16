@@ -24,5 +24,5 @@ public class Fare {
     private BigDecimal paidWaitingPrice;
     private BigDecimal pricePerKm;
     private BigDecimal pricePerMin;
-    private OffsetDateTime createdAt;
+    private OffsetDateTime createdAt=OffsetDateTime.now();
 }

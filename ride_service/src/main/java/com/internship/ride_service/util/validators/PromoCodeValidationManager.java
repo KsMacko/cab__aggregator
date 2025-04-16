@@ -1,4 +1,4 @@
-package com.internship.ride_service.util;
+package com.internship.ride_service.util.validators;
 
 import com.internship.ride_service.entity.PromoCode;
 import com.internship.ride_service.repo.PromoCodeRepo;

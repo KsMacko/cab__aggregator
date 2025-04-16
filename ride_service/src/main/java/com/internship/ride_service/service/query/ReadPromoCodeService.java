@@ -5,7 +5,8 @@ import com.internship.ride_service.dto.mapper.PromoCodeMapper;
 import com.internship.ride_service.dto.transfer.PromoCodeFilterRequest;
 import com.internship.ride_service.dto.transfer.PromoCodePackageDto;
 import com.internship.ride_service.entity.PromoCode;
-import com.internship.ride_service.util.PromoCodeValidationManager;
+import com.internship.ride_service.enums.PromoCodeFieldsToFilter;
+import com.internship.ride_service.util.validators.PromoCodeValidationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,9 +43,9 @@ public class ReadPromoCodeService {
         return new PromoCodePackageDto(
                 promoCodesDto,
                 totalElements,
-                filterRequest.page(),
+                filterRequest.getPage(),
                 promoCodesDto.size(),
-                (int) Math.ceil((double) totalElements / filterRequest.size())
+                (int) Math.ceil((double) totalElements / filterRequest.getSize())
         );
     }
 
@@ -60,8 +61,8 @@ public class ReadPromoCodeService {
 
     private Query buildQuery(PromoCodeFilterRequest filterRequest) {
         Criteria criteria = new Criteria();
-        addCriteriaIfNotNull(criteria, createdAt, filterRequest.createdDate());
-        addCriteriaIfNotNull(criteria, validUntil, filterRequest.validDate());
+        addCriteriaIfNotNull(criteria, createdAt, filterRequest.getCreatedDate());
+        addCriteriaIfNotNull(criteria, validUntil, filterRequest.getValidDate());
         return new Query(criteria);
     }
 
@@ -73,8 +74,8 @@ public class ReadPromoCodeService {
 
     private Pageable createPageableObject(PromoCodeFilterRequest filterRequest) {
         Sort sort = Sort.by(
-                Sort.Direction.fromString(filterRequest.order().toString()),
-                filterRequest.sortBy().getFieldName());
-        return PageRequest.of(filterRequest.page(), filterRequest.size(), sort);
+                Sort.Direction.fromString(filterRequest.getOrder()),
+                PromoCodeFieldsToFilter.valueOf(filterRequest.getSortBy()).getFieldName());
+        return PageRequest.of(filterRequest.getPage(), filterRequest.getSize(), sort);
     }
 }

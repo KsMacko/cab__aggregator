@@ -5,7 +5,10 @@ import com.internship.ride_service.dto.mapper.RideMapper;
 import com.internship.ride_service.dto.transfer.RideFilterRequest;
 import com.internship.ride_service.dto.transfer.RidePackageDto;
 import com.internship.ride_service.entity.Ride;
-import com.internship.ride_service.util.RideValidationManager;
+import com.internship.ride_service.enums.FareType;
+import com.internship.ride_service.enums.RideFieldsToFilter;
+import com.internship.ride_service.enums.RideStatus;
+import com.internship.ride_service.util.validators.RideValidationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -56,13 +59,13 @@ public class ReadRideService {
 
     private Query buildQuery(RideFilterRequest filterRequest) {
         Criteria criteria = new Criteria();
-        addCriteriaIfNotNull(criteria, createdAt, filterRequest.createdAt());
-        addCriteriaIfNotNull(criteria, driverId, filterRequest.driverId());
-        addCriteriaIfNotNull(criteria, passengerId, filterRequest.passengerId());
-        addCriteriaIfNotNull(criteria, status, filterRequest.status());
-        addCriteriaIfNotNull(criteria, fareType, filterRequest.fareType());
-        if (filterRequest.sortBy() != null) {
-            criteria.and(filterRequest.sortBy().getFieldName()).ne(null);
+        addCriteriaIfNotNull(criteria, createdAt, filterRequest.getCreatedDate());
+        addCriteriaIfNotNull(criteria, driverId, filterRequest.getDriverId());
+        addCriteriaIfNotNull(criteria, passengerId, filterRequest.getPassengerId());
+        addCriteriaIfNotNull(criteria, status, RideStatus.valueOf(filterRequest.getStatus()));
+        addCriteriaIfNotNull(criteria, fareType, FareType.valueOf(filterRequest.getFareType()));
+        if (filterRequest.getSortBy() != null) {
+            criteria.and(RideFieldsToFilter.valueOf(filterRequest.getSortBy()).getFieldName()).ne(null);
         }
         return new Query(criteria);
     }
@@ -75,18 +78,18 @@ public class ReadRideService {
 
     private Pageable createPageableObject(RideFilterRequest filterRequest) {
         Sort sort = Sort.by(Sort.Direction.fromString(
-                        filterRequest.order().toString()),
-                filterRequest.sortBy().getFieldName());
-        return PageRequest.of(filterRequest.page(), filterRequest.size(), sort);
+                filterRequest.getOrder()),
+                RideFieldsToFilter.valueOf(filterRequest.getSortBy()).getFieldName());
+        return PageRequest.of(filterRequest.getPage(), filterRequest.getSize(), sort);
     }
 
     public RidePackageDto createRidePackage(List<RideDto> rides, long totalElements, RideFilterRequest filterRequest) {
         return new RidePackageDto(
                 rides,
                 totalElements,
-                filterRequest.page(),
+                filterRequest.getPage(),
                 rides.size(),
-                (int) Math.ceil((double) totalElements / filterRequest.size())
+                (int) Math.ceil((double) totalElements / filterRequest.getSize())
         );
     }
 }

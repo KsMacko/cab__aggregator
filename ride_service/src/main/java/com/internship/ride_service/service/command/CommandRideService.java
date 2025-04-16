@@ -5,7 +5,7 @@ import com.internship.ride_service.dto.mapper.RideMapper;
 import com.internship.ride_service.entity.Ride;
 import com.internship.ride_service.enums.RideStatus;
 import com.internship.ride_service.repo.RideRepo;
-import com.internship.ride_service.util.RideValidationManager;
+import com.internship.ride_service.util.validators.RideValidationManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

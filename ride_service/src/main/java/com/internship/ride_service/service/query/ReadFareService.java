@@ -6,7 +6,7 @@ import com.internship.ride_service.dto.transfer.FarePackageDto;
 import com.internship.ride_service.entity.Fare;
 import com.internship.ride_service.enums.FareType;
 import com.internship.ride_service.repo.FareRepo;
-import com.internship.ride_service.util.FareValidationManager;
+import com.internship.ride_service.util.validators.FareValidationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
