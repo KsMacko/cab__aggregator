@@ -4,27 +4,6 @@ databaseChangeLog:
       author: KsMacko
       changes:
         - createTable:
-            tableName: user_account
-            columns:
-              - column:
-                  name: id
-                  type: bigint
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: username
-                  type: varchar(50)
-                  constraints:
-                    nullable: false
-                    unique: true
-              - column:
-                  name: hash_password
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-        - createTable:
             tableName: profile
             columns:
               - column:
@@ -33,9 +12,6 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     primaryKey: true
-                    foreignKeyName: profile_id
-                    referencedTableName: user_account
-                    referencedColumnNames: id
                     nullable: false
               - column:
                   name: first_name
@@ -66,7 +42,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: activated_promo_code_id
-                  type: bigint
+                  type: varchar(20)
         - createTable:
             tableName: rate
             columns:
