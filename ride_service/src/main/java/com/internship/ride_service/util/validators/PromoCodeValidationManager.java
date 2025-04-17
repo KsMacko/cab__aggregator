@@ -3,8 +3,10 @@ package com.internship.ride_service.util.validators;
 import com.internship.ride_service.entity.PromoCode;
 import com.internship.ride_service.repo.PromoCodeRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
@@ -31,7 +33,7 @@ public class PromoCodeValidationManager {
     public void checkForCreationPromoCodeValidity(String promoCode) {
         Optional<PromoCode> existingCode = promoCodeRepo.findByPromoCodeAndValidUntilAfter(
                 promoCode,
-                OffsetDateTime.now());
+                LocalDate.now());
         if (existingCode.isPresent()) {
             throw new RuntimeException(PROMO_CODE_STILL_VALID.getCode());
         }
@@ -39,7 +41,7 @@ public class PromoCodeValidationManager {
 
     public PromoCode getCurrentPromoCode(String promoCode) {
         if (!promoCode.isEmpty()) {
-            Optional<PromoCode> code = promoCodeRepo.findByPromoCodeAndValidUntilAfter(promoCode, OffsetDateTime.now());
+            Optional<PromoCode> code = promoCodeRepo.findByPromoCodeAndValidUntilAfter(promoCode, LocalDate.now());
             if (code.isPresent()) {
                 return code.get();
             } else {

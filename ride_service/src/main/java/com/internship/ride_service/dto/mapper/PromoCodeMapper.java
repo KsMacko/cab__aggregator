@@ -10,16 +10,17 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PromoCodeMapper {
 
-    DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+    DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdAt", expression = "java(new java.util.Date())")
     @Mapping(target = "validUntil", source = "validUntil")
     PromoCode handleDto(RequestPromoCodeDto dto);
 
@@ -32,13 +33,13 @@ public interface PromoCodeMapper {
     @Mapping(target = "validUntil", source = "validUntil")
     void updateEntity(RequestPromoCodeDto dto, @MappingTarget PromoCode entity);
 
-    default String mapOffsetDateTimeToString(OffsetDateTime value) {
+    default String mapLocalDateToString(LocalDate value) {
         return value != null ? value.format(FORMATTER) : null;
     }
 
-    default OffsetDateTime mapStringToOffsetDateTime(String value) {
+    default LocalDate mapStringToLocalDate(String value) {
         try {
-            return value != null ? OffsetDateTime.parse(value, FORMATTER) : null;
+            return value != null ? LocalDate.parse(value, FORMATTER) : null;
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid date format: " + value, e);
         }

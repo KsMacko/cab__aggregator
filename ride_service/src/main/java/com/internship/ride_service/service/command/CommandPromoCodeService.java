@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Service
@@ -23,7 +24,7 @@ public class CommandPromoCodeService {
     public ResponsePromoCodeDto createPromoCode(RequestPromoCodeDto promoCodeDto) {
         promoCodeValidationManager.checkForCreationPromoCodeValidity(promoCodeDto.promoCode());
         PromoCode promoCode = promoCodeMapper.handleDto(promoCodeDto);
-        promoCode.setValidUntil(OffsetDateTime.parse(promoCodeDto.validUntil()));
+        promoCode.setValidUntil(LocalDate.parse(promoCodeDto.validUntil()));
         return promoCodeMapper.handleEntity(promoCodeRepo.save(promoCode));
     }
 
