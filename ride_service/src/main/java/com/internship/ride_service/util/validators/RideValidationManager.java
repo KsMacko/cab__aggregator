@@ -2,6 +2,7 @@ package com.internship.ride_service.util.validators;
 
 import com.internship.ride_service.entity.Ride;
 import com.internship.ride_service.repo.RideRepo;
+import com.internship.ride_service.util.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +15,12 @@ public class RideValidationManager {
 
     public void checkIfExistsById(String id) {
         if (!rideRepo.existsById(id)) {
-            throw new RuntimeException(RIDE_NOT_FOUND.getCode());
+            throw new ResourceNotFoundException(RIDE_NOT_FOUND.getCode());
         }
     }
 
     public Ride getRideByIdIfExists(String id) {
         return rideRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException(RIDE_NOT_FOUND.getCode()));
+                .orElseThrow(() -> new ResourceNotFoundException(RIDE_NOT_FOUND.getCode()));
     }
 }

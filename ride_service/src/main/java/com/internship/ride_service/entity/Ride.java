@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
@@ -28,7 +29,7 @@ public class Ride {
     private String promoCode;
     private String startLocation;
     private List<String> endLocation;
-    private Date createdAt;
+    private LocalDateTime createdAt;
     private LocalTime startWaitingTime;
     private LocalTime startTime;
     private LocalTime endTime;

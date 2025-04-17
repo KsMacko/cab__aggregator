@@ -20,7 +20,7 @@ public interface PromoCodeMapper {
     DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", expression = "java(new java.util.Date())")
+    @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "validUntil", source = "validUntil")
     PromoCode handleDto(RequestPromoCodeDto dto);
 

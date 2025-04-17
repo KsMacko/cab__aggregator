@@ -6,8 +6,7 @@ import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Document(collection = "promo_codes")
 @Getter
@@ -18,6 +17,6 @@ public class PromoCode {
     private String id;
     private String promoCode;
     private Byte discount;
-    private Date createdAt;
-    private LocalDate validUntil;
+    private LocalDateTime createdAt;
+    private LocalDateTime validUntil;
 }

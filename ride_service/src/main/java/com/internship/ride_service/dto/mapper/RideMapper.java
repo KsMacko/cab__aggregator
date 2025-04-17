@@ -16,7 +16,7 @@ public interface RideMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", constant = "CREATED")
     @Mapping(target = "startWaitingTime", ignore = true)
-    @Mapping(target = "createdAt", expression = "java(new java.util.Date())")
+    @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "startTime", ignore = true)
     @Mapping(target = "endTime", ignore = true)
     @Mapping(target = "driverId", ignore = true)
