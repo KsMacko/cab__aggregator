@@ -7,7 +7,6 @@ import com.internship.ride_service.util.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -19,6 +18,7 @@ import static com.internship.ride_service.util.exceptions.ExceptionCodes.PROMO_C
 @RequiredArgsConstructor
 public class PromoCodeValidationManager {
     private final PromoCodeRepo promoCodeRepo;
+
 
     public void checkIfExistsById(String id) {
         if (!promoCodeRepo.existsById(id)) {

@@ -1,6 +1,8 @@
 package com.internship.ride_service.util.exceptions;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.Ordered;
@@ -22,7 +24,7 @@ import static com.internship.ride_service.util.exceptions.ExceptionCodes.UNKNOWN
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
-
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private final MessageSource messageSource;
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -65,8 +67,9 @@ public class GlobalExceptionHandler {
                         null,
                         LocaleContextHolder.getLocale()));
     }
-    @ExceptionHandler({Exception.class})
-    public ResponseEntity<BaseExceptionDto> handleHttpMessageNotReadableException(Exception ex) {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<BaseExceptionDto> handleUnexpectedException(Exception ex) {
+        log.error("Unexpected exception", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new BaseExceptionDto(messageSource.getMessage(
                         UNKNOWN_ERROR.getCode(),

@@ -8,6 +8,9 @@ import com.internship.ride_service.util.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import static com.internship.ride_service.util.exceptions.ExceptionCodes.FARE_ALREADY_EXISTS;
 import static com.internship.ride_service.util.exceptions.ExceptionCodes.FARE_NOT_FOUND;
 
