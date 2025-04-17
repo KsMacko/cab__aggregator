@@ -1,8 +1,9 @@
 package com.internship.passenger_service.controller.doc;
 
+import com.internship.passenger_service.dto.request.RequestProfileDto;
 import com.internship.passenger_service.utils.exceptions.BaseException;
 import com.internship.passenger_service.utils.exceptions.BaseValidationException;
-import com.internship.passenger_service.dto.ProfileDto;
+import com.internship.passenger_service.dto.response.ResponseProfileDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,7 +34,7 @@ public interface CommandDoc {
             @ApiResponse(
                     responseCode = "201",
                     description = "Profile created",
-                    content = @Content(schema = @Schema(implementation = ProfileDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseProfileDto.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -42,10 +43,10 @@ public interface CommandDoc {
             )
     })
     @PostMapping
-    ResponseEntity<ProfileDto> createPassenger(
+    ResponseEntity<ResponseProfileDto> createPassenger(
             @Parameter(description = "Instance of passenger's profile", required = true)
             @Valid
-            @RequestBody ProfileDto profileDto);
+            @RequestBody RequestProfileDto profileDto);
 
     @Operation(
             summary = "Updates passenger's profile info"
@@ -54,7 +55,7 @@ public interface CommandDoc {
             @ApiResponse(
                     responseCode = "200",
                     description = "Profile successfully updated",
-                    content = @Content(schema = @Schema(implementation = ProfileDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseProfileDto.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -67,11 +68,14 @@ public interface CommandDoc {
                     content = @Content(schema = @Schema(implementation = BaseValidationException.class))
             )
     })
-    @PutMapping
-    ProfileDto updatePassenger(
-            @RequestBody
+    @PutMapping("/{id}")
+    ResponseProfileDto updatePassenger(
+            @Parameter(description = "Unique identifier of the passenger", example = "1", required = true)
+            @Positive(message = "id.positive")
+            @Max(value = MAX_ID_VALUE, message = "profile.id.maxValue")
+            @PathVariable Long id,
             @Valid
-            ProfileDto profileDto);
+            @RequestBody RequestProfileDto profileDto);
 
     @Operation(
             summary = "Delete passenger",

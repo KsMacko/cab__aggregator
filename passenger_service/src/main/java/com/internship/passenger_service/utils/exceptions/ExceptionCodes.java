@@ -13,6 +13,7 @@ public enum ExceptionCodes {
     ERROR_NOT_READABLE("error.notReadable"),
     PHONE_ALREADY_EXISTS("phone.alreadyExists"),
     EMAIL_ALREADY_EXISTS("email.alreadyExists"),
-    TYPE_MISMATCH("type.mismatch"),;
+    TYPE_MISMATCH("type.mismatch"),
+    UNKNOWN_ERROR("error.unknown");
     private final String code;
 }

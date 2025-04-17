@@ -1,14 +1,12 @@
 package com.internship.passenger_service.service;
 
-import com.internship.passenger_service.dto.ProfileDto;
-import com.internship.passenger_service.dto.RateDto;
+import com.internship.passenger_service.dto.response.ResponseProfileDto;
 import com.internship.passenger_service.dto.mapper.ProfileMapper;
 import com.internship.passenger_service.dto.transfer.DataPackageDto;
 import com.internship.passenger_service.dto.transfer.ProfileFilterRequest;
 import com.internship.passenger_service.entity.PassengerProfile;
 import com.internship.passenger_service.enums.FieldsToSort;
 import com.internship.passenger_service.repo.PassengerProfileRepo;
-import com.internship.passenger_service.repo.RateRepo;
 import com.internship.passenger_service.service.specification.PassengerProfileSpecification;
 import com.internship.passenger_service.utils.ProfileValidationManager;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +33,7 @@ public class ReadPassengerProfileService {
     private final ProfileMapper profileMapper;
 
     @Transactional(readOnly = true)
-    public ProfileDto readPassengerProfile(Long id) {
+    public ResponseProfileDto readPassengerProfile(Long id) {
         PassengerProfile passengerProfile = validationManager.getProfileByIdIfExists(id);
         return profileMapper.handleEntity(passengerProfile);
     }
@@ -57,7 +55,7 @@ public class ReadPassengerProfileService {
     }
 
     public DataPackageDto convertToDataPackageDto(Page<PassengerProfile> resultPage) {
-        List<ProfileDto> profiles = resultPage.getContent().stream()
+        List<ResponseProfileDto> profiles = resultPage.getContent().stream()
                 .map(profileMapper::handleEntity)
                 .toList();
         return DataPackageDto.builder()

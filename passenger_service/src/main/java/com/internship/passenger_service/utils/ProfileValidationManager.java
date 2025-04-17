@@ -1,6 +1,7 @@
 package com.internship.passenger_service.utils;
 
-import com.internship.passenger_service.dto.ProfileDto;
+import com.internship.passenger_service.dto.request.RequestProfileDto;
+import com.internship.passenger_service.dto.response.ResponseProfileDto;
 import com.internship.passenger_service.entity.PassengerProfile;
 import com.internship.passenger_service.repo.PassengerProfileRepo;
 import com.internship.passenger_service.utils.exceptions.InvalidInputException;
@@ -38,10 +39,7 @@ public class ProfileValidationManager {
             throw new InvalidInputException(PHONE_ALREADY_EXISTS.getCode());
         }
     }
-    public void checkProfileToUpdate(ProfileDto profileDto){
-        if(isNull(profileDto.profileId())){
-            throw new InvalidInputException(PASSENGER_ID_IS_NULL.getCode());
-        }
+    public void checkProfileToUpdate(RequestProfileDto profileDto){
         if(!profileDto.email().isEmpty()) {
             checkEmailUniqueness(profileDto.email());
         }

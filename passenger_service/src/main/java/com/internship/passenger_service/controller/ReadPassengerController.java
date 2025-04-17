@@ -1,7 +1,7 @@
 package com.internship.passenger_service.controller;
 
 import com.internship.passenger_service.controller.doc.ReadDoc;
-import com.internship.passenger_service.dto.ProfileDto;
+import com.internship.passenger_service.dto.response.ResponseProfileDto;
 import com.internship.passenger_service.dto.transfer.DataPackageDto;
 import com.internship.passenger_service.dto.transfer.ProfileFilterRequest;
 import com.internship.passenger_service.service.ReadPassengerProfileService;
@@ -22,7 +22,7 @@ public class ReadPassengerController implements ReadDoc {
         return profileService.readPassengerProfiles(profileFilterRequest);
     }
     @Override
-    public ProfileDto readPassengerById(@PathVariable("id") Long id) {
+    public ResponseProfileDto readPassengerById(@PathVariable("id") Long id) {
         return profileService.readPassengerProfile(id);
     }
 }

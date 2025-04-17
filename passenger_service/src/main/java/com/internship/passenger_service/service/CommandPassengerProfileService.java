@@ -1,7 +1,8 @@
 package com.internship.passenger_service.service;
 
-import com.internship.passenger_service.dto.ProfileDto;
-import com.internship.passenger_service.dto.RateDto;
+import com.internship.passenger_service.dto.request.RequestProfileDto;
+import com.internship.passenger_service.dto.response.ResponseProfileDto;
+import com.internship.passenger_service.dto.response.ResponseRateDto;
 import com.internship.passenger_service.dto.mapper.ProfileMapper;
 import com.internship.passenger_service.dto.mapper.RateMapper;
 import com.internship.passenger_service.entity.PassengerProfile;
@@ -24,7 +25,7 @@ public class CommandPassengerProfileService {
     private final RateMapper rateMapper;
 
     @Transactional
-    public ProfileDto createNewPassengerProfile(ProfileDto profileDto) {
+    public ResponseProfileDto createNewPassengerProfile(RequestProfileDto profileDto) {
         profileValidationManager.checkEmailUniqueness(profileDto.email());
         profileValidationManager.checkPhoneNumberUniqueness(profileDto.phone());
         PassengerProfile savedProfile = passengerProfileRepo.save(profileMapper.handleDto(profileDto));
@@ -32,10 +33,10 @@ public class CommandPassengerProfileService {
     }
 
     @Transactional
-    public ProfileDto updatePassengerProfile(ProfileDto profileDto) {
+    public ResponseProfileDto updatePassengerProfile(Long profileId, RequestProfileDto profileDto) {
         profileValidationManager.checkProfileToUpdate(profileDto);
-        profileValidationManager.checkIfProfileExists(profileDto.profileId());
-        PassengerProfile existingProfile = profileValidationManager.getProfileByIdIfExists(profileDto.profileId());
+        profileValidationManager.checkIfProfileExists(profileId);
+        PassengerProfile existingProfile = profileValidationManager.getProfileByIdIfExists(profileId);
         profileMapper.updateEntity(profileDto, existingProfile);
 
         return profileMapper.handleEntity(passengerProfileRepo.save(existingProfile));
@@ -49,7 +50,7 @@ public class CommandPassengerProfileService {
     }
 
     @Transactional
-    public RateDto setNewRate(RateDto rateDto) {
+    public ResponseRateDto setNewRate(ResponseRateDto rateDto) {
         profileValidationManager.checkIfProfileExists(rateDto.id());
         return rateMapper.handleEntity(rateRepo.save(rateMapper.handleDto(rateDto)));
     }

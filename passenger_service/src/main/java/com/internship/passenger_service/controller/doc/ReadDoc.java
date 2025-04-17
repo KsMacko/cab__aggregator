@@ -2,7 +2,7 @@ package com.internship.passenger_service.controller.doc;
 
 import com.internship.passenger_service.utils.exceptions.BaseException;
 import com.internship.passenger_service.utils.exceptions.BaseValidationException;
-import com.internship.passenger_service.dto.ProfileDto;
+import com.internship.passenger_service.dto.response.ResponseProfileDto;
 import com.internship.passenger_service.dto.transfer.DataPackageDto;
 import com.internship.passenger_service.dto.transfer.ProfileFilterRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Positive;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +33,7 @@ public interface ReadDoc {
             @ApiResponse(
                     responseCode = "200",
                     description = "Profile found",
-                    content = @Content(schema = @Schema(implementation = ProfileDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseProfileDto.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -48,7 +47,7 @@ public interface ReadDoc {
             )
     })
     @GetMapping("/{id}")
-    ProfileDto readPassengerById(
+    ResponseProfileDto readPassengerById(
             @Parameter(description = "Unique identifier of the passenger", example = "1", required = true)
             @Positive(message = "id.positive")
             @Max(value = MAX_ID_VALUE, message = "profile.id.maxValue")
