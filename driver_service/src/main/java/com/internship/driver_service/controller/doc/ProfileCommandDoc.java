@@ -1,7 +1,9 @@
 package com.internship.driver_service.controller.doc;
 
-import com.internship.driver_service.dto.ProfileDto;
-import com.internship.driver_service.dto.RateDto;
+import com.internship.driver_service.dto.request.RequestProfileDto;
+import com.internship.driver_service.dto.request.RequestRateDto;
+import com.internship.driver_service.dto.response.ResponseProfileDto;
+import com.internship.driver_service.dto.response.ResponseRateDto;
 import com.internship.driver_service.utils.exceptions.transfer.BaseException;
 import com.internship.driver_service.utils.exceptions.transfer.BaseValidationException;
 import com.internship.driver_service.utils.validation.ValidationConstants;
@@ -36,7 +38,7 @@ public interface ProfileCommandDoc {
             @ApiResponse(
                     responseCode = "201",
                     description = "Driver profile created successfully",
-                    content = @Content(schema = @Schema(implementation = ProfileDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseProfileDto.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -45,10 +47,11 @@ public interface ProfileCommandDoc {
             )
     })
     @PostMapping
-    ResponseEntity<ProfileDto> createProfile(
+    ResponseEntity<ResponseProfileDto> createProfile(
             @Parameter(description = "Driver profile data to create", required = true)
             @Valid
-            @RequestBody ProfileDto profileDto);
+            @RequestBody
+            RequestProfileDto profileDto);
 
     @Operation(
             summary = "Update an existing driver profile",
@@ -58,7 +61,7 @@ public interface ProfileCommandDoc {
             @ApiResponse(
                     responseCode = "200",
                     description = "Driver profile updated successfully",
-                    content = @Content(schema = @Schema(implementation = ProfileDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseProfileDto.class))
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -71,10 +74,11 @@ public interface ProfileCommandDoc {
                     content = @Content(schema = @Schema(implementation = BaseValidationException.class))
             )
     })
-    @PutMapping
-    ProfileDto updateProfile(
+    @PutMapping("/{id}")
+    ResponseProfileDto updateProfile(
             @Parameter(description = "Updated driver profile data", required = true)
-            @RequestBody ProfileDto profileDto);
+            @PathVariable Long id,
+            @RequestBody RequestProfileDto profileDto);
 
     @Operation(
             summary = "Delete a driver profile by ID",
@@ -111,7 +115,7 @@ public interface ProfileCommandDoc {
             @ApiResponse(
                     responseCode = "201",
                     description = "Rate set successfully",
-                    content = @Content(schema = @Schema(implementation = RateDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseRateDto.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -125,10 +129,10 @@ public interface ProfileCommandDoc {
             )
     })
     @PostMapping("/rates")
-    RateDto setRateToDriver(
+    ResponseRateDto setRateToDriver(
             @Parameter(description = "Rate data to set for the driver", required = true)
             @Valid
-            @RequestBody RateDto rateDto);
+            @RequestBody RequestRateDto rateDto);
 
     @Operation(
             summary = "Delete a rate from a driver",

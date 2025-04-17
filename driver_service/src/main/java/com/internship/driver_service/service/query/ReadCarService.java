@@ -1,6 +1,6 @@
 package com.internship.driver_service.service.query;
 
-import com.internship.driver_service.dto.CarDto;
+import com.internship.driver_service.dto.response.ResponseCarDto;
 import com.internship.driver_service.dto.mapper.CarMapper;
 import com.internship.driver_service.dto.transfer.CarFilterRequest;
 import com.internship.driver_service.dto.transfer.CarPackageDto;
@@ -28,6 +28,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 public class ReadCarService {
     private final CarRepo carRepo;
+    private final CarMapper carMapper;
     private final CarSpecification carSpecification;
     private final ProfileValidationManager profileValidationManager;
     private final CarValidationManager carValidationManager;
@@ -46,17 +47,17 @@ public class ReadCarService {
     }
 
     @Transactional(readOnly = true)
-    public CarDto getCurrentCarByProfileId(Long profileId) {
+    public ResponseCarDto getCurrentCarByProfileId(Long profileId) {
         profileValidationManager.checkIfProfileIdNotNull(profileId);
         DriverProfile driverProfile = profileValidationManager.getDriverProfile(profileId);
         Car car = carRepo.findByDriverProfileAndIsCurrent(driverProfile, true);
         carValidationManager.checkCarNotNull(car);
-        return CarMapper.converter.handleEntity(car);
+        return carMapper.handleEntity(car);
     }
 
     private CarPackageDto createCarPackageDto(Page<Car> resultPage) {
-        List<CarDto> carsDto = resultPage.getContent().stream()
-                .map(CarMapper.converter::handleEntity)
+        List<ResponseCarDto> carsDto = resultPage.getContent().stream()
+                .map(carMapper::handleEntity)
                 .toList();
 
         return CarPackageDto.builder()

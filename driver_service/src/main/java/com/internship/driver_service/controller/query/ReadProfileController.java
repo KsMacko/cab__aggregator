@@ -1,7 +1,7 @@
 package com.internship.driver_service.controller.query;
 
 import com.internship.driver_service.controller.doc.ProfileReadDoc;
-import com.internship.driver_service.dto.ProfileDto;
+import com.internship.driver_service.dto.response.ResponseProfileDto;
 import com.internship.driver_service.dto.transfer.DriverFilterRequest;
 import com.internship.driver_service.dto.transfer.ProfilePackageDto;
 import com.internship.driver_service.service.query.ReadDriverProfileService;
@@ -23,7 +23,7 @@ public class ReadProfileController implements ProfileReadDoc {
     }
 
     @Override
-    public ProfileDto findById(@PathVariable Long id) {
+    public ResponseProfileDto findById(@PathVariable Long id) {
         return readDriverProfileService.readDriverProfileById(id);
     }
 }

@@ -1,6 +1,6 @@
 package com.internship.driver_service.controller.doc;
 
-import com.internship.driver_service.dto.CarDto;
+import com.internship.driver_service.dto.response.ResponseCarDto;
 import com.internship.driver_service.dto.transfer.CarFilterRequest;
 import com.internship.driver_service.dto.transfer.CarPackageDto;
 import com.internship.driver_service.utils.exceptions.transfer.BaseException;
@@ -32,7 +32,7 @@ public interface CarReadDoc {
             @ApiResponse(
                     responseCode = "200",
                     description = "Current car retrieved successfully",
-                    content = @Content(schema = @Schema(implementation = CarDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseCarDto.class))
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -41,7 +41,7 @@ public interface CarReadDoc {
             )
     })
     @GetMapping("/{id}/cars/current")
-    CarDto getCurrentCar(
+    ResponseCarDto getCurrentCar(
             @Parameter(description = "Unique identifier of the driver profile", example = "1", required = true)
             @PositiveOrZero(message = "id.positive")
             @Max(value = ValidationConstants.MAX_ID_VALUE, message = "id.maxValue")

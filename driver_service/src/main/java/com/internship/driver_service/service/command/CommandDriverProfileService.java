@@ -1,7 +1,9 @@
 package com.internship.driver_service.service.command;
 
-import com.internship.driver_service.dto.ProfileDto;
-import com.internship.driver_service.dto.RateDto;
+import com.internship.driver_service.dto.request.RequestProfileDto;
+import com.internship.driver_service.dto.request.RequestRateDto;
+import com.internship.driver_service.dto.response.ResponseProfileDto;
+import com.internship.driver_service.dto.response.ResponseRateDto;
 import com.internship.driver_service.dto.mapper.ProfileMapper;
 import com.internship.driver_service.dto.mapper.RateMapper;
 import com.internship.driver_service.entity.DriverProfile;
@@ -17,24 +19,25 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CommandDriverProfileService {
     private final DriverProfileRepo driverProfileRepo;
+    private final ProfileMapper profileMapper;
+    private final RateMapper rateMapper;
     private final ProfileValidationManager profileValidationManager;
     private final RateValidationManager rateValidationManager;
     private final RateRepo rateRepo;
 
     @Transactional
-    public ProfileDto createProfile(ProfileDto profileDto) {
+    public ResponseProfileDto createProfile(RequestProfileDto profileDto) {
         profileValidationManager.checkIfPhoneUnique(profileDto.phone());
-        DriverProfile driverProfile = ProfileMapper.converter.handleDto(profileDto);
-        return ProfileMapper.converter.handleEntity(driverProfileRepo.save(driverProfile));
+        DriverProfile driverProfile = profileMapper.handleDto(profileDto);
+        return profileMapper.handleEntity(driverProfileRepo.save(driverProfile));
     }
 
     @Transactional
-    public ProfileDto updateDriverProfile(ProfileDto profileDto) {
-        profileValidationManager.checkIfProfileIdNotNull(profileDto.profileId());
-        DriverProfile existingProfile = profileValidationManager.getDriverProfile(profileDto.profileId());
-        ProfileMapper.converter.updateProfileFromDto(profileDto, existingProfile);
+    public ResponseProfileDto updateDriverProfile(Long profileId, RequestProfileDto profileDto) {
+        DriverProfile existingProfile = profileValidationManager.getDriverProfile(profileId);
+        profileMapper.updateProfileFromDto(profileDto, existingProfile);
 
-        return ProfileMapper.converter.handleEntity(driverProfileRepo.save(existingProfile));
+        return profileMapper.handleEntity(driverProfileRepo.save(existingProfile));
     }
 
     @Transactional
@@ -45,9 +48,9 @@ public class CommandDriverProfileService {
     }
 
     @Transactional
-    public RateDto setNewRate(RateDto rateDto) {
+    public ResponseRateDto setNewRate(RequestRateDto rateDto) {
         profileValidationManager.checkIfProfileExists(rateDto.driverId());
-        return RateMapper.converter.handleEntity(rateRepo.save(RateMapper.converter.handleDto(rateDto)));
+        return rateMapper.handleEntity(rateRepo.save(rateMapper.handleDto(rateDto)));
     }
 
     @Transactional

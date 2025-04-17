@@ -1,7 +1,8 @@
 package com.internship.driver_service.controller.command;
 
 import com.internship.driver_service.controller.doc.CarCommandDoc;
-import com.internship.driver_service.dto.CarDto;
+import com.internship.driver_service.dto.request.RequestCarDto;
+import com.internship.driver_service.dto.response.ResponseCarDto;
 import com.internship.driver_service.service.command.CommandCarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,12 @@ public class CommandCarController implements CarCommandDoc {
     private final CommandCarService commandCarService;
 
     @Override
-    public CarDto setCurrentCar(@PathVariable Long id) {
+    public ResponseCarDto setCurrentCar(@PathVariable Long id) {
         return commandCarService.setCurrentCar(id);
     }
 
     @Override
-    public CarDto addNewCar(@RequestBody CarDto carDto) {
+    public ResponseCarDto addNewCar(@RequestBody RequestCarDto carDto) {
         return commandCarService.addNewCar(carDto);
     }
 
