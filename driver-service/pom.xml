@@ -4,16 +4,17 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.intership</groupId>
-        <artifactId>cab_aggregator</artifactId>
+        <artifactId>cab-aggregator</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>passenger_service</artifactId>
+    <artifactId>driver-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>passenger_service</name>
+    <name>driver-service</name>
 
     <properties>
         <java.version>17</java.version>
     </properties>
+
 
 </project>

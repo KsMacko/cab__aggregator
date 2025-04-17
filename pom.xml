@@ -9,10 +9,10 @@
 		<relativePath/>
 	</parent>
 	<modules>
-		<module>driver_service</module>
-		<module>passenger_service</module>
-		<module>finance_service</module>
-		<module>ride_service</module>
+		<module>driver-service</module>
+		<module>passenger-service</module>
+		<module>finance-service</module>
+		<module>ride-service</module>
 	</modules>
 
 	<groupId>com.intership</groupId>

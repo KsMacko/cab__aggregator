@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.intership</groupId>
-        <artifactId>cab_aggregator</artifactId>
+        <artifactId>cab-aggregator</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>finance_service</artifactId>
+    <artifactId>finance-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>finance_service</name>
 
