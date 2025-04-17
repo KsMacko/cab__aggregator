@@ -1,15 +1,16 @@
 spring:
+  messages:
+    basename: messages
+    encoding: UTF-8
   application:
-    name: ${SPRING_APPLICATION_NAME}
+    name: ride_service
   data:
     mongodb:
-      uri: ${MONGODB_URI}
+      uri: mongodb://localhost:27017/ride_db
   liquibase:
-    enabled: ${LIQUIBASE_ENABLED}
-    change-log: ${LIQUIBASE_CHANGELOG}
-
+    enabled: true
+    change-log: db/changelog/changelog.xml
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-
 server:
-  port: ${SERVER_PORT}
+  port: 8083

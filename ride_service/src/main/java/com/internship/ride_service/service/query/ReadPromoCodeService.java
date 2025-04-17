@@ -1,11 +1,12 @@
 package com.internship.ride_service.service.query;
 
-import com.internship.ride_service.dto.PromoCodeDto;
+import com.internship.ride_service.dto.response.ResponsePromoCodeDto;
 import com.internship.ride_service.dto.mapper.PromoCodeMapper;
 import com.internship.ride_service.dto.transfer.PromoCodeFilterRequest;
 import com.internship.ride_service.dto.transfer.PromoCodePackageDto;
 import com.internship.ride_service.entity.PromoCode;
-import com.internship.ride_service.util.PromoCodeValidationManager;
+import com.internship.ride_service.enums.PromoCodeFieldsToFilter;
+import com.internship.ride_service.util.validators.PromoCodeValidationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,33 +36,33 @@ public class ReadPromoCodeService {
         query.with(createPageableObject(filterRequest));
         List<PromoCode> promoCodes = mongoTemplate.find(query, PromoCode.class);
         long totalElements = mongoTemplate.count(query, PromoCode.class);
-        List<PromoCodeDto> promoCodesDto = promoCodes.stream()
+        List<ResponsePromoCodeDto> promoCodesDto = promoCodes.stream()
                 .map(promoCodeMapper::handleEntity)
                 .toList();
 
         return new PromoCodePackageDto(
                 promoCodesDto,
                 totalElements,
-                filterRequest.page(),
+                filterRequest.getPage(),
                 promoCodesDto.size(),
-                (int) Math.ceil((double) totalElements / filterRequest.size())
+                (int) Math.ceil((double) totalElements / filterRequest.getSize())
         );
     }
 
     @Transactional(readOnly = true)
-    public PromoCodeDto getPromoCodeById(String id) {
+    public ResponsePromoCodeDto getPromoCodeById(String id) {
         return promoCodeMapper.handleEntity(promoCodeValidationManager.getPromoCodeByIdIfExists(id));
     }
 
     @Transactional(readOnly = true)
-    public PromoCodeDto getPromoCodeCurrentByCode(String code) {
+    public ResponsePromoCodeDto getPromoCodeCurrentByCode(String code) {
         return promoCodeMapper.handleEntity(promoCodeValidationManager.getCurrentPromoCode(code));
     }
 
     private Query buildQuery(PromoCodeFilterRequest filterRequest) {
         Criteria criteria = new Criteria();
-        addCriteriaIfNotNull(criteria, createdAt, filterRequest.createdDate());
-        addCriteriaIfNotNull(criteria, validUntil, filterRequest.validDate());
+        addCriteriaIfNotNull(criteria, createdAt, filterRequest.getCreatedDate());
+        addCriteriaIfNotNull(criteria, validUntil, filterRequest.getValidDate());
         return new Query(criteria);
     }
 
@@ -73,8 +74,8 @@ public class ReadPromoCodeService {
 
     private Pageable createPageableObject(PromoCodeFilterRequest filterRequest) {
         Sort sort = Sort.by(
-                Sort.Direction.fromString(filterRequest.order().toString()),
-                filterRequest.sortBy().getFieldName());
-        return PageRequest.of(filterRequest.page(), filterRequest.size(), sort);
+                Sort.Direction.fromString(filterRequest.getOrder()),
+                PromoCodeFieldsToFilter.valueOf(filterRequest.getSortBy()).getFieldName());
+        return PageRequest.of(filterRequest.getPage(), filterRequest.getSize(), sort);
     }
 }

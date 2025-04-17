@@ -3,8 +3,8 @@ package com.internship.ride_service.service.command;
 import com.internship.ride_service.entity.Fare;
 import com.internship.ride_service.entity.PromoCode;
 import com.internship.ride_service.entity.Ride;
-import com.internship.ride_service.util.FareValidationManager;
-import com.internship.ride_service.util.PromoCodeValidationManager;
+import com.internship.ride_service.util.validators.FareValidationManager;
+import com.internship.ride_service.util.validators.PromoCodeValidationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
