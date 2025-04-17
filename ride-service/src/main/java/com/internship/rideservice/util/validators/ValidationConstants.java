@@ -1,0 +1,34 @@
+package com.internship.rideservice.util.validators;
+
+public interface ValidationConstants {
+    int DEFAULT_PAGE_NUMBER = 0;
+    int MAX_PAGE_VALUE = 100;
+    int DEFAULT_PAGE_SIZE = 10;
+    int MAX_PAGE_SIZE = 100;
+    int MAX_ID_VALUE = 100;
+
+    String CYRILLIC_REGEX = "^[а-яА-ЯёЁ]+$";
+    String LATIN_LETTERS_REGEX = "^[a-zA-Z]+$";
+    String ALPHANUMERIC_REGEX = "^[a-zA-Z0-9]+$";
+    String ORDER_DIRECTION_PATTERN = "ASC|DESC";
+    String PROMO_CODE_FIELDS_PATTERN = "CREATED_AT|VALID_UNTIL";
+    String RIDE_STATUS_PATTERN = "CREATED|ACCEPTED|WAIT_FOR_PASSENGER|IN_PROGRESS|RECALCULATED|COMPLETED|CANCELLED";
+    String FARE_TYPE_PATTERN = "ECONOMY|COMFORT|BUSINESS";
+    String RIDE_FIELDS_TO_FILTER_PATTERN = "DATE|START_TIME|END_TIME|DISTANCE|RIDE_STATUS";
+
+
+    int MIN_PROMO_CODE_DISCOUNT = 1;
+    int MAX_PROMO_CODE_DISCOUNT = 99;
+    String MIN_PRICE = "0.0";
+    String MAX_FARE_MIN_PRICE = "10.0";
+    int MAX_FREE_WAITING_MINUTES = 20;
+    String MAX_PAID_WAITING_PRICE = "1.0";
+    String MAX_PRICE_PER_KM = "2.0";
+    String MAX_PRICE_PER_MINUTE = "1.0";
+    String MIN_DISTANCE = "0.1";
+    String MAX_DISTANCE = "8000.0";
+
+    int MIN_ADDRESS_LENGTH = 10;
+    int MAX_ADDRESS_LENGTH = 100;
+    int MAX_PROMO_CODE_LENGTH = 15;
+}

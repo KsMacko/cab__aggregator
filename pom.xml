@@ -15,8 +15,8 @@
 		<module>ride-service</module>
 	</modules>
 
-	<groupId>com.intership</groupId>
-	<artifactId>cab_aggregator</artifactId>
+	<groupId>com.internship</groupId>
+	<artifactId>cab-aggregator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>cab_aggregator</name>
 	<packaging>pom</packaging>
