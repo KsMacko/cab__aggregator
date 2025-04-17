@@ -1,10 +1,11 @@
 package com.internship.ride_service.dto;
 
 import com.internship.ride_service.enums.RideStatus;
-import com.internship.ride_service.util.validators.ValidateLocationList;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -36,8 +37,10 @@ public record RideDto(
         String promoCode,
         @Size(min = MIN_ADDRESS_LENGTH, max = MAX_ADDRESS_LENGTH, message = "start.location.invalidSize")
         String startLocation,
-        @ValidateLocationList
-        List<String> endLocation,
+        @NotEmpty(message = "location.list.notNull")
+        List<@NotBlank(message = "location.list.elements.notBlank")
+        @Size(min = MIN_ADDRESS_LENGTH, max = MAX_ADDRESS_LENGTH, message = "location.list.invalidSize")
+                String> endLocation,
         OffsetDateTime createdAt,
         OffsetTime startWaitingTime,
         OffsetTime startTime,

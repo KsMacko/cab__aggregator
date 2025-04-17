@@ -1,6 +1,5 @@
 package com.internship.ride_service.util.exceptions;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 
 import static com.internship.ride_service.util.exceptions.ExceptionCodes.ERROR_INVALID_INPUT;
+import static com.internship.ride_service.util.exceptions.ExceptionCodes.ERROR_NOT_READABLE;
+import static com.internship.ride_service.util.exceptions.ExceptionCodes.UNKNOWN_ERROR;
 
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -60,7 +61,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(messageSource.getMessage(
-                        "error.notReadable",
+                        ERROR_NOT_READABLE.getCode(),
+                        null,
+                        LocaleContextHolder.getLocale()));
+    }
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<String> handleHttpMessageNotReadableException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(messageSource.getMessage(
+                        UNKNOWN_ERROR.getCode(),
                         null,
                         LocaleContextHolder.getLocale()));
     }
