@@ -1,7 +1,8 @@
 package com.internship.ride_service.controller.command;
 
 import com.internship.ride_service.controller.doc.CommandFareDoc;
-import com.internship.ride_service.dto.FareDto;
+import com.internship.ride_service.dto.request.RequestFareDto;
+import com.internship.ride_service.dto.response.ResponseFareDto;
 import com.internship.ride_service.enums.FareType;
 import com.internship.ride_service.service.command.CommandFareService;
 import jakarta.validation.Valid;
@@ -23,8 +24,8 @@ public class CommandFareController implements CommandFareDoc {
     private final CommandFareService commandFareService;
 
     @Override
-    public ResponseEntity<FareDto> createFare(@Valid @RequestBody FareDto fareDto) {
-        FareDto createdFare = commandFareService.createFare(fareDto);
+    public ResponseEntity<ResponseFareDto> createFare(@Valid @RequestBody RequestFareDto fareDto) {
+        ResponseFareDto createdFare = commandFareService.createFare(fareDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{type}")
@@ -42,8 +43,8 @@ public class CommandFareController implements CommandFareDoc {
     }
 
     @Override
-    public ResponseEntity<FareDto> updateFare(@RequestBody FareDto fareDto) {
-        FareDto updatedFare = commandFareService.updateFare(fareDto);
+    public ResponseEntity<ResponseFareDto> updateFare(@RequestBody RequestFareDto fareDto) {
+        ResponseFareDto updatedFare = commandFareService.updateFare(fareDto);
         return ResponseEntity.ok(updatedFare);
     }
 }

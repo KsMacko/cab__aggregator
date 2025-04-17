@@ -65,12 +65,12 @@ public class GlobalExceptionHandler {
                         null,
                         LocaleContextHolder.getLocale()));
     }
-    @ExceptionHandler({Exception.class})
-    public ResponseEntity<String> handleHttpMessageNotReadableException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(messageSource.getMessage(
-                        UNKNOWN_ERROR.getCode(),
-                        null,
-                        LocaleContextHolder.getLocale()));
-    }
+//    @ExceptionHandler({Exception.class})
+//    public ResponseEntity<BaseExceptionDto> handleHttpMessageNotReadableException(Exception ex) {
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                .body(new BaseExceptionDto(messageSource.getMessage(
+//                        UNKNOWN_ERROR.getCode(),
+//                        null,
+//                        LocaleContextHolder.getLocale())));
+//    }
 }

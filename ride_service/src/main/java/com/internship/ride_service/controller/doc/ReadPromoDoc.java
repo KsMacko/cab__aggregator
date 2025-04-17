@@ -3,7 +3,7 @@ package com.internship.ride_service.controller.doc;
 import com.internship.ride_service.dto.transfer.PromoCodeFilterRequest;
 import com.internship.ride_service.util.exceptions.BaseExceptionDto;
 import com.internship.ride_service.util.exceptions.BaseValidationException;
-import com.internship.ride_service.dto.PromoCodeDto;
+import com.internship.ride_service.dto.response.ResponsePromoCodeDto;
 import com.internship.ride_service.dto.transfer.PromoCodePackageDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -51,7 +51,7 @@ public interface ReadPromoDoc {
             @ApiResponse(
                     responseCode = "200",
                     description = "Promo code retrieved successfully",
-                    content = @Content(schema = @Schema(implementation = PromoCodeDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponsePromoCodeDto.class))
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -65,7 +65,7 @@ public interface ReadPromoDoc {
             )
     })
     @GetMapping("/{code}/current")
-    PromoCodeDto getPromoCode(
+    ResponsePromoCodeDto getPromoCode(
             @Parameter(description = "Unique code of the promo code", example = "SUMMER20", required = true)
             @PathVariable String code);
 }

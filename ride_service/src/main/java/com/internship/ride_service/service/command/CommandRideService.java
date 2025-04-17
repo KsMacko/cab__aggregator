@@ -1,6 +1,7 @@
 package com.internship.ride_service.service.command;
 
-import com.internship.ride_service.dto.RideDto;
+import com.internship.ride_service.dto.request.RequestRideDto;
+import com.internship.ride_service.dto.response.ResponseRideDto;
 import com.internship.ride_service.dto.mapper.RideMapper;
 import com.internship.ride_service.entity.Ride;
 import com.internship.ride_service.enums.RideStatus;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.time.OffsetTime;
 
 @Service
@@ -23,16 +25,9 @@ public class CommandRideService {
     private final RideMapper rideMapper;
 
     @Transactional
-    public RideDto createRide(RideDto rideDto) {
+    public ResponseRideDto createRide(RequestRideDto rideDto) {
         Ride rideEntity = rideMapper.handleDto(rideDto);
         return rideMapper.handleEntity(rideRepo.save(rideEntity));
-    }
-
-    @Transactional
-    public RideDto updateRide(RideDto updatedRideDto) {
-        Ride existingRide = rideValidationManager.getRideByIdIfExists(updatedRideDto.id());
-        rideMapper.updateEntity(updatedRideDto, existingRide);
-        return rideMapper.handleEntity(rideRepo.save(existingRide));
     }
 
     @Transactional
@@ -42,42 +37,42 @@ public class CommandRideService {
     }
 
     @Transactional
-    public RideDto changeRideStatusToAccepted(String rideId, Long driverId) {
+    public ResponseRideDto changeRideStatusToAccepted(String rideId, Long driverId) {
         Ride ride = rideValidationManager.getRideByIdIfExists(rideId);
         ride.setDriverId(driverId);
         return saveRideAndGetStatus(ride, RideStatus.ACCEPTED);
     }
 
     @Transactional
-    public RideDto changeRideStatusToWaitingForPassenger(String rideId) {
+    public ResponseRideDto changeRideStatusToWaitingForPassenger(String rideId) {
         Ride ride = rideValidationManager.getRideByIdIfExists(rideId);
-        ride.setStartWaitingTime(OffsetTime.now());
+        ride.setStartWaitingTime(LocalTime.now());
         return saveRideAndGetStatus(ride, RideStatus.WAIT_FOR_PASSENGER);
     }
 
     @Transactional
-    public RideDto changeRideStatusToInProgress(String rideId) {
+    public ResponseRideDto changeRideStatusToInProgress(String rideId) {
         Ride ride = rideValidationManager.getRideByIdIfExists(rideId);
-        ride.setStartTime(OffsetTime.now());
+        ride.setStartTime(LocalTime.now());
         return saveRideAndGetStatus(ride, RideStatus.IN_PROGRESS);
     }
 
     @Transactional
-    public RideDto changeRideStatusRecalculated(String rideId) {
+    public ResponseRideDto changeRideStatusRecalculated(String rideId) {
         Ride ride = rideValidationManager.getRideByIdIfExists(rideId);
-        ride.setEndTime(OffsetTime.now());
+        ride.setEndTime(LocalTime.now());
         BigDecimal recalculatedPrice = calculatePriceService.ReCalculatePrice(ride);
         ride.setPrice(recalculatedPrice);
         return saveRideAndGetStatus(ride, RideStatus.RECALCULATED);
     }
 
     @Transactional
-    public RideDto changeRideStatusToCompleted(String rideId) {
+    public ResponseRideDto changeRideStatusToCompleted(String rideId) {
         Ride ride = rideValidationManager.getRideByIdIfExists(rideId);
         return saveRideAndGetStatus(ride, RideStatus.COMPLETED);
     }
 
-    private RideDto saveRideAndGetStatus(Ride ride, RideStatus rideStatus) {
+    private ResponseRideDto saveRideAndGetStatus(Ride ride, RideStatus rideStatus) {
         ride.setStatus(rideStatus);
         return rideMapper.handleEntity(rideRepo.save(ride));
     }

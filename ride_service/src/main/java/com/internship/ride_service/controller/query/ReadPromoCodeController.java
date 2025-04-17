@@ -1,7 +1,7 @@
 package com.internship.ride_service.controller.query;
 
 import com.internship.ride_service.controller.doc.ReadPromoDoc;
-import com.internship.ride_service.dto.PromoCodeDto;
+import com.internship.ride_service.dto.response.ResponsePromoCodeDto;
 import com.internship.ride_service.dto.transfer.PromoCodePackageDto;
 import com.internship.ride_service.dto.transfer.PromoCodeFilterRequest;
 import com.internship.ride_service.service.query.ReadPromoCodeService;
@@ -24,7 +24,7 @@ public class ReadPromoCodeController implements ReadPromoDoc {
     }
 
     @Override
-    public PromoCodeDto getPromoCode(@PathVariable String code) {
+    public ResponsePromoCodeDto getPromoCode(@PathVariable String code) {
         return  readPromoCodeService.getPromoCodeCurrentByCode(code);
     }
 }

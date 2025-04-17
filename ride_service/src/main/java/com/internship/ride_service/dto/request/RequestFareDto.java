@@ -1,4 +1,4 @@
-package com.internship.ride_service.dto;
+package com.internship.ride_service.dto.request;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 
 import static com.internship.ride_service.util.validators.ValidationConstants.FARE_TYPE_PATTERN;
 import static com.internship.ride_service.util.validators.ValidationConstants.MAX_FARE_MIN_PRICE;
@@ -18,7 +17,7 @@ import static com.internship.ride_service.util.validators.ValidationConstants.MA
 import static com.internship.ride_service.util.validators.ValidationConstants.MAX_PRICE_PER_MINUTE;
 import static com.internship.ride_service.util.validators.ValidationConstants.MIN_PRICE;
 
-public record FareDto(
+public record RequestFareDto(
         @Pattern(regexp = FARE_TYPE_PATTERN, message = "fare.type.invalidInput")
         String type,
         @NotNull(message = "minPrice.notNull")
@@ -40,7 +39,7 @@ public record FareDto(
         @NotNull(message = "price.per.min.notNull")
         @DecimalMin(value = MIN_PRICE, inclusive = false, message = "price.per.min.positive")
         @DecimalMax(value = MAX_PRICE_PER_MINUTE, message = "price.per.min.maxValue")
-        BigDecimal pricePerMin,
-        OffsetDateTime createdAt
-) {
+        BigDecimal pricePerMin
+){
+
 }

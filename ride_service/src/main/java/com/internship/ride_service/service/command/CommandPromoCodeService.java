@@ -1,6 +1,7 @@
 package com.internship.ride_service.service.command;
 
-import com.internship.ride_service.dto.PromoCodeDto;
+import com.internship.ride_service.dto.request.RequestPromoCodeDto;
+import com.internship.ride_service.dto.response.ResponsePromoCodeDto;
 import com.internship.ride_service.dto.mapper.PromoCodeMapper;
 import com.internship.ride_service.entity.PromoCode;
 import com.internship.ride_service.repo.PromoCodeRepo;
@@ -19,7 +20,7 @@ public class CommandPromoCodeService {
     private final PromoCodeMapper promoCodeMapper;
 
     @Transactional
-    public PromoCodeDto createPromoCode(PromoCodeDto promoCodeDto) {
+    public ResponsePromoCodeDto createPromoCode(RequestPromoCodeDto promoCodeDto) {
         promoCodeValidationManager.checkForCreationPromoCodeValidity(promoCodeDto.promoCode());
         PromoCode promoCode = promoCodeMapper.handleDto(promoCodeDto);
         promoCode.setValidUntil(OffsetDateTime.parse(promoCodeDto.validUntil()));
@@ -33,8 +34,8 @@ public class CommandPromoCodeService {
     }
 
     @Transactional
-    public PromoCodeDto updatePromoCode(PromoCodeDto promoCodeDto) {
-        PromoCode existingPromoCode = promoCodeValidationManager.getPromoCodeByIdIfExists(promoCodeDto.id());
+    public ResponsePromoCodeDto updatePromoCode(String promoCodeId, RequestPromoCodeDto promoCodeDto) {
+        PromoCode existingPromoCode = promoCodeValidationManager.getPromoCodeByIdIfExists(promoCodeId);
         promoCodeMapper.updateEntity(promoCodeDto, existingPromoCode);
         return promoCodeMapper.handleEntity(promoCodeRepo.save(existingPromoCode));
     }

@@ -1,8 +1,9 @@
 package com.internship.ride_service.controller.doc;
 
+import com.internship.ride_service.dto.request.RequestRideDto;
 import com.internship.ride_service.util.exceptions.BaseExceptionDto;
 import com.internship.ride_service.util.exceptions.BaseValidationException;
-import com.internship.ride_service.dto.RideDto;
+import com.internship.ride_service.dto.response.ResponseRideDto;
 import com.internship.ride_service.enums.RideStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,7 +39,7 @@ public interface CommandRideDoc {
             @ApiResponse(
                     responseCode = "201",
                     description = "Ride created successfully",
-                    content = @Content(schema = @Schema(implementation = RideDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseRideDto.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -47,10 +48,10 @@ public interface CommandRideDoc {
             )
     })
     @PostMapping
-    ResponseEntity<RideDto> createRide(
+    ResponseEntity<ResponseRideDto> createRide(
             @Parameter(description = "Ride data to create", required = true)
             @Valid
-            @RequestBody RideDto rideDto);
+            @RequestBody RequestRideDto rideDto);
 
     @Operation(
             summary = "Delete a ride by ID",
@@ -78,32 +79,6 @@ public interface CommandRideDoc {
             @RequestParam String id);
 
     @Operation(
-            summary = "Update an existing ride",
-            description = "Updates an existing ride with the provided data"
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Ride updated successfully",
-                    content = @Content(schema = @Schema(implementation = RideDto.class))
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Occurs when the ride is not found",
-                    content = @Content(schema = @Schema(implementation = BaseExceptionDto.class))
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid input data",
-                    content = @Content(schema = @Schema(implementation = BaseExceptionDto.class))
-            )
-    })
-    @PutMapping
-    RideDto updateRide(
-            @Parameter(description = "Updated ride data", required = true)
-            @RequestBody RideDto ride);
-
-    @Operation(
             summary = "Change ride status to ACCEPTED",
             description = "Changes the ride status to ACCEPTED and assigns a driver"
     )
@@ -125,7 +100,7 @@ public interface CommandRideDoc {
             )
     })
     @PostMapping("/{rideId}/status/accepted")
-    RideDto changeRideStatusToAccepted(
+    ResponseRideDto changeRideStatusToAccepted(
             @Parameter(description = "Unique identifier of the ride", example = "67e92415198ed4652992f5ec", required = true)
             @PathVariable String rideId,
             @Parameter(description = "Driver data to assign", required = true)
@@ -153,7 +128,7 @@ public interface CommandRideDoc {
             )
     })
     @PostMapping("/{rideId}/status/wait-for-passenger")
-    RideDto changeRideStatusToWaitingForPassenger(
+    ResponseRideDto changeRideStatusToWaitingForPassenger(
             @Parameter(description = "Unique identifier of the ride", example = "67e92415198ed4652992f5ec", required = true)
             @PathVariable String rideId);
 
@@ -179,7 +154,7 @@ public interface CommandRideDoc {
             )
     })
     @PostMapping("/{rideId}/status/in-progress")
-    RideDto changeRideStatusToInProgress(
+    ResponseRideDto changeRideStatusToInProgress(
             @Parameter(description = "Unique identifier of the ride", example = "67e92415198ed4652992f5ec", required = true)
             @PathVariable String rideId);
 
@@ -205,7 +180,7 @@ public interface CommandRideDoc {
             )
     })
     @PostMapping("/{rideId}/status/recalculated")
-    RideDto changeRideStatusRecalculated(
+    ResponseRideDto changeRideStatusRecalculated(
             @Parameter(description = "Unique identifier of the ride", example = "67e92415198ed4652992f5ec", required = true)
             @PathVariable String rideId);
 
@@ -231,7 +206,7 @@ public interface CommandRideDoc {
             )
     })
     @PostMapping("/{rideId}/status/completed")
-    RideDto changeRideStatusToCompleted(
+    ResponseRideDto changeRideStatusToCompleted(
             @Parameter(description = "Unique identifier of the ride", example = "67e92415198ed4652992f5ec", required = true)
             @PathVariable String rideId);
 }

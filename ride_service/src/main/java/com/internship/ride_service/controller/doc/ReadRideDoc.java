@@ -1,7 +1,7 @@
 package com.internship.ride_service.controller.doc;
 
 import com.internship.ride_service.util.exceptions.BaseExceptionDto;
-import com.internship.ride_service.dto.RideDto;
+import com.internship.ride_service.dto.response.ResponseRideDto;
 import com.internship.ride_service.dto.transfer.RideFilterRequest;
 import com.internship.ride_service.dto.transfer.RidePackageDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +28,7 @@ public interface ReadRideDoc {
             @ApiResponse(
                     responseCode = "200",
                     description = "Ride found",
-                    content = @Content(schema = @Schema(implementation = RideDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseRideDto.class))
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -37,7 +37,7 @@ public interface ReadRideDoc {
             )
     })
     @GetMapping("/{id}")
-    RideDto getRideById(
+    ResponseRideDto getRideById(
             @Parameter(description = "Unique identifier of the ride", example = "67e92415198ed4652992f5ec", required = true)
             @PathVariable String id);
 

@@ -1,8 +1,9 @@
 package com.internship.ride_service.controller.doc;
 
+import com.internship.ride_service.dto.request.RequestFareDto;
 import com.internship.ride_service.util.exceptions.BaseExceptionDto;
 import com.internship.ride_service.util.exceptions.BaseValidationException;
-import com.internship.ride_service.dto.FareDto;
+import com.internship.ride_service.dto.response.ResponseFareDto;
 import com.internship.ride_service.enums.FareType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,7 +36,7 @@ public interface CommandFareDoc {
             @ApiResponse(
                     responseCode = "201",
                     description = "Fare type created successfully",
-                    content = @Content(schema = @Schema(implementation = FareDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseFareDto.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -49,10 +50,10 @@ public interface CommandFareDoc {
             )
     })
     @PostMapping
-    ResponseEntity<FareDto> createFare(
+    ResponseEntity<ResponseFareDto> createFare(
             @Parameter(description = "Fare data to create", required = true)
             @Valid
-            @RequestBody FareDto fareDto);
+            @RequestBody RequestFareDto fareDto);
 
     @Operation(
             summary = "Delete a fare type by type",
@@ -87,7 +88,7 @@ public interface CommandFareDoc {
             @ApiResponse(
                     responseCode = "200",
                     description = "Fare type updated successfully",
-                    content = @Content(schema = @Schema(implementation = FareDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseFareDto.class))
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -101,7 +102,7 @@ public interface CommandFareDoc {
             )
     })
     @PutMapping
-    ResponseEntity<FareDto> updateFare(
+    ResponseEntity<ResponseFareDto> updateFare(
             @Parameter(description = "Updated fare data", required = true)
-            @RequestBody FareDto fareDto);
+            @RequestBody RequestFareDto fareDto);
 }

@@ -3,7 +3,7 @@ package com.internship.ride_service.controller.doc;
 import com.internship.ride_service.dto.transfer.FarePackageDto;
 import com.internship.ride_service.util.exceptions.BaseExceptionDto;
 import com.internship.ride_service.util.exceptions.BaseValidationException;
-import com.internship.ride_service.dto.FareDto;
+import com.internship.ride_service.dto.response.ResponseFareDto;
 import com.internship.ride_service.enums.FareType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,7 +32,7 @@ public interface ReadFareDoc {
             @ApiResponse(
                     responseCode = "200",
                     description = "Fare types retrieved successfully",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = FareDto.class)))
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ResponseFareDto.class)))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -51,7 +51,7 @@ public interface ReadFareDoc {
             @ApiResponse(
                     responseCode = "200",
                     description = "Fare type retrieved successfully",
-                    content = @Content(schema = @Schema(implementation = FareDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseFareDto.class))
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -65,7 +65,7 @@ public interface ReadFareDoc {
             )
     })
     @GetMapping("/{type}")
-    FareDto getFareByType(
+    ResponseFareDto getFareByType(
             @Parameter(description = "Unique type of the fare", example = "ECONOMY", required = true)
             @PathVariable FareType type);
 }

@@ -9,8 +9,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "rides")
@@ -25,10 +28,10 @@ public class Ride {
     private String promoCode;
     private String startLocation;
     private List<String> endLocation;
-    private OffsetDateTime createdAt;
-    private OffsetTime startWaitingTime;
-    private OffsetTime startTime;
-    private OffsetTime endTime;
+    private Date createdAt;
+    private LocalTime startWaitingTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private Float distance;
     private RideStatus status;
     private FareType fareType;

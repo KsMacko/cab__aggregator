@@ -1,7 +1,7 @@
 package com.internship.ride_service.controller.query;
 
 import com.internship.ride_service.controller.doc.ReadRideDoc;
-import com.internship.ride_service.dto.RideDto;
+import com.internship.ride_service.dto.response.ResponseRideDto;
 import com.internship.ride_service.dto.transfer.RideFilterRequest;
 import com.internship.ride_service.dto.transfer.RidePackageDto;
 import com.internship.ride_service.service.query.ReadRideService;
@@ -23,7 +23,7 @@ public class ReadRideRideController implements ReadRideDoc {
     }
 
     @Override
-    public RideDto getRideById(@PathVariable String id) {
+    public ResponseRideDto getRideById(@PathVariable String id) {
         return readRideService.getRideById(id);
     }
 

@@ -1,11 +1,11 @@
 package com.internship.ride_service.dto.transfer;
 
-import com.internship.ride_service.dto.RideDto;
+import com.internship.ride_service.dto.response.ResponseRideDto;
 
 import java.util.List;
 
 public record RidePackageDto(
-        List<RideDto> ridesDto,
+        List<ResponseRideDto> ridesDto,
         long totalElements,
         int pageNumber,
         int pageSize,

@@ -1,6 +1,7 @@
 package com.internship.ride_service.dto.mapper;
 
-import com.internship.ride_service.dto.PromoCodeDto;
+import com.internship.ride_service.dto.request.RequestPromoCodeDto;
+import com.internship.ride_service.dto.response.ResponsePromoCodeDto;
 import com.internship.ride_service.entity.PromoCode;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -20,13 +21,16 @@ public interface PromoCodeMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "validUntil", source = "validUntil")
-    PromoCode handleDto(PromoCodeDto dto);
+    PromoCode handleDto(RequestPromoCodeDto dto);
 
     @Mapping(target = "validUntil", source = "validUntil")
-    PromoCodeDto handleEntity(PromoCode entity);
+    ResponsePromoCodeDto handleEntity(PromoCode entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntity(PromoCodeDto dto, @MappingTarget PromoCode entity);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "validUntil", source = "validUntil")
+    void updateEntity(RequestPromoCodeDto dto, @MappingTarget PromoCode entity);
 
     default String mapOffsetDateTimeToString(OffsetDateTime value) {
         return value != null ? value.format(FORMATTER) : null;

@@ -1,7 +1,8 @@
 package com.internship.ride_service.controller.command;
 
 import com.internship.ride_service.controller.doc.CommandRideDoc;
-import com.internship.ride_service.dto.RideDto;
+import com.internship.ride_service.dto.request.RequestRideDto;
+import com.internship.ride_service.dto.response.ResponseRideDto;
 import com.internship.ride_service.service.command.CommandRideService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ public class CommandRideRideController implements CommandRideDoc {
     private final CommandRideService commandRideService;
 
     @Override
-    public ResponseEntity<RideDto> createRide(@Valid @RequestBody RideDto rideDto) {
-        RideDto createdProfile = commandRideService.createRide(rideDto);
+    public ResponseEntity<ResponseRideDto> createRide(@Valid @RequestBody RequestRideDto rideDto) {
+        ResponseRideDto createdProfile = commandRideService.createRide(rideDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -41,32 +42,27 @@ public class CommandRideRideController implements CommandRideDoc {
     }
 
     @Override
-    public RideDto updateRide(@Valid @RequestBody RideDto ride) {
-        return commandRideService.updateRide(ride);
-    }
-
-    @Override
-    public RideDto changeRideStatusToAccepted(String rideId, Long driverId) {
+    public ResponseRideDto changeRideStatusToAccepted(String rideId, Long driverId) {
         return commandRideService.changeRideStatusToAccepted(rideId, driverId);
     }
 
     @Override
-    public RideDto changeRideStatusToWaitingForPassenger(String rideId) {
+    public ResponseRideDto changeRideStatusToWaitingForPassenger(String rideId) {
         return commandRideService.changeRideStatusToWaitingForPassenger(rideId);
     }
 
     @Override
-    public RideDto changeRideStatusToInProgress(String rideId) {
+    public ResponseRideDto changeRideStatusToInProgress(String rideId) {
         return commandRideService.changeRideStatusToInProgress(rideId);
     }
 
     @Override
-    public RideDto changeRideStatusRecalculated(String rideId) {
+    public ResponseRideDto changeRideStatusRecalculated(String rideId) {
         return commandRideService.changeRideStatusRecalculated(rideId);
     }
 
     @Override
-    public RideDto changeRideStatusToCompleted(String rideId) {
+    public ResponseRideDto changeRideStatusToCompleted(String rideId) {
         return commandRideService.changeRideStatusToCompleted(rideId);
     }
 }

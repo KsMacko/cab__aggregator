@@ -1,6 +1,6 @@
 package com.internship.ride_service.service.query;
 
-import com.internship.ride_service.dto.PromoCodeDto;
+import com.internship.ride_service.dto.response.ResponsePromoCodeDto;
 import com.internship.ride_service.dto.mapper.PromoCodeMapper;
 import com.internship.ride_service.dto.transfer.PromoCodeFilterRequest;
 import com.internship.ride_service.dto.transfer.PromoCodePackageDto;
@@ -36,7 +36,7 @@ public class ReadPromoCodeService {
         query.with(createPageableObject(filterRequest));
         List<PromoCode> promoCodes = mongoTemplate.find(query, PromoCode.class);
         long totalElements = mongoTemplate.count(query, PromoCode.class);
-        List<PromoCodeDto> promoCodesDto = promoCodes.stream()
+        List<ResponsePromoCodeDto> promoCodesDto = promoCodes.stream()
                 .map(promoCodeMapper::handleEntity)
                 .toList();
 
@@ -50,12 +50,12 @@ public class ReadPromoCodeService {
     }
 
     @Transactional(readOnly = true)
-    public PromoCodeDto getPromoCodeById(String id) {
+    public ResponsePromoCodeDto getPromoCodeById(String id) {
         return promoCodeMapper.handleEntity(promoCodeValidationManager.getPromoCodeByIdIfExists(id));
     }
 
     @Transactional(readOnly = true)
-    public PromoCodeDto getPromoCodeCurrentByCode(String code) {
+    public ResponsePromoCodeDto getPromoCodeCurrentByCode(String code) {
         return promoCodeMapper.handleEntity(promoCodeValidationManager.getCurrentPromoCode(code));
     }
 

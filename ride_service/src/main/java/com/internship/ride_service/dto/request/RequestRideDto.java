@@ -1,6 +1,5 @@
-package com.internship.ride_service.dto;
+package com.internship.ride_service.dto.request;
 
-import com.internship.ride_service.enums.RideStatus;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
@@ -11,9 +10,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
 import java.util.List;
 
 import static com.internship.ride_service.util.validators.ValidationConstants.ALPHANUMERIC_REGEX;
@@ -25,9 +21,7 @@ import static com.internship.ride_service.util.validators.ValidationConstants.MA
 import static com.internship.ride_service.util.validators.ValidationConstants.MIN_ADDRESS_LENGTH;
 import static com.internship.ride_service.util.validators.ValidationConstants.MIN_DISTANCE;
 
-public record RideDto(
-        String id,
-        Long driverId,
+public record RequestRideDto(
         @NotNull(message = "passenger.notNull")
         @PositiveOrZero(message = "id.positive")
         @Max(value = MAX_ID_VALUE, message = "profile.id.maxValue")
@@ -41,17 +35,11 @@ public record RideDto(
         List<@NotBlank(message = "location.list.elements.notBlank")
         @Size(min = MIN_ADDRESS_LENGTH, max = MAX_ADDRESS_LENGTH, message = "location.list.invalidSize")
                 String> endLocation,
-        OffsetDateTime createdAt,
-        OffsetTime startWaitingTime,
-        OffsetTime startTime,
-        OffsetTime endTime,
         @NotNull(message = "distance.notNull")
         @DecimalMin(value = MIN_DISTANCE, inclusive = false, message = "distance.positive")
         @DecimalMax(value = MAX_DISTANCE, message = "distance.maxValue")
         Float distance,
-        RideStatus status,
         @Pattern(regexp = FARE_TYPE_PATTERN, message = "fare.type.invalidInput")
-        String fareType,
-        BigDecimal price
+        String fareType
 ) {
 }

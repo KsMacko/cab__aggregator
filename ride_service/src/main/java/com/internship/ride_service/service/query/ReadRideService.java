@@ -1,6 +1,6 @@
 package com.internship.ride_service.service.query;
 
-import com.internship.ride_service.dto.RideDto;
+import com.internship.ride_service.dto.response.ResponseRideDto;
 import com.internship.ride_service.dto.mapper.RideMapper;
 import com.internship.ride_service.dto.transfer.RideFilterRequest;
 import com.internship.ride_service.dto.transfer.RidePackageDto;
@@ -42,7 +42,7 @@ public class ReadRideService {
         Query query = buildQuery(filterRequest);
         query.with(createPageableObject(filterRequest));
 
-        List<RideDto> rides = mongoTemplate.find(query, Ride.class)
+        List<ResponseRideDto> rides = mongoTemplate.find(query, Ride.class)
                 .stream()
                 .map(rideMapper::handleEntity)
                 .toList();
@@ -52,7 +52,7 @@ public class ReadRideService {
     }
 
     @Transactional(readOnly = true)
-    public RideDto getRideById(String id) {
+    public ResponseRideDto getRideById(String id) {
         Ride ride = rideValidationManager.getRideByIdIfExists(id);
         return rideMapper.handleEntity(ride);
     }
@@ -83,7 +83,7 @@ public class ReadRideService {
         return PageRequest.of(filterRequest.getPage(), filterRequest.getSize(), sort);
     }
 
-    public RidePackageDto createRidePackage(List<RideDto> rides, long totalElements, RideFilterRequest filterRequest) {
+    public RidePackageDto createRidePackage(List<ResponseRideDto> rides, long totalElements, RideFilterRequest filterRequest) {
         return new RidePackageDto(
                 rides,
                 totalElements,

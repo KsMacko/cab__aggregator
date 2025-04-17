@@ -1,8 +1,9 @@
 package com.internship.ride_service.controller.doc;
 
+import com.internship.ride_service.dto.request.RequestPromoCodeDto;
 import com.internship.ride_service.util.exceptions.BaseExceptionDto;
 import com.internship.ride_service.util.exceptions.BaseValidationException;
-import com.internship.ride_service.dto.PromoCodeDto;
+import com.internship.ride_service.dto.response.ResponsePromoCodeDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(
         name = "Operations for managing promo codes",
@@ -34,7 +36,7 @@ public interface CommandPromoDoc {
             @ApiResponse(
                     responseCode = "201",
                     description = "Promo code created successfully",
-                    content = @Content(schema = @Schema(implementation = PromoCodeDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponsePromoCodeDto.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -43,10 +45,10 @@ public interface CommandPromoDoc {
             )
     })
     @PostMapping
-    ResponseEntity<PromoCodeDto> createPromoCode(
+    ResponseEntity<ResponsePromoCodeDto> createPromoCode(
             @Parameter(description = "Promo code data to create", required = true)
             @Valid
-            @RequestBody PromoCodeDto promoCodeDto);
+            @RequestBody RequestPromoCodeDto promoCodeDto);
 
     @Operation(
             summary = "Delete a promo code by code",
@@ -81,7 +83,7 @@ public interface CommandPromoDoc {
             @ApiResponse(
                     responseCode = "200",
                     description = "Promo code updated successfully",
-                    content = @Content(schema = @Schema(implementation = PromoCodeDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponsePromoCodeDto.class))
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -95,7 +97,9 @@ public interface CommandPromoDoc {
             )
     })
     @PutMapping
-    PromoCodeDto updatePromoCode(
+    ResponsePromoCodeDto updatePromoCode(
             @Parameter(description = "Updated promo code data", required = true)
-            @RequestBody PromoCodeDto promoCodeDto);
+            @RequestParam String promoCodeId,
+            @Valid
+            @RequestBody RequestPromoCodeDto promoCodeDto);
 }

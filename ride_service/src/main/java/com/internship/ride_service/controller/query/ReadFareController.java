@@ -1,7 +1,7 @@
 package com.internship.ride_service.controller.query;
 
 import com.internship.ride_service.controller.doc.ReadFareDoc;
-import com.internship.ride_service.dto.FareDto;
+import com.internship.ride_service.dto.response.ResponseFareDto;
 import com.internship.ride_service.dto.transfer.FarePackageDto;
 import com.internship.ride_service.enums.FareType;
 import com.internship.ride_service.service.query.ReadFareService;
@@ -23,7 +23,7 @@ public class ReadFareController implements ReadFareDoc {
     }
 
     @Override
-    public FareDto getFareByType(@PathVariable FareType type) {
+    public ResponseFareDto getFareByType(@PathVariable FareType type) {
         return readFareService.getFareById(type);
     }
 }
