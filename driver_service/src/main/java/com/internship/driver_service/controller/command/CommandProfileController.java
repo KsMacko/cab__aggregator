@@ -1,8 +1,10 @@
 package com.internship.driver_service.controller.command;
 
 import com.internship.driver_service.controller.doc.ProfileCommandDoc;
-import com.internship.driver_service.dto.ProfileDto;
-import com.internship.driver_service.dto.RateDto;
+import com.internship.driver_service.dto.request.RequestProfileDto;
+import com.internship.driver_service.dto.request.RequestRateDto;
+import com.internship.driver_service.dto.response.ResponseProfileDto;
+import com.internship.driver_service.dto.response.ResponseRateDto;
 import com.internship.driver_service.service.command.CommandDriverProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,8 @@ public class CommandProfileController implements ProfileCommandDoc {
     private final CommandDriverProfileService commandDriverProfileService;
 
     @Override
-    public ResponseEntity<ProfileDto> createProfile(@RequestBody ProfileDto profileDto) {
-        ProfileDto createdProfile = commandDriverProfileService.createProfile(profileDto);
+    public ResponseEntity<ResponseProfileDto> createProfile(@RequestBody RequestProfileDto profileDto) {
+        ResponseProfileDto createdProfile = commandDriverProfileService.createProfile(profileDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -35,8 +37,9 @@ public class CommandProfileController implements ProfileCommandDoc {
     }
 
     @Override
-    public ProfileDto updateProfile(@RequestBody ProfileDto profileDto) {
-        return commandDriverProfileService.updateDriverProfile(profileDto);
+    public ResponseProfileDto updateProfile(@PathVariable Long id,
+                                            @RequestBody RequestProfileDto profileDto) {
+        return commandDriverProfileService.updateDriverProfile(id, profileDto);
     }
 
     @Override
@@ -46,7 +49,7 @@ public class CommandProfileController implements ProfileCommandDoc {
     }
 
     @Override
-    public RateDto setRateToDriver(@RequestBody RateDto rateDto) {
+    public ResponseRateDto setRateToDriver(@RequestBody RequestRateDto rateDto) {
         return commandDriverProfileService.setNewRate(rateDto);
     }
 

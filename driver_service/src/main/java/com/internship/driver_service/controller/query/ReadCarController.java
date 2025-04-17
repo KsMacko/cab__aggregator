@@ -1,7 +1,7 @@
 package com.internship.driver_service.controller.query;
 
 import com.internship.driver_service.controller.doc.CarReadDoc;
-import com.internship.driver_service.dto.CarDto;
+import com.internship.driver_service.dto.response.ResponseCarDto;
 import com.internship.driver_service.dto.transfer.CarFilterRequest;
 import com.internship.driver_service.dto.transfer.CarPackageDto;
 import com.internship.driver_service.service.query.ReadCarService;
@@ -17,7 +17,7 @@ public class ReadCarController implements CarReadDoc {
     private final ReadCarService carService;
 
     @Override
-    public CarDto getCurrentCar(@PathVariable Long id) {
+    public ResponseCarDto getCurrentCar(@PathVariable Long id) {
         return carService.getCurrentCarByProfileId(id);
     }
 

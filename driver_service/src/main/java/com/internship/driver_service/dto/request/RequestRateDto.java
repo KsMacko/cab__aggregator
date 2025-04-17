@@ -1,4 +1,4 @@
-package com.internship.driver_service.dto;
+package com.internship.driver_service.dto.request;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -9,7 +9,7 @@ import static com.internship.driver_service.utils.validation.ValidationConstants
 import static com.internship.driver_service.utils.validation.ValidationConstants.MAX_RATE;
 import static com.internship.driver_service.utils.validation.ValidationConstants.MIN_RATE;
 
-public record RateDto(
+public record RequestRateDto(
         @Min(value = MIN_RATE, message = "rate.minValue")
         @Max(value = MAX_RATE, message = "rate.maxValue")
         @NotNull(message = "value.notNull")

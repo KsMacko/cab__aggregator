@@ -1,6 +1,7 @@
 package com.internship.driver_service.service.command;
 
-import com.internship.driver_service.dto.CarDto;
+import com.internship.driver_service.dto.request.RequestCarDto;
+import com.internship.driver_service.dto.response.ResponseCarDto;
 import com.internship.driver_service.dto.mapper.CarMapper;
 import com.internship.driver_service.entity.Car;
 import com.internship.driver_service.entity.DriverProfile;
@@ -17,16 +18,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommandCarService {
     private final CarRepo carRepo;
+    private final CarMapper carMapper;
     private final ProfileValidationManager profileValidationManager;
     private final CarValidationManager carValidationManager;
 
     @Transactional
-    public CarDto addNewCar(CarDto carDto) {
+    public ResponseCarDto addNewCar(RequestCarDto carDto) {
         DriverProfile driverProfile = profileValidationManager.getDriverProfile(carDto.driverId());
         carValidationManager.validateCarNumberUniqueness(carDto.carNumber());
-        Car car = CarMapper.converter.handleDto(carDto);
+        Car car = carMapper.handleDto(carDto);
         car.setDriverProfile(driverProfile);
-        return CarMapper.converter.handleEntity(carRepo.save(car));
+        return carMapper.handleEntity(carRepo.save(car));
     }
 
     @Transactional
@@ -36,11 +38,11 @@ public class CommandCarService {
     }
 
     @Transactional
-    public CarDto setCurrentCar(Long carId) {
+    public ResponseCarDto setCurrentCar(Long carId) {
         Car car = carValidationManager.getIfExistsById(carId);
         resetCurrentCarForDriver(car.getDriverProfile().getProfileId());
         car.setIsCurrent(true);
-        return CarMapper.converter.handleEntity(carRepo.save(car));
+        return carMapper.handleEntity(carRepo.save(car));
     }
 
     private void resetCurrentCarForDriver(Long driverId) {

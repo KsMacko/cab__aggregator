@@ -1,6 +1,7 @@
 package com.internship.driver_service.controller.doc;
 
-import com.internship.driver_service.dto.CarDto;
+import com.internship.driver_service.dto.request.RequestCarDto;
+import com.internship.driver_service.dto.response.ResponseCarDto;
 import com.internship.driver_service.utils.exceptions.transfer.BaseException;
 import com.internship.driver_service.utils.exceptions.transfer.BaseValidationException;
 import com.internship.driver_service.utils.validation.ValidationConstants;
@@ -47,7 +48,7 @@ public interface CarCommandDoc {
             )
     })
     @PatchMapping("/cars/{id}")
-    CarDto setCurrentCar(
+    ResponseCarDto setCurrentCar(
             @Parameter(description = "Unique identifier of the car", example = "1", required = true)
             @PositiveOrZero(message = "id.positive")
             @Max(value = ValidationConstants.MAX_ID_VALUE, message = "id.maxValue")
@@ -61,7 +62,7 @@ public interface CarCommandDoc {
             @ApiResponse(
                     responseCode = "201",
                     description = "Car added successfully",
-                    content = @Content(schema = @Schema(implementation = CarDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseCarDto.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -70,10 +71,10 @@ public interface CarCommandDoc {
             )
     })
     @PostMapping("/cars")
-    CarDto addNewCar(
+    ResponseCarDto addNewCar(
             @Parameter(description = "Car data to add", required = true)
             @Valid
-            @RequestBody CarDto carDto);
+            @RequestBody RequestCarDto carDto);
 
     @Operation(
             summary = "Delete a car from a driver",

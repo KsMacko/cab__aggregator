@@ -1,6 +1,6 @@
 package com.internship.driver_service.controller.doc;
 
-import com.internship.driver_service.dto.ProfileDto;
+import com.internship.driver_service.dto.response.ResponseProfileDto;
 import com.internship.driver_service.dto.transfer.DriverFilterRequest;
 import com.internship.driver_service.dto.transfer.ProfilePackageDto;
 import com.internship.driver_service.utils.exceptions.transfer.BaseException;
@@ -55,7 +55,7 @@ public interface ProfileReadDoc {
             @ApiResponse(
                     responseCode = "200",
                     description = "Driver profile retrieved successfully",
-                    content = @Content(schema = @Schema(implementation = ProfileDto.class))
+                    content = @Content(schema = @Schema(implementation = ResponseProfileDto.class))
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -64,7 +64,7 @@ public interface ProfileReadDoc {
             )
     })
     @GetMapping("/{id}")
-    ProfileDto findById(
+    ResponseProfileDto findById(
             @Parameter(description = "Unique identifier of the driver profile", example = "1", required = true)
             @PositiveOrZero(message = "id.positive")
             @Max(value = ValidationConstants.MAX_ID_VALUE, message = "id.maxValue")

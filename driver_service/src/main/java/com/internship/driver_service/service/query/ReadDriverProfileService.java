@@ -1,6 +1,6 @@
 package com.internship.driver_service.service.query;
 
-import com.internship.driver_service.dto.ProfileDto;
+import com.internship.driver_service.dto.response.ResponseProfileDto;
 import com.internship.driver_service.dto.mapper.ProfileMapper;
 import com.internship.driver_service.dto.transfer.DriverFilterRequest;
 import com.internship.driver_service.dto.transfer.ProfilePackageDto;
@@ -28,6 +28,7 @@ import static java.util.Objects.isNull;
 public class ReadDriverProfileService {
     private final DriverProfileRepo driverProfileRepo;
     private final RateRepo rateRepo;
+    private final ProfileMapper profileMapper;
     private final DriverSpecificationService specificationService;
     private final ProfileValidationManager profileValidationManager;
 
@@ -40,18 +41,18 @@ public class ReadDriverProfileService {
     }
 
     @Transactional(readOnly = true)
-    public ProfileDto readDriverProfileById(Long id) {
+    public ResponseProfileDto readDriverProfileById(Long id) {
         profileValidationManager.checkIfProfileExists(id);
         DriverProfile driverProfile = profileValidationManager.getDriverProfile(id);
         Integer rate = rateRepo.findDriverRatingByProfileId(id);
-        return ProfileMapper.converter.handleEntity(driverProfile, rate);
+        return profileMapper.handleEntity(driverProfile, rate);
 
     }
 
     @Transactional(readOnly = true)
     public ProfilePackageDto createDataPackageDto(Page<DriverProfile> resultPage) {
-        List<ProfileDto> profiles = resultPage.getContent().stream()
-                .map(ProfileMapper.converter::handleEntity)
+        List<ResponseProfileDto> profiles = resultPage.getContent().stream()
+                .map(profileMapper::handleEntity)
                 .toList();
         return ProfilePackageDto.builder()
                 .profilesDto(profiles)
