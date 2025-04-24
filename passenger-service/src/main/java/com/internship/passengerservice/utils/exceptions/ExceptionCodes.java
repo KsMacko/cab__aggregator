@@ -14,6 +14,9 @@ public enum ExceptionCodes {
     PHONE_ALREADY_EXISTS("phone.alreadyExists"),
     EMAIL_ALREADY_EXISTS("email.alreadyExists"),
     TYPE_MISMATCH("type.mismatch"),
-    UNKNOWN_ERROR("error.unknown");
+    UNKNOWN_ERROR("error.unknown"),
+    PASSENGER_ID_NOT_MATCH_RIDE("passenger.id.notMatchRide"),
+    DRIVER_ID_NOT_MATCH_RIDE("driver.id.notMatchRide"),
+    RATE_AUTHOR_NOT_MATCH("rate.author.notMatch");
     private final String code;
 }

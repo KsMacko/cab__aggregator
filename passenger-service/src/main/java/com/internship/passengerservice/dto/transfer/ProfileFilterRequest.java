@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +37,7 @@ public class ProfileFilterRequest{
     @Positive(message = "page.positive")
     @Max(value = MAX_PAGE_VALUE, message = "page.max")
     private Integer page = DEFAULT_PAGE_VALUE;
-    @Positive(message = "size.positive")
+    @PositiveOrZero(message = "size.positive")
     @Max(value = MAX_PAGE_SIZE, message = "size.max")
     private Integer size = DEFAULT_PAGE_SIZE;
     @Pattern(regexp = PROFILE_SORT_FIELDS, message = "sort.field.invalidInput")

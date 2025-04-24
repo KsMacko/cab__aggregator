@@ -19,6 +19,7 @@ public interface ProfileMapper{
     @Mapping(target = "rates", ignore = true)
     PassengerProfile handleDto(RequestProfileDto dto);
 
+    @Mapping(target = "rate", ignore = true)
     ResponseProfileDto handleEntity(PassengerProfile passengerProfile);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

@@ -1,5 +1,7 @@
 package com.internship.passengerservice.utils.exceptions;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.TypeMismatchException;
 import org.slf4j.Logger;
@@ -14,6 +16,8 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
 import java.util.List;
 
 import static com.internship.passengerservice.utils.exceptions.ExceptionCodes.ERROR_INVALID_INPUT;
@@ -27,6 +31,7 @@ import static com.internship.passengerservice.utils.exceptions.ExceptionCodes.UN
 public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private final MessageSource messageSource;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<BaseValidationException> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -61,21 +66,22 @@ public class GlobalExceptionHandler {
                 LocaleContextHolder.getLocale())), HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+    public ResponseEntity<BaseException> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(messageSource.getMessage(
+                .body(new BaseException(messageSource.getMessage(
                         ERROR_NOT_READABLE.getCode(),
                         null,
-                        LocaleContextHolder.getLocale()));
+                        LocaleContextHolder.getLocale())));
     }
-    @ExceptionHandler(TypeMismatchException.class)
-    public ResponseEntity<String> handleTypeMismatchException(TypeMismatchException ex) {
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<BaseException> handleTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(messageSource.getMessage(
+                .body(new BaseException(messageSource.getMessage(
                         TYPE_MISMATCH.getCode(),
                         null,
-                        LocaleContextHolder.getLocale()));
+                        LocaleContextHolder.getLocale())));
     }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BaseException> handleUnexpectedException(Exception ex) {
         log.error("Unexpected exception", ex);
@@ -84,5 +90,33 @@ public class GlobalExceptionHandler {
                         UNKNOWN_ERROR.getCode(),
                         null,
                         LocaleContextHolder.getLocale())));
+    }
+    @ExceptionHandler(FeignException.BadRequest.class)
+    public ResponseEntity<BaseValidationException> handleFeignExceptionBadRequest(FeignException.BadRequest exception) {
+        try {
+            String responseBody = exception.contentUTF8();
+            BaseValidationException validationException = objectMapper.readValue(responseBody, BaseValidationException.class);
+
+            return ResponseEntity.status(exception.status()).body(validationException);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new BaseValidationException(messageSource.getMessage(
+                    ERROR_INVALID_INPUT.getCode(),
+                    null,
+                    LocaleContextHolder.getLocale()), List.of(exception.getLocalizedMessage())), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<BaseException> handleFeignException(FeignException exception) {
+        try {
+            String responseBody = exception.contentUTF8();
+            BaseException validationException = objectMapper.readValue(responseBody, BaseException.class);
+
+            return ResponseEntity.status(exception.status()).body(validationException);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new BaseException(messageSource.getMessage(
+                    ERROR_INVALID_INPUT.getCode(),
+                    null,
+                    LocaleContextHolder.getLocale())), HttpStatus.BAD_REQUEST);
+        }
     }
 }

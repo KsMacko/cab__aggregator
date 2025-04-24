@@ -36,7 +36,7 @@ public class CommandPassengerController implements CommandDoc {
                 .body(createdProfile);
     }
     @Override
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseProfileDto updatePassenger(@PathVariable Long id,
                                               @RequestBody RequestProfileDto profileDto) {
         return profileService.updatePassengerProfile(id, profileDto);
@@ -46,5 +46,6 @@ public class CommandPassengerController implements CommandDoc {
     public void deletePassenger(@PathVariable Long id) {
         profileService.deletePassengerProfile(id);
     }
+
 
 }
