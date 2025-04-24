@@ -1,5 +1,7 @@
 package com.internship.rideservice.util.exceptions;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,7 @@ import static com.internship.rideservice.util.exceptions.ExceptionCodes.UNKNOWN_
 public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private final MessageSource messageSource;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<BaseValidationException> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -45,7 +48,7 @@ public class GlobalExceptionHandler {
                 null,
                 LocaleContextHolder.getLocale()), errors), HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler( ResourceNotFoundException.class)
+    @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<BaseExceptionDto> handleResourceNotFoundException(ResourceNotFoundException ex) {
         return new ResponseEntity<>(new BaseExceptionDto(messageSource.getMessage(
                 ex.getMessage(),
@@ -75,5 +78,33 @@ public class GlobalExceptionHandler {
                         UNKNOWN_ERROR.getCode(),
                         null,
                         LocaleContextHolder.getLocale())));
+    }
+    @ExceptionHandler(FeignException.BadRequest.class)
+    public ResponseEntity<BaseValidationException> handleFeignExceptionBadRequest(FeignException.BadRequest exception) {
+        try {
+            String responseBody = exception.contentUTF8();
+            BaseValidationException validationException = objectMapper.readValue(responseBody, BaseValidationException.class);
+
+            return ResponseEntity.status(exception.status()).body(validationException);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new BaseValidationException(messageSource.getMessage(
+                    ERROR_INVALID_INPUT.getCode(),
+                    null,
+                    LocaleContextHolder.getLocale()), List.of(exception.getLocalizedMessage())), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<BaseExceptionDto> handleFeignException(FeignException exception) {
+        try {
+            String responseBody = exception.contentUTF8();
+            BaseExceptionDto validationException = objectMapper.readValue(responseBody, BaseExceptionDto.class);
+
+            return ResponseEntity.status(exception.status()).body(validationException);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new BaseExceptionDto(messageSource.getMessage(
+                    ERROR_INVALID_INPUT.getCode(),
+                    null,
+                    LocaleContextHolder.getLocale())), HttpStatus.BAD_REQUEST);
+        }
     }
 }

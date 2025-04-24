@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   messages:
     basename: messages
     encoding: UTF-8
@@ -6,11 +8,20 @@ spring:
     name: ride_service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/ride_db
+      uri: mongodb://localhost:${DB_HOST}/${DB_NAME}
   liquibase:
     enabled: true
     change-log: db/changelog/changelog.xml
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVERS}
+    consumer:
+      group-id: ride-status
+  artemis:
+    mode: native
+    user: admin
+    password: admin
+    broker-url: tcp://localhost:61616
 server:
-  port: 8083
+  port: ${RIDE_SERVICE_PORT}

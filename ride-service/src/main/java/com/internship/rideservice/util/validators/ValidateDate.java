@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidOffsetDateValidator.class)
+@Constraint(validatedBy = ValidDateTimeValidator.class)
 public @interface ValidateDate {
     String message() default "date.invalidFormat";
 

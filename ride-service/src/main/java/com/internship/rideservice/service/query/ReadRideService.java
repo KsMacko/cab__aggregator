@@ -62,11 +62,8 @@ public class ReadRideService {
         addCriteriaIfNotNull(criteria, createdAt, filterRequest.getCreatedDate());
         addCriteriaIfNotNull(criteria, driverId, filterRequest.getDriverId());
         addCriteriaIfNotNull(criteria, passengerId, filterRequest.getPassengerId());
-        addCriteriaIfNotNull(criteria, status, RideStatus.valueOf(filterRequest.getStatus()));
-        addCriteriaIfNotNull(criteria, fareType, FareType.valueOf(filterRequest.getFareType()));
-        if (filterRequest.getSortBy() != null) {
-            criteria.and(RideFieldsToFilter.valueOf(filterRequest.getSortBy()).getFieldName()).ne(null);
-        }
+        addEnumCriteriaIfNotNull(criteria, status, filterRequest.getStatus(), RideStatus.class);
+        addEnumCriteriaIfNotNull(criteria, fareType, filterRequest.getFareType(), FareType.class);
         return new Query(criteria);
     }
 
@@ -75,7 +72,11 @@ public class ReadRideService {
             criteria.and(fieldName).is(value);
         }
     }
-
+    private <T extends Enum<T>> void addEnumCriteriaIfNotNull(Criteria criteria, String fieldName, String value, Class<T> enumClass) {
+        if (nonNull(value)) {
+            criteria.and(fieldName).is(Enum.valueOf(enumClass, value));
+        }
+    }
     private Pageable createPageableObject(RideFilterRequest filterRequest) {
         Sort sort = Sort.by(Sort.Direction.fromString(
                 filterRequest.getOrder()),

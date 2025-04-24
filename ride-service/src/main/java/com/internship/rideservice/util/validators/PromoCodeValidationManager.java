@@ -13,6 +13,7 @@ import java.util.Optional;
 import static com.internship.rideservice.util.exceptions.ExceptionCodes.NO_CURRENT_PROMO_CODE;
 import static com.internship.rideservice.util.exceptions.ExceptionCodes.PROMO_CODE_NOT_FOUND;
 import static com.internship.rideservice.util.exceptions.ExceptionCodes.PROMO_CODE_STILL_VALID;
+import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class PromoCodeValidationManager {
     }
 
     public PromoCode getCurrentPromoCode(String promoCode) {
-        if (!promoCode.isEmpty()) {
+        if (nonNull(promoCode)) {
             Optional<PromoCode> code = promoCodeRepo.findByPromoCodeAndValidUntilAfter(promoCode, LocalDateTime.now());
             if (code.isPresent()) {
                 return code.get();
