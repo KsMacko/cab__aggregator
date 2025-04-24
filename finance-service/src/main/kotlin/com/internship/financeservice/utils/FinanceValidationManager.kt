@@ -1,7 +1,6 @@
 package com.internship.financeservice.utils
 
-import com.internship.financeservice.dto.PaymentDto
-import com.internship.financeservice.dto.WalletTransferDto
+import com.internship.financeservice.dto.request.RequestWalletTransferDto
 import com.internship.financeservice.entity.DriverWallet
 import com.internship.financeservice.entity.Payment
 import com.internship.financeservice.entity.WalletTransfer
@@ -47,15 +46,13 @@ class FinanceValidationManager @Autowired constructor(
         }
     }
 
-    fun validatePayment(paymentDto: PaymentDto) {
-        if (paymentDto.paymentType == PaymentType.CARD) {
-            cardValidationManager.validateCardExistsForOwner(paymentDto.passengerId)
-        }
+    fun validatePayment(passengerId: Long) {
+        cardValidationManager.validateCardExistsForOwner(passengerId)
     }
 
-    fun validateWalletTransfer(walletTransferDto: WalletTransferDto): DriverWallet {
-        val wallet = walletValidationManager.getWalletIfExistsByDriverId(walletTransferDto.driverId)
-        if (wallet.balance < walletTransferDto.amount) {
+    fun validateWalletTransfer(requestWalletTransferDto: RequestWalletTransferDto): DriverWallet {
+        val wallet = walletValidationManager.getWalletIfExistsByDriverId(requestWalletTransferDto.driverId)
+        if (wallet.balance < requestWalletTransferDto.amount) {
             throw RuntimeException("wallet.transfer.invalidAmount")
         }
         return wallet

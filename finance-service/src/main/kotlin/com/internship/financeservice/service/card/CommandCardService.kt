@@ -1,7 +1,8 @@
 package com.internship.financeservice.service.card
 
-import com.internship.financeservice.dto.CardDto
+import com.internship.financeservice.dto.response.ResponseCardDto
 import com.internship.financeservice.dto.mapper.CardMapper
+import com.internship.financeservice.dto.request.RequestCardDto
 import com.internship.financeservice.repo.CardRepo
 import com.internship.financeservice.utils.CardValidationManager
 import org.springframework.stereotype.Service
@@ -14,8 +15,8 @@ class CommandCardService(
     private val cardMapper: CardMapper
 ) {
     @Transactional
-    fun createCard(cardDto: CardDto): CardDto =
-        cardMapper.toDto(cardRepo.save(cardMapper.toEntity(cardDto)))
+    fun createCard(requestCardDto: RequestCardDto): ResponseCardDto =
+        cardMapper.toDto(cardRepo.save(cardMapper.toEntity(requestCardDto)))
 
     @Transactional
     fun deleteCard(id: Long) {

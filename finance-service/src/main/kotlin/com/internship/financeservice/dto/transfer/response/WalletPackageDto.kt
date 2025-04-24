@@ -1,6 +1,6 @@
 package com.internship.financeservice.dto.transfer.response
 
-import com.internship.financeservice.dto.WalletDto
+import com.internship.financeservice.dto.response.WalletDto
 
 data class WalletPackageDto(
     val wallets: List<WalletDto>,

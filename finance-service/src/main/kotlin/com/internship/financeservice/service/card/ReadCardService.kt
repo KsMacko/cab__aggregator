@@ -1,6 +1,6 @@
 package com.internship.financeservice.service.card
 
-import com.internship.financeservice.dto.CardDto
+import com.internship.financeservice.dto.response.ResponseCardDto
 import com.internship.financeservice.dto.mapper.CardMapper
 import com.internship.financeservice.dto.transfer.request.CardFilterRequest
 import com.internship.financeservice.dto.transfer.response.CardPackageDto
@@ -37,6 +37,6 @@ class ReadCardService(
     }
 
     @Transactional(readOnly = true)
-    fun findCardById(id: Long): CardDto =
+    fun findCardById(id: Long): ResponseCardDto =
         cardMapper.toDto(cardValidationManager.getCardIfExists(id))
 }

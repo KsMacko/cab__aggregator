@@ -1,9 +1,9 @@
 package com.internship.financeservice.service.finance
 
-import com.internship.financeservice.dto.PaymentDto
-import com.internship.financeservice.dto.WalletTransferDto
 import com.internship.financeservice.dto.mapper.PaymentMapper
 import com.internship.financeservice.dto.mapper.WalletTransferMapper
+import com.internship.financeservice.dto.response.ResponsePaymentDto
+import com.internship.financeservice.dto.response.ResponseTransferDto
 import com.internship.financeservice.dto.transfer.request.PaymentFilterRequest
 import com.internship.financeservice.dto.transfer.request.WalletTransferFilterRequest
 import com.internship.financeservice.dto.transfer.response.PaymentPackageDto
@@ -64,10 +64,10 @@ class ReadFinanceOperationService(
     }
 
     @Transactional(readOnly = true)
-    fun getPaymentById(id: Long): PaymentDto =
+    fun getPaymentById(id: Long): ResponsePaymentDto =
         paymentMapper.toDto(financeValidationManager.getPaymentOperationIfExists(id))
 
     @Transactional(readOnly = true)
-    fun getWalletTransferById(id: Long): WalletTransferDto =
+    fun getWalletTransferById(id: Long): ResponseTransferDto =
         walletTransferMapper.toDto(financeValidationManager.getWalletTransferOperationIfExists(id))
 }
