@@ -6,11 +6,13 @@ import com.internship.driverservice.dto.request.RequestRateDto;
 import com.internship.driverservice.dto.response.ResponseProfileDto;
 import com.internship.driverservice.dto.response.ResponseRateDto;
 import com.internship.driverservice.service.command.CommandDriverProfileService;
+import com.internship.driverservice.service.command.CommandNotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,6 +24,7 @@ import java.net.URI;
 public class CommandProfileController implements ProfileCommandDoc {
 
     private final CommandDriverProfileService commandDriverProfileService;
+    private final CommandNotificationService commandNotificationService;
 
     @Override
     public ResponseEntity<ResponseProfileDto> createProfile(@RequestBody RequestProfileDto profileDto) {
@@ -48,14 +51,10 @@ public class CommandProfileController implements ProfileCommandDoc {
         return ResponseEntity.noContent().build();
     }
 
-    @Override
-    public ResponseRateDto setRateToDriver(@RequestBody RequestRateDto rateDto) {
-        return commandDriverProfileService.setNewRate(rateDto);
-    }
 
     @Override
-    public ResponseEntity<Void> deleteRateFromDriver(@PathVariable Long id) {
-        commandDriverProfileService.deleteRate(id);
+    public ResponseEntity<Void> updateCurrentRideStatus(@RequestParam String rideId, @RequestParam String status) {
+        commandNotificationService.updateRideStatus(rideId, status);
         return ResponseEntity.noContent().build();
     }
 }

@@ -10,6 +10,7 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CarMapper {
     @Mapping(target = "driverProfile", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Car handleDto(RequestCarDto dto);
 
     @Mapping(target = "driverId", source = "driverProfile.profileId")

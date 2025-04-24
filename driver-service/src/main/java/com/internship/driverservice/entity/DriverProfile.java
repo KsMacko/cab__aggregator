@@ -2,6 +2,7 @@ package com.internship.driverservice.entity;
 
 import com.internship.driverservice.enums.DriverStatus;
 import com.internship.driverservice.enums.FareType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -53,8 +54,10 @@ public class DriverProfile {
 
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
-    @OneToMany(mappedBy = "driver")
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rate> rates;
-    @OneToMany(mappedBy = "driverProfile")
+    @OneToMany(mappedBy = "driverProfile",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Car> car;
+    @OneToMany(mappedBy = "driverProfile",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
 }
