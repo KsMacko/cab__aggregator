@@ -1,5 +1,6 @@
 package com.internship.driverservice.controller.doc;
 
+import com.internship.commonevents.event.ChangeRideStatusEvent;
 import com.internship.driverservice.dto.request.RequestProfileDto;
 import com.internship.driverservice.dto.request.RequestRateDto;
 import com.internship.driverservice.dto.response.ResponseProfileDto;
@@ -80,7 +81,7 @@ public interface ProfileCommandDoc {
             )
     })
     @PutMapping("/{id}")
-    ResponseProfileDto updateProfile(
+    ResponseEntity<ResponseProfileDto> updateProfile(
             @Parameter(description = "Updated driver profile data", required = true)
             @PathVariable Long id,
             @Validated
@@ -119,7 +120,7 @@ public interface ProfileCommandDoc {
     )
 
     @PostMapping("/ride/update-status")
-    ResponseEntity<Void> updateCurrentRideStatus(
+    ResponseEntity<ChangeRideStatusEvent> updateCurrentRideStatus(
             @RequestParam String rideId,
             @Valid
             @Pattern(regexp = RIDE_STATUS_PATTERN, message = "ride.status.invalidInput")

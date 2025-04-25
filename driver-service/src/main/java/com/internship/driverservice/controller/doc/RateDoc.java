@@ -39,7 +39,7 @@ public interface RateDoc {
             )
     })
     @PostMapping("/author/passenger")
-    ResponseRateDto setRateToDriver(
+    ResponseEntity<ResponseRateDto> setRateToDriver(
             @Parameter(description = "Rate data to set for the driver", required = true)
             @Validated
             @RequestBody RequestRateDto rateDto);
@@ -91,7 +91,7 @@ public interface RateDoc {
             )
     })
     @PostMapping("/author/driver")
-    ResponseRateDto setRateToPassenger(
+    ResponseEntity<ResponseRateDto> setRateToPassenger(
             @Parameter(description = "Rate data to set for the driver", required = true)
             @Validated
             @RequestBody

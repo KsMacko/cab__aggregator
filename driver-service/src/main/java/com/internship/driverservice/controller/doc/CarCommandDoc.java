@@ -48,7 +48,7 @@ public interface CarCommandDoc {
             )
     })
     @PatchMapping("/cars/{id}")
-    ResponseCarDto setCurrentCar(
+    ResponseEntity<ResponseCarDto> setCurrentCar(
             @Parameter(description = "Unique identifier of the car", example = "1", required = true)
             @PositiveOrZero(message = "id.positive")
             @Max(value = ValidationConstants.MAX_ID_VALUE, message = "id.maxValue")
@@ -71,7 +71,7 @@ public interface CarCommandDoc {
             )
     })
     @PostMapping("/cars")
-    ResponseCarDto addNewCar(
+    ResponseEntity<ResponseCarDto> addNewCar(
             @Parameter(description = "Car data to add", required = true)
             @Valid
             @RequestBody RequestCarDto carDto);

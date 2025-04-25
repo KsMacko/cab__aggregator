@@ -23,12 +23,12 @@ public class CommandCarService {
     private final CarValidationManager carValidationManager;
 
     @Transactional
-    public ResponseCarDto addNewCar(RequestCarDto carDto) {
+    public Car addNewCar(RequestCarDto carDto) {
         DriverProfile driverProfile = profileValidationManager.getDriverProfile(carDto.driverId());
         carValidationManager.validateCarNumberUniqueness(carDto.carNumber());
         Car car = carMapper.handleDto(carDto);
         car.setDriverProfile(driverProfile);
-        return carMapper.handleEntity(carRepo.save(car));
+        return carRepo.save(car);
     }
 
     @Transactional
@@ -38,11 +38,11 @@ public class CommandCarService {
     }
 
     @Transactional
-    public ResponseCarDto setCurrentCar(Long carId) {
+    public Car setCurrentCar(Long carId) {
         Car car = carValidationManager.getIfExistsById(carId);
         resetCurrentCarForDriver(car.getDriverProfile().getProfileId());
         car.setIsCurrent(true);
-        return carMapper.handleEntity(carRepo.save(car));
+        return carRepo.save(car);
     }
 
     private void resetCurrentCarForDriver(Long driverId) {

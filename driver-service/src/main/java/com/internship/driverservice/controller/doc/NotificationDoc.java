@@ -24,7 +24,7 @@ import static com.internship.driverservice.utils.validation.ValidationConstants.
 @Validated
 public interface NotificationDoc {
     @PostMapping("/notifications/ride-creation-notification/{id}/status")
-    RideCreatedNotificationDto updateRideCreationNotificationStatus(
+    ResponseEntity<RideCreatedNotificationDto> updateRideCreationNotificationStatus(
             @PathVariable("id")
             @PositiveOrZero(message = "id.positive")
             @Max(value = ValidationConstants.MAX_ID_VALUE, message = "id.maxValue")
@@ -33,7 +33,7 @@ public interface NotificationDoc {
             @RequestParam String status);
 
     @PostMapping("/notifications/confirm-payment-notification/{id}/status")
-    PaymentByCashConfirmationDto confirmCashPayment(
+    ResponseEntity<PaymentByCashConfirmationDto> confirmCashPayment(
             @PathVariable("id")
             @PositiveOrZero(message = "id.positive")
             @Max(value = ValidationConstants.MAX_ID_VALUE, message = "id.maxValue")
@@ -41,7 +41,7 @@ public interface NotificationDoc {
             @Pattern(regexp = NOTIFICATION_STATUS, message = "notification.status.invalidInput")
             @RequestParam String status);
     @PostMapping("/notifications/current-ride/{rideId}/status")
-    ChangeRideStatusEvent updateCurrentRideStatus(
+    ResponseEntity<ChangeRideStatusEvent> updateCurrentRideStatus(
             @NotBlank(message = "ride.id.notEmpty")
             @PathVariable
             String rideId,

@@ -18,8 +18,8 @@ public class RateController implements RateDoc {
     private final RateService rateService;
 
     @Override
-    public ResponseRateDto setRateToDriver(@RequestBody RequestRateDto rateDto) {
-        return rateService.setNewRate(rateDto);
+    public ResponseEntity<ResponseRateDto> setRateToDriver(@RequestBody RequestRateDto rateDto) {
+        return ResponseEntity.ok(rateService.setNewRate(rateDto));
     }
     @Override
     public ResponseEntity<Void> deleteRateFromDriver(@PathVariable Long passengerId,
@@ -29,8 +29,8 @@ public class RateController implements RateDoc {
     }
 
     @Override
-    public ResponseRateDto setRateToPassenger(@RequestBody RequestRateDto rateDto) {
-        return rateService.setRateToPassenger(rateDto);
+    public ResponseEntity<ResponseRateDto> setRateToPassenger(@RequestBody RequestRateDto rateDto) {
+        return ResponseEntity.ok(rateService.setRateToPassenger(rateDto));
     }
 
     @Override

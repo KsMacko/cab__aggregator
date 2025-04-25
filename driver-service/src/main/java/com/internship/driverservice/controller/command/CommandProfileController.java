@@ -1,5 +1,6 @@
 package com.internship.driverservice.controller.command;
 
+import com.internship.commonevents.event.ChangeRideStatusEvent;
 import com.internship.driverservice.controller.doc.ProfileCommandDoc;
 import com.internship.driverservice.dto.request.RequestProfileDto;
 import com.internship.driverservice.dto.request.RequestRateDto;
@@ -40,9 +41,9 @@ public class CommandProfileController implements ProfileCommandDoc {
     }
 
     @Override
-    public ResponseProfileDto updateProfile(@PathVariable Long id,
+    public ResponseEntity<ResponseProfileDto> updateProfile(@PathVariable Long id,
                                             @RequestBody RequestProfileDto profileDto) {
-        return commandDriverProfileService.updateDriverProfile(id, profileDto);
+        return ResponseEntity.ok(commandDriverProfileService.updateDriverProfile(id, profileDto));
     }
 
     @Override
@@ -51,10 +52,8 @@ public class CommandProfileController implements ProfileCommandDoc {
         return ResponseEntity.noContent().build();
     }
 
-
     @Override
-    public ResponseEntity<Void> updateCurrentRideStatus(@RequestParam String rideId, @RequestParam String status) {
-        commandNotificationService.updateRideStatus(rideId, status);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ChangeRideStatusEvent> updateCurrentRideStatus(@RequestParam String rideId, @RequestParam String status) {
+        return ResponseEntity.ok(commandNotificationService.updateRideStatus(rideId, status));
     }
 }

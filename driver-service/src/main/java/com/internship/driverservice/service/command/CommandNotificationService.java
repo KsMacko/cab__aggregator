@@ -22,6 +22,7 @@ import com.internship.driverservice.service.communication.ArtemisProducer;
 import com.internship.driverservice.utils.validation.NotificationValidationManager;
 import com.internship.driverservice.utils.validation.ProfileValidationManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,7 @@ import static com.internship.driverservice.utils.validation.ValidationConstants.
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommandNotificationService {
     private final NotificationRepo notificationRepo;
     private final DriverProfileRepo driverProfileRepo;
@@ -40,41 +42,33 @@ public class CommandNotificationService {
     private final ProfileValidationManager profileValidationManager;
     private final NotificationValidationManager notificationValidationManager;
     private final NotificationMapper notificationMapper;
-    Logger logger = Logger.getLogger(CommandNotificationService.class.getName());
 
     @Transactional
-    public RideCreatedNotificationDto updateRideCreatedNotification(Long notificationId, String status) {
+    public RideCreationNotification updateRideCreatedNotification(Long notificationId, String status) {
         Notification notification = notificationValidationManager
                 .checkNotificationAccordance(notificationId, NotificationType.RIDE_CREATION);
         notification.setStatus(NotificationStatus.valueOf(status));
         if(NotificationStatus.valueOf(status) == NotificationStatus.ACCEPTED) {
-            notification.getDriverProfile().setDriverStatus(DriverStatus.DRIVING_TO_CLIENT);
-           updateRideStatus(notification.getRideId(), status);
-            List<Notification> notificationsForRide = notificationRepo.findByRideId(notification.getRideId());
-            for (Notification otherNotification : notificationsForRide) {
-                otherNotification.setActivity(NotificationActivity.NON_ACTIVE);
-            }
+            updateAllNotificationActivityAfterAccepting(notification, status);
         }
         notification.setActivity(NotificationActivity.NON_ACTIVE);
         RideCreationNotification rideCreation = notification.getRideCreationNotification();
         notificationRepo.save(notification);
-        return notificationMapper.handleEntity(rideCreation);
+        return rideCreation;
     }
 
     @Transactional
-    public PaymentByCashConfirmationDto updatePaymentByCashNotification(Long notificationId, String status) {
+    public PaymentByCashConfirmation updatePaymentByCashNotification(Long notificationId, String status) {
         Notification notification = notificationValidationManager
                 .checkNotificationAccordance(notificationId, NotificationType.CASH_CONFIRMATION);
         PaymentByCashConfirmation confirmationNotification = notification.getPaymentByCashConfirmation();
         notification.setStatus(NotificationStatus.valueOf(status));
         notification.setActivity(NotificationActivity.NON_ACTIVE);
         notification.getDriverProfile().setDriverStatus(DriverStatus.FREE);
-        artemisProducer.sendCashPaymentConfirmation(ConfirmedPaymentRequest.builder()
-                        .passengerId(confirmationNotification.getPassengerId())
-                        .amount(confirmationNotification.getAmount())
-                        .driverId(notification.getDriverProfile().getProfileId())
-                .build());
-        return notificationMapper.handleEntity(confirmationNotification);
+        artemisProducer.sendCashPaymentConfirmation(
+                buildConfirmedPaymentRequest(confirmationNotification, notification.getDriverProfile().getProfileId())
+        );
+        return confirmationNotification;
     }
 
     public void notifyAboutRideCreation(RideNotificationEvent event){
@@ -83,58 +77,94 @@ public class CommandNotificationService {
                 FareType.valueOf(event.fare())
         );
         for (DriverProfile driver : drivers) {
-            logger.info("notified driver "+driver.getProfileId()+" about ride "+event.rideId()+" creation");
-            Notification notification = Notification.builder()
-                    .type(NotificationType.RIDE_CREATION)
-                    .status(NotificationStatus.NON_VIEWED)
-                    .rideId(event.rideId())
-                    .activity(NotificationActivity.ACTIVE)
-                    .driverProfile(driver)
-                    .build();
-            RideCreationNotification rideCreationNotification = RideCreationNotification.builder()
-                    .notification(notification)
-                    .startLocation(event.pickupLocation())
-                    .endLocations(String.join(", ",event.endLocation()))
-                    .build();
+            log.info("notified driver {} about ride {} creation", driver.getProfileId(), event.rideId());
+            Notification notification = buildNotificationFromRideCreationEvent(event, driver);
+            RideCreationNotification rideCreationNotification = buildRideCreationNotification(notification, event);
             notification.setRideCreationNotification(rideCreationNotification);
             notificationRepo.save(notification);
         }
     }
 
     public void notifyAboutRidePaymentByCashConfirmation(CashConfirmationRequest event){
-        Notification notification = Notification.builder()
+        Notification notification = buildNotificationFromCashConfirmationEvent(event);
+        PaymentByCashConfirmation paymentConfirmation = buildPaymentByCashConfirmation(notification, event);
+        notification.setPaymentByCashConfirmation(paymentConfirmation);
+        log.info("notified driver {} about ride payment", event.driverId());
+        notificationRepo.save(notification);
+    }
+
+    public ChangeRideStatusEvent updateRideStatus(String rideId, String rideStatus) {
+        DriverProfile driverProfile = profileValidationManager.findDriverByAcceptedRide(rideId);
+        if(rideStatus.equals(STATUS_WAIT_FOR_PASSENGER)){
+            driverProfile.setDriverStatus(DriverStatus.WAITING_FOR_CLIENT);
+        }
+        else if(rideStatus.equals(STATUS_IN_PROGRESS)){
+            driverProfile.setDriverStatus(DriverStatus.IN_TRANSIT);
+        }
+        ChangeRideStatusEvent event = buildChangeRideStatusEvent(rideId, rideStatus, driverProfile.getProfileId());
+        artemisProducer.sendRideStatusUpdate(event);
+        return event;
+    }
+    private Notification buildNotificationFromRideCreationEvent(RideNotificationEvent event, DriverProfile driver){
+        return Notification.builder()
+                .type(NotificationType.RIDE_CREATION)
+                .status(NotificationStatus.NON_VIEWED)
+                .rideId(event.rideId())
+                .activity(NotificationActivity.ACTIVE)
+                .driverProfile(driver)
+                .build();
+    }
+
+    private Notification buildNotificationFromCashConfirmationEvent(CashConfirmationRequest event){
+        return Notification.builder()
                 .type(NotificationType.CASH_CONFIRMATION)
                 .status(NotificationStatus.NON_VIEWED)
                 .activity(NotificationActivity.ACTIVE)
                 .driverProfile(profileValidationManager.getDriverProfile(event.driverId()))
                 .rideId(event.rideId())
                 .build();
-        PaymentByCashConfirmation paymentConfirmation = PaymentByCashConfirmation.builder()
+    }
+
+    private ChangeRideStatusEvent buildChangeRideStatusEvent(String rideId, String rideStatus, Long profileId){
+        return ChangeRideStatusEvent.builder()
+                .status(rideStatus)
+                .driverId(profileId)
+                .rideId(rideId)
+                .build();
+    }
+
+    private ConfirmedPaymentRequest buildConfirmedPaymentRequest(PaymentByCashConfirmation confirmationNotification,
+                                                                 Long profileId){
+        return ConfirmedPaymentRequest.builder()
+                .passengerId(confirmationNotification.getPassengerId())
+                .amount(confirmationNotification.getAmount())
+                .driverId(profileId)
+                .build();
+    }
+    private RideCreationNotification buildRideCreationNotification(Notification notification,
+                                                                   RideNotificationEvent event){
+        return RideCreationNotification.builder()
+                .notification(notification)
+                .startLocation(event.pickupLocation())
+                .endLocations(String.join(", ",event.endLocation()))
+                .build();
+    }
+
+    private PaymentByCashConfirmation buildPaymentByCashConfirmation(Notification notification,
+                                                                     CashConfirmationRequest event){
+        return PaymentByCashConfirmation.builder()
                 .notification(notification)
                 .passengerId(event.passengerId())
                 .amount(event.amount())
                 .build();
-        notification.setPaymentByCashConfirmation(paymentConfirmation);
-        logger.info("notified driver "+event.driverId()+" about ride payment");
-        notificationRepo.save(notification);
     }
 
-    public ChangeRideStatusEvent updateRideStatus(String rideId, String rideStatus) {
-        DriverProfile driverProfile = profileValidationManager.findDriverByAcceptedRide(rideId);
-        switch (rideStatus){
-            case STATUS_WAIT_FOR_PASSENGER -> {
-                driverProfile.setDriverStatus(DriverStatus.WAITING_FOR_CLIENT);
-            }
-            case STATUS_IN_PROGRESS -> {
-                driverProfile.setDriverStatus(DriverStatus.IN_TRANSIT);
-            }
+    private void updateAllNotificationActivityAfterAccepting(Notification notification, String status) {
+        notification.getDriverProfile().setDriverStatus(DriverStatus.DRIVING_TO_CLIENT);
+        updateRideStatus(notification.getRideId(), status);
+        List<Notification> notificationsForRide = notificationRepo.findByRideId(notification.getRideId());
+        for (Notification otherNotification : notificationsForRide) {
+            otherNotification.setActivity(NotificationActivity.NON_ACTIVE);
         }
-        ChangeRideStatusEvent event = ChangeRideStatusEvent.builder()
-                .status(rideStatus)
-                .driverId(driverProfile.getProfileId())
-                .rideId(rideId)
-                .build();
-        artemisProducer.sendRideStatusUpdate(event);
-        return event;
     }
 }
