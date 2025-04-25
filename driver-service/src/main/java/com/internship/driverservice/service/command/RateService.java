@@ -26,13 +26,13 @@ public class RateService {
     private final PassengerFeignClient passengerFeignClient;
 
     @Transactional
-    public ResponseRateDto setNewRate(RequestRateDto rateDto) {
+    public Rate setNewRate(RequestRateDto rateDto) {
         DriverProfile driverProfile = profileValidationManager.getDriverProfile(rateDto.recipientId());
         RideParticipantsConfirmation participants = rideFeignClient.checkParticipants(rateDto.rideId());
         rateValidationManager.checkParticipants(participants, rateDto);
         Rate rate = rateMapper.handleDto(rateDto);
         rate.setDriver(driverProfile);
-        return rateMapper.handleEntity(rateRepo.save(rate));
+        return rateRepo.save(rate);
     }
 
     @Transactional

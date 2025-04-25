@@ -1,6 +1,7 @@
 package com.internship.driverservice.controller;
 
 import com.internship.driverservice.controller.doc.RateDoc;
+import com.internship.driverservice.dto.mapper.RateMapper;
 import com.internship.driverservice.dto.request.RequestRateDto;
 import com.internship.driverservice.dto.response.ResponseRateDto;
 import com.internship.driverservice.service.command.RateService;
@@ -16,10 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RateController implements RateDoc {
     private final RateService rateService;
+    private final RateMapper rateMapper;
 
     @Override
     public ResponseEntity<ResponseRateDto> setRateToDriver(@RequestBody RequestRateDto rateDto) {
-        return ResponseEntity.ok(rateService.setNewRate(rateDto));
+        return ResponseEntity.ok(rateMapper.handleEntity(rateService.setNewRate(rateDto)));
     }
     @Override
     public ResponseEntity<Void> deleteRateFromDriver(@PathVariable Long passengerId,
