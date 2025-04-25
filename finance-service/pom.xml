@@ -14,6 +14,7 @@
 
     <properties>
         <kotlin.version>1.9.25</kotlin.version>
+        <common-events.version>0.0.1-SNAPSHOT</common-events.version>
     </properties>
     <dependencies>
         <dependency>
@@ -28,6 +29,15 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit5</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-artemis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.internship</groupId>
+            <artifactId>common-events</artifactId>
+            <version>${common-events.version}</version>
         </dependency>
     </dependencies>
 

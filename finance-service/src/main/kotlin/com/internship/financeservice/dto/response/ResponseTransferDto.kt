@@ -1,12 +1,12 @@
-package com.internship.financeservice.dto
+package com.internship.financeservice.dto.response
 
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-data class WalletTransferDto(
-    val id: Long? = null,
+data class ResponseTransferDto (
+    val id: Long,
     val driverId: Long,
-    var date: LocalDateTime? = null,
+    var date: LocalDateTime,
     var amount: BigDecimal,
     var remainingAmount: BigDecimal
 )

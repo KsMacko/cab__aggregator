@@ -7,10 +7,16 @@ import jakarta.persistence.Id
 import jakarta.persistence.MapsId
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
+import java.math.BigDecimal
 
 @Entity
 @Table(name = "payment")
-class Payment {
+class Payment (){
+    constructor(passengerId: Long, paymentType: PaymentType, financialOperation: FinancialOperation) : this() {
+        this.passengerId = passengerId
+        this.paymentType = paymentType
+        this.financialOperation=financialOperation
+    }
     @Id
     val id: Long? = null
     var passengerId: Long = 0

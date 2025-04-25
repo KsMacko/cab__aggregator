@@ -1,9 +1,9 @@
 package com.internship.financeservice.service.finance
 
-import com.internship.financeservice.dto.PaymentDto
-import com.internship.financeservice.dto.WalletTransferDto
 import com.internship.financeservice.dto.mapper.PaymentMapper
 import com.internship.financeservice.dto.mapper.WalletTransferMapper
+import com.internship.financeservice.dto.response.ResponsePaymentDto
+import com.internship.financeservice.dto.response.ResponseTransferDto
 import com.internship.financeservice.dto.transfer.request.PaymentFilterRequest
 import com.internship.financeservice.dto.transfer.request.WalletTransferFilterRequest
 import com.internship.financeservice.dto.transfer.response.PaymentPackageDto
@@ -15,7 +15,7 @@ import com.internship.financeservice.repo.WalletTransferRepo
 import com.internship.financeservice.service.PageableObjectCreator
 import com.internship.financeservice.service.specification.PaymentSpecification
 import com.internship.financeservice.service.specification.WalletTransferSpecification
-import com.internship.financeservice.utils.FinanceValidationManager
+import com.internship.financeservice.utils.validation.FinanceValidationManager
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -64,10 +64,10 @@ class ReadFinanceOperationService(
     }
 
     @Transactional(readOnly = true)
-    fun getPaymentById(id: Long): PaymentDto =
-        paymentMapper.toDto(financeValidationManager.getPaymentOperationIfExists(id))
+    fun getPaymentById(id: Long): Payment =
+        financeValidationManager.getPaymentOperationIfExists(id)
 
     @Transactional(readOnly = true)
-    fun getWalletTransferById(id: Long): WalletTransferDto =
-        walletTransferMapper.toDto(financeValidationManager.getWalletTransferOperationIfExists(id))
+    fun getWalletTransferById(id: Long): WalletTransfer =
+        financeValidationManager.getWalletTransferOperationIfExists(id)
 }

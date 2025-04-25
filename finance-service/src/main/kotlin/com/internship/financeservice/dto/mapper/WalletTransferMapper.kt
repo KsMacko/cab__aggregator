@@ -1,6 +1,7 @@
 package com.internship.financeservice.dto.mapper
 
-import com.internship.financeservice.dto.WalletTransferDto
+import com.internship.financeservice.dto.request.RequestWalletTransferDto
+import com.internship.financeservice.dto.response.ResponseTransferDto
 import com.internship.financeservice.entity.WalletTransfer
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
@@ -15,11 +16,11 @@ interface WalletTransferMapper {
         Mapping(target = "amount", source = "financialOperation.amount"),
         Mapping(target = "driverId", source = "wallet.driverId")
     )
-    fun toDto(entity: WalletTransfer): WalletTransferDto
+    fun toDto(entity: WalletTransfer): ResponseTransferDto
 
     @Mapping(target = WalletTransfer.ID, ignore = true)
     @Mapping(target = WalletTransfer.WALLET, ignore = true)
     @Mapping(target = WalletTransfer.FINANCIAL_OPERATION, ignore = true)
     @Mapping(target = "remainingAmount", ignore = true)
-    fun toEntity(dto: WalletTransferDto): WalletTransfer
+    fun toEntity(dto: RequestWalletTransferDto): WalletTransfer
 }
