@@ -20,6 +20,7 @@ import static com.internship.rideservice.util.validators.ValidationConstants.MAX
 import static com.internship.rideservice.util.validators.ValidationConstants.MAX_PROMO_CODE_LENGTH;
 import static com.internship.rideservice.util.validators.ValidationConstants.MIN_ADDRESS_LENGTH;
 import static com.internship.rideservice.util.validators.ValidationConstants.MIN_DISTANCE;
+import static com.internship.rideservice.util.validators.ValidationConstants.PAYMENT_TYPE_PATTERN;
 
 public record RequestRideDto(
         @NotNull(message = "passenger.notNull")
@@ -39,7 +40,11 @@ public record RequestRideDto(
         @DecimalMin(value = MIN_DISTANCE, inclusive = false, message = "distance.positive")
         @DecimalMax(value = MAX_DISTANCE, message = "distance.maxValue")
         Float distance,
+        @NotBlank(message = "fare.type.notBlank")
         @Pattern(regexp = FARE_TYPE_PATTERN, message = "fare.type.invalidInput")
-        String fareType
+        String fareType,
+        @NotBlank(message = "payment.type.notBlank")
+        @Pattern(regexp = PAYMENT_TYPE_PATTERN, message = "payment.type.invalidInput")
+        String paymentType
 ) {
 }

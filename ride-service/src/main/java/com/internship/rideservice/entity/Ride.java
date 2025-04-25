@@ -1,6 +1,7 @@
 package com.internship.rideservice.entity;
 
 import com.internship.rideservice.enums.FareType;
+import com.internship.rideservice.enums.PaymentType;
 import com.internship.rideservice.enums.RideStatus;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,4 +34,5 @@ public class Ride {
     private RideStatus status;
     private FareType fareType;
     private BigDecimal price;
+    private PaymentType paymentType;
 }

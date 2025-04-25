@@ -22,7 +22,7 @@ public class CalculatePriceService {
 
     public BigDecimal ReCalculatePrice(Ride ride) {
         Fare fare = fareValidationManager.getFareIfExists(ride.getFareType());
-        BigDecimal currentAmount = ride.getPrice();
+        BigDecimal currentAmount = BigDecimal.valueOf(ride.getDistance()).multiply(fare.getPricePerKm());
         BigDecimal amountByTime = BigDecimal.valueOf(Duration.between(
                         ride.getStartTime(),
                         ride.getEndTime()

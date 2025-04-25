@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class ValidOffsetDateValidator implements ConstraintValidator<ValidateDate, String> {
+public class ValidDateTimeValidator implements ConstraintValidator<ValidateDate, String> {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 

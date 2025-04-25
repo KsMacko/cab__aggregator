@@ -1,5 +1,7 @@
 package com.internship.rideservice.dto.response;
 
+import com.internship.rideservice.enums.FareType;
+import com.internship.rideservice.enums.PaymentType;
 import com.internship.rideservice.enums.RideStatus;
 
 import java.math.BigDecimal;
@@ -20,7 +22,8 @@ public record ResponseRideDto(
         LocalTime endTime,
         Float distance,
         RideStatus status,
-        String fareType,
-        BigDecimal price
+        FareType fareType,
+        BigDecimal price,
+        PaymentType paymentType
 ) {
 }

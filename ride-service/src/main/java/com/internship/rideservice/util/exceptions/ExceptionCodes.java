@@ -14,6 +14,7 @@ public enum ExceptionCodes {
     NO_CURRENT_PROMO_CODE("promo.code.noCurrentCode"),
     ERROR_INVALID_INPUT("error.input.invalid"),
     UNKNOWN_ERROR("error.unknown"),
-    ERROR_NOT_READABLE("error.notReadable"),;
+    ERROR_NOT_READABLE("error.notReadable"),
+    PASSENGER_NOT_FOUND("passenger.notFound"),;
     private final String code;
 }

@@ -55,8 +55,8 @@ public class ReadPromoCodeService {
     }
 
     @Transactional(readOnly = true)
-    public ResponsePromoCodeDto getPromoCodeCurrentByCode(String code) {
-        return promoCodeMapper.handleEntity(promoCodeValidationManager.getCurrentPromoCode(code));
+    public PromoCode getPromoCodeCurrentByCode(String code) {
+        return promoCodeValidationManager.getCurrentPromoCode(code);
     }
 
     private Query buildQuery(PromoCodeFilterRequest filterRequest) {

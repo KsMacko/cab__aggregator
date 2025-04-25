@@ -7,8 +7,7 @@ public interface ValidationConstants {
     int MAX_PAGE_SIZE = 100;
     int MAX_ID_VALUE = 100;
 
-    String CYRILLIC_REGEX = "^[а-яА-ЯёЁ]+$";
-    String LATIN_LETTERS_REGEX = "^[a-zA-Z]+$";
+    String PAYMENT_TYPE_PATTERN = "CASH|CARD";
     String ALPHANUMERIC_REGEX = "^[a-zA-Z0-9]+$";
     String ORDER_DIRECTION_PATTERN = "ASC|DESC";
     String PROMO_CODE_FIELDS_PATTERN = "CREATED_AT|VALID_UNTIL";

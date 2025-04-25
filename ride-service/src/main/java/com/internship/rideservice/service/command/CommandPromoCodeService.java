@@ -20,11 +20,11 @@ public class CommandPromoCodeService {
     private final PromoCodeMapper promoCodeMapper;
 
     @Transactional
-    public ResponsePromoCodeDto createPromoCode(RequestPromoCodeDto promoCodeDto) {
+    public PromoCode createPromoCode(RequestPromoCodeDto promoCodeDto) {
         promoCodeValidationManager.checkForCreationPromoCodeValidity(promoCodeDto.promoCode());
         PromoCode promoCode = promoCodeMapper.handleDto(promoCodeDto);
         promoCode.setValidUntil(LocalDateTime.parse(promoCodeDto.validUntil()));
-        return promoCodeMapper.handleEntity(promoCodeRepo.save(promoCode));
+        return promoCodeRepo.save(promoCode);
     }
 
     @Transactional
@@ -34,9 +34,9 @@ public class CommandPromoCodeService {
     }
 
     @Transactional
-    public ResponsePromoCodeDto updatePromoCode(String promoCodeId, RequestPromoCodeDto promoCodeDto) {
+    public PromoCode updatePromoCode(String promoCodeId, RequestPromoCodeDto promoCodeDto) {
         PromoCode existingPromoCode = promoCodeValidationManager.getPromoCodeByIdIfExists(promoCodeId);
         promoCodeMapper.updateEntity(promoCodeDto, existingPromoCode);
-        return promoCodeMapper.handleEntity(promoCodeRepo.save(existingPromoCode));
+        return promoCodeRepo.save(existingPromoCode);
     }
 }

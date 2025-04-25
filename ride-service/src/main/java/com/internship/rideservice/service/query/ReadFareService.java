@@ -32,9 +32,8 @@ public class ReadFareService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseFareDto getFareById(FareType type) {
-        Fare fare = fareValidationManager.getFareIfExists(type);
-        return fareMapper.handleEntity(fare);
+    public Fare getFareById(FareType type) {
+        return fareValidationManager.getFareIfExists(type);
     }
 
 }

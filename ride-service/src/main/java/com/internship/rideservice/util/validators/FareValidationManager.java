@@ -17,19 +17,19 @@ public class FareValidationManager {
     private final FareRepo fareRepo;
 
     public Fare getFareIfExists(FareType fareType) {
-        return fareRepo.findFareByType(fareType)
+        return fareRepo.findFareByType(fareType).stream().findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException(FARE_NOT_FOUND.getCode()));
     }
 
     public void checkForDuplicateType(FareType fareType) {
-        if (fareRepo.existsById(fareType)) {
+        if (fareRepo.existsFareByType(fareType)) {
             throw new InvalidInputException(FARE_ALREADY_EXISTS.getCode());
         }
     }
 
     public void checkIfNotExistsByType(FareType fareType) {
         if (!fareRepo.existsById(fareType)) {
-            throw new RuntimeException(FARE_NOT_FOUND.getCode());
+            throw new ResourceNotFoundException(FARE_NOT_FOUND.getCode());
         }
     }
 }

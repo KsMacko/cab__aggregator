@@ -19,11 +19,9 @@ public class CommandFareService {
     private final FareMapper fareMapper;
 
     @Transactional
-    public ResponseFareDto createFare(RequestFareDto fareDto) {
+    public Fare createFare(RequestFareDto fareDto) {
         fareValidationManager.checkForDuplicateType(FareType.valueOf(fareDto.type()));
-        Fare fare = fareMapper.handleDto(fareDto);
-        Fare savedFare = fareRepo.save(fare);
-        return fareMapper.handleEntity(savedFare);
+        return fareRepo.save(fareMapper.handleDto(fareDto));
     }
 
     @Transactional
@@ -33,10 +31,9 @@ public class CommandFareService {
     }
 
     @Transactional
-    public ResponseFareDto updateFare(RequestFareDto fareDto) {
+    public Fare updateFare(RequestFareDto fareDto) {
         Fare existingFare = fareValidationManager.getFareIfExists(FareType.valueOf(fareDto.type()));
         fareMapper.updateEntity(fareDto, existingFare);
-        Fare updatedFare = fareRepo.save(existingFare);
-        return fareMapper.handleEntity(updatedFare);
+        return fareRepo.save(existingFare);
     }
 }
