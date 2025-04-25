@@ -23,5 +23,13 @@ spring:
     user: admin
     password: admin
     broker-url: tcp://localhost:61616
+  cloud:
+    openfeign:
+      client:
+        config:
+          finance-service:
+            url: http://localhost:8084/api/v1/finance
+          passenger-service:
+            url: http://localhost:8081/api/v1/passengers
 server:
   port: ${RIDE_SERVICE_PORT}

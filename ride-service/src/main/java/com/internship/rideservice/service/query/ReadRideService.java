@@ -52,9 +52,8 @@ public class ReadRideService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseRideDto getRideById(String id) {
-        Ride ride = rideValidationManager.getRideByIdIfExists(id);
-        return rideMapper.handleEntity(ride);
+    public Ride getRideById(String id) {
+        return rideValidationManager.getRideByIdIfExists(id);
     }
 
     private Query buildQuery(RideFilterRequest filterRequest) {

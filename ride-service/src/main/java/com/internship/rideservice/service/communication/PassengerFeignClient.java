@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "passenger-service", url = "http://localhost:8081/api/v1/passengers")
+@FeignClient(name = "passenger-service")
 public interface PassengerFeignClient {
     @GetMapping("/{id}")
     ResponseEntity<Void> getPassengerById(@PathVariable Long id);

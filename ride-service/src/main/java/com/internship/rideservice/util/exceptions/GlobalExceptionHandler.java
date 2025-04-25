@@ -3,6 +3,7 @@ package com.internship.rideservice.util.exceptions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -25,8 +26,8 @@ import static com.internship.rideservice.util.exceptions.ExceptionCodes.UNKNOWN_
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RequiredArgsConstructor
+@Slf4j
 public class GlobalExceptionHandler {
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private final MessageSource messageSource;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

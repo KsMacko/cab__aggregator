@@ -37,11 +37,10 @@ public class CommandRideService {
     private final PromoCodeValidationManager promoCodeValidationManager;
 
     @Transactional
-    public ResponseRideDto createRide(RequestRideDto rideDto) {
+    public Ride createRide(RequestRideDto rideDto) {
         rideValidationManager.checkIfPassengerExistsById(rideDto.passengerId());
         promoCodeValidationManager.getCurrentPromoCode(rideDto.promoCode());
-        Ride rideEntity = rideMapper.handleDto(rideDto);
-        Ride ride = rideRepo.save(rideEntity);
+        Ride ride = rideRepo.save(rideMapper.handleDto(rideDto));
         kafkaProducer.sendRideCreationNotification(
                 RideNotificationEvent.builder()
                         .rideId(ride.getId())
@@ -50,7 +49,7 @@ public class CommandRideService {
                         .fare(ride.getFareType().toString())
                         .build()
         );
-        return rideMapper.handleEntity(ride);
+        return ride;
     }
     @Transactional
     public RideParticipantsConfirmation findDriverAndPassengerByRideId(String rideId) {
@@ -73,7 +72,6 @@ public class CommandRideService {
             case RECALCULATED -> changeRideStatusRecalculated(event.rideId());
             case ACCEPTED -> changeRideStatusToAccepted(event.rideId(), event.driverId());
         }
-
     }
 
     @Transactional

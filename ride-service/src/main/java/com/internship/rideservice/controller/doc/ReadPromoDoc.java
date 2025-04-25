@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -42,7 +43,7 @@ public interface ReadPromoDoc {
             )
     })
     @GetMapping
-    PromoCodePackageDto getFilteredPromoCodes(@ModelAttribute @Validated PromoCodeFilterRequest filterRequest);
+    ResponseEntity<PromoCodePackageDto> getFilteredPromoCodes(@ModelAttribute @Validated PromoCodeFilterRequest filterRequest);
 
     @Operation(
             summary = "Get a promo code by code",
@@ -66,7 +67,7 @@ public interface ReadPromoDoc {
             )
     })
     @GetMapping("/{code}/current")
-    ResponsePromoCodeDto getPromoCode(
+    ResponseEntity<ResponsePromoCodeDto> getPromoCode(
             @Parameter(description = "Unique code of the promo code", example = "SUMMER20", required = true)
             @PathVariable String code);
 }

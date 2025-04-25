@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "finance-service", url = "http://localhost:8084/api/v1/finance")
+@FeignClient(name = "finance-service")
 public interface FinanceFeignClient {
     @PostMapping("/payment")
     ResponseEntity<Void> createCardPayment(@RequestBody ConfirmedPaymentRequest payment);

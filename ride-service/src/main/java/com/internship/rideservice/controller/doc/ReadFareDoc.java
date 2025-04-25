@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +42,7 @@ public interface ReadFareDoc {
             )
     })
     @GetMapping
-    FarePackageDto getAllFares();
+    ResponseEntity<FarePackageDto> getAllFares();
 
     @Operation(
             summary = "Get a fare type by type",
@@ -65,7 +66,7 @@ public interface ReadFareDoc {
             )
     })
     @GetMapping("/{type}")
-    ResponseFareDto getFareByType(
+    ResponseEntity<ResponseFareDto> getFareByType(
             @Parameter(description = "Unique type of the fare", example = "ECONOMY", required = true)
             @PathVariable FareType type);
 }

@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +39,7 @@ public interface ReadRideDoc {
             )
     })
     @GetMapping("/{id}")
-    ResponseRideDto getRideById(
+    ResponseEntity<ResponseRideDto> getRideById(
             @Parameter(description = "Unique identifier of the ride", example = "67e92415198ed4652992f5ec", required = true)
             @PathVariable String id);
 
@@ -60,5 +61,5 @@ public interface ReadRideDoc {
     })
 
     @GetMapping
-    RidePackageDto getAllRides(@ParameterObject @Validated RideFilterRequest filterRequest);
+    ResponseEntity<RidePackageDto> getAllRides(@ParameterObject @Validated RideFilterRequest filterRequest);
 }

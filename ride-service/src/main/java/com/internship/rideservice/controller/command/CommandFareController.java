@@ -1,8 +1,10 @@
 package com.internship.rideservice.controller.command;
 
 import com.internship.rideservice.controller.doc.CommandFareDoc;
+import com.internship.rideservice.dto.mapper.FareMapper;
 import com.internship.rideservice.dto.request.RequestFareDto;
 import com.internship.rideservice.dto.response.ResponseFareDto;
+import com.internship.rideservice.entity.Fare;
 import com.internship.rideservice.enums.FareType;
 import com.internship.rideservice.service.command.CommandFareService;
 import jakarta.validation.Valid;
@@ -22,18 +24,19 @@ import java.net.URI;
 public class CommandFareController implements CommandFareDoc {
 
     private final CommandFareService commandFareService;
+    private final FareMapper fareMapper;
 
     @Override
     public ResponseEntity<ResponseFareDto> createFare(@Valid @RequestBody RequestFareDto fareDto) {
-        ResponseFareDto createdFare = commandFareService.createFare(fareDto);
+        Fare createdFare = commandFareService.createFare(fareDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{type}")
-                .buildAndExpand(createdFare.type())
+                .buildAndExpand(createdFare.getType())
                 .toUri();
         return ResponseEntity
                 .created(location)
-                .body(createdFare);
+                .body(fareMapper.handleEntity(createdFare));
     }
 
     @Override
@@ -44,7 +47,6 @@ public class CommandFareController implements CommandFareDoc {
 
     @Override
     public ResponseEntity<ResponseFareDto> updateFare(@RequestBody RequestFareDto fareDto) {
-        ResponseFareDto updatedFare = commandFareService.updateFare(fareDto);
-        return ResponseEntity.ok(updatedFare);
+        return ResponseEntity.ok(fareMapper.handleEntity(commandFareService.updateFare(fareDto)));
     }
 }
