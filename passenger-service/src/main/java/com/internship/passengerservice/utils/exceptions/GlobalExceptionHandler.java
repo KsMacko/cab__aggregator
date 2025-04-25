@@ -3,6 +3,7 @@ package com.internship.passengerservice.utils.exceptions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.TypeMismatchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +29,8 @@ import static com.internship.passengerservice.utils.exceptions.ExceptionCodes.UN
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RequiredArgsConstructor
+@Slf4j
 public class GlobalExceptionHandler {
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private final MessageSource messageSource;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Positive;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -48,7 +49,7 @@ public interface ReadDoc {
             )
     })
     @GetMapping("/{id}")
-    ResponseProfileDto readPassengerById(
+    ResponseEntity<ResponseProfileDto> readPassengerById(
             @Parameter(description = "Unique identifier of the passenger", example = "1", required = true)
             @Positive(message = "id.positive")
             @Max(value = MAX_ID_VALUE, message = "profile.id.maxValue")
@@ -70,7 +71,7 @@ public interface ReadDoc {
             )
     })
     @GetMapping
-    DataPackageDto readAllProfiles(
+    ResponseEntity<DataPackageDto> readAllProfiles(
             @Validated
             @ModelAttribute
             ProfileFilterRequest filterRequest);

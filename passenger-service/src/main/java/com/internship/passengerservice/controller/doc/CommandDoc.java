@@ -71,7 +71,7 @@ public interface CommandDoc {
             )
     })
     @PutMapping("/{id}")
-    ResponseProfileDto updatePassenger(
+    ResponseEntity<ResponseProfileDto> updatePassenger(
             @Parameter(description = "Unique identifier of the passenger", example = "1", required = true)
             @Positive(message = "id.positive")
             @Max(value = MAX_ID_VALUE, message = "profile.id.maxValue")
@@ -101,7 +101,7 @@ public interface CommandDoc {
             )
     })
     @DeleteMapping("/{id}")
-    void deletePassenger(
+    ResponseEntity<Void> deletePassenger(
             @Parameter(description = "Unique identifier of the passenger", example = "1", required = true)
             @Positive(message = "id.positive")
             @Max(value = MAX_ID_VALUE, message = "profile.id.maxValue")

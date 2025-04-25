@@ -1,11 +1,13 @@
 package com.internship.passengerservice.controller;
 
 import com.internship.passengerservice.controller.doc.ReadDoc;
+import com.internship.passengerservice.dto.mapper.ProfileMapper;
 import com.internship.passengerservice.dto.response.ResponseProfileDto;
 import com.internship.passengerservice.dto.transfer.DataPackageDto;
 import com.internship.passengerservice.dto.transfer.ProfileFilterRequest;
 import com.internship.passengerservice.service.ReadPassengerProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,13 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ReadPassengerController implements ReadDoc {
     private final ReadPassengerProfileService profileService;
+    private final ProfileMapper profileMapper;
 
     @Override
-    public DataPackageDto readAllProfiles(ProfileFilterRequest profileFilterRequest) {
-        return profileService.readPassengerProfiles(profileFilterRequest);
+    public ResponseEntity<DataPackageDto> readAllProfiles(ProfileFilterRequest profileFilterRequest) {
+        return ResponseEntity.ok(profileService.readPassengerProfiles(profileFilterRequest));
     }
     @Override
-    public ResponseProfileDto readPassengerById(@PathVariable("id") Long id) {
-        return profileService.readPassengerProfile(id);
+    public ResponseEntity<ResponseProfileDto> readPassengerById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(profileMapper.handleEntity(profileService.readPassengerProfile(id)));
     }
 }

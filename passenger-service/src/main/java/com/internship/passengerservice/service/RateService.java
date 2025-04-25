@@ -26,13 +26,13 @@ public class RateService {
     private final RateMapper rateMapper;
 
     @Transactional
-    public ResponseRateDto setNewRate(RequestRateDto rateDto) {
+    public Rate setNewRate(RequestRateDto rateDto) {
         PassengerProfile passengerProfile = profileValidationManager.getProfileByIdIfExists(rateDto.recipientId());
         RideParticipantsConfirmation participants = rideFeignClient.checkParticipants(rateDto.rideId());
         rateValidationManager.checkParticipants(participants, rateDto);
         Rate rate = rateMapper.handleDto(rateDto);
         rate.setPassenger(passengerProfile);
-        return rateMapper.handleEntity(rateRepo.save(rate));
+        return rateRepo.save(rate);
     }
 
     @Transactional

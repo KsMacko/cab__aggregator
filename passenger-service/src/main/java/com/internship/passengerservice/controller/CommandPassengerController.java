@@ -1,6 +1,7 @@
 package com.internship.passengerservice.controller;
 
 import com.internship.passengerservice.controller.doc.CommandDoc;
+import com.internship.passengerservice.dto.mapper.ProfileMapper;
 import com.internship.passengerservice.dto.request.RequestProfileDto;
 import com.internship.passengerservice.dto.response.ResponseProfileDto;
 import com.internship.passengerservice.service.CommandPassengerProfileService;
@@ -22,6 +23,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class CommandPassengerController implements CommandDoc {
     private final CommandPassengerProfileService profileService;
+    private final ProfileMapper profileMapper;
     @Override
     @PostMapping
     public ResponseEntity<ResponseProfileDto> createPassenger(@RequestBody RequestProfileDto profileDto) {
@@ -37,14 +39,15 @@ public class CommandPassengerController implements CommandDoc {
     }
     @Override
     @PutMapping("/{id}")
-    public ResponseProfileDto updatePassenger(@PathVariable Long id,
+    public ResponseEntity<ResponseProfileDto> updatePassenger(@PathVariable Long id,
                                               @RequestBody RequestProfileDto profileDto) {
-        return profileService.updatePassengerProfile(id, profileDto);
+        return ResponseEntity.ok(profileMapper.handleEntity(profileService.updatePassengerProfile(id, profileDto)));
     }
     @Override
     @DeleteMapping("/{id}")
-    public void deletePassenger(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePassenger(@PathVariable Long id) {
         profileService.deletePassengerProfile(id);
+        return ResponseEntity.noContent().build();
     }
 
 

@@ -14,5 +14,13 @@ spring:
   messages:
     basename: messages
     encoding: UTF-8
+  cloud:
+    openfeign:
+      client:
+        config:
+          driver-service:
+            url: http://localhost:8081/api/v1/rates
+          ride-service:
+            url: http://localhost:8083/api/v1/rides
 server:
   port: 8081

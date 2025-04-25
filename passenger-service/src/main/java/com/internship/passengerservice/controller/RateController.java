@@ -1,6 +1,7 @@
 package com.internship.passengerservice.controller;
 
 import com.internship.passengerservice.controller.doc.RateDoc;
+import com.internship.passengerservice.dto.mapper.RateMapper;
 import com.internship.passengerservice.dto.request.RequestRateDto;
 import com.internship.passengerservice.dto.response.ResponseRateDto;
 import com.internship.passengerservice.service.RateService;
@@ -16,10 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RateController implements RateDoc {
     private final RateService rateService;
+    private final RateMapper rateMapper;
 
     @Override
-    public ResponseRateDto setRateToPassenger(@RequestBody RequestRateDto rateDto) {
-        return rateService.setNewRate(rateDto);
+    public ResponseEntity<ResponseRateDto> setRateToPassenger(@RequestBody RequestRateDto rateDto) {
+        return ResponseEntity.ok(rateMapper.handleEntity(rateService.setNewRate(rateDto)));
     }
 
     @Override
@@ -30,8 +32,8 @@ public class RateController implements RateDoc {
     }
 
     @Override
-    public ResponseRateDto setRateToDriver(@RequestBody RequestRateDto rateDto) {
-        return rateService.setRateToDriver(rateDto);
+    public ResponseEntity<ResponseRateDto> setRateToDriver(@RequestBody RequestRateDto rateDto) {
+        return ResponseEntity.ok(rateService.setRateToDriver(rateDto));
     }
 
     @Override

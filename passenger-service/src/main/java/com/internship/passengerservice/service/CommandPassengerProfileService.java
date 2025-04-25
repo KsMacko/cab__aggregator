@@ -34,13 +34,13 @@ public class CommandPassengerProfileService {
     }
 
     @Transactional
-    public ResponseProfileDto updatePassengerProfile(Long profileId, RequestProfileDto profileDto) {
+    public PassengerProfile updatePassengerProfile(Long profileId, RequestProfileDto profileDto) {
         profileValidationManager.checkProfileToUpdate(profileDto);
         profileValidationManager.checkIfProfileExists(profileId);
         PassengerProfile existingProfile = profileValidationManager.getProfileByIdIfExists(profileId);
         profileMapper.updateEntity(profileDto, existingProfile);
 
-        return profileMapper.handleEntity(passengerProfileRepo.save(existingProfile));
+        return passengerProfileRepo.save(existingProfile);
     }
 
     @Transactional

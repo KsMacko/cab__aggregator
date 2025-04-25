@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "driver-service", url = "http://localhost:8081/api/v1/rates")
+@FeignClient(name = "driver-service")
 public interface DriverFeignClient {
     @PostMapping("/author/passenger")
     ResponseRateDto setRateToDriver(@RequestBody RequestRateDto requestRateDto);
