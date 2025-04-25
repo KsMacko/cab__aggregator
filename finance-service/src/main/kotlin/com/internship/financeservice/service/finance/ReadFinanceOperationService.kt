@@ -64,10 +64,10 @@ class ReadFinanceOperationService(
     }
 
     @Transactional(readOnly = true)
-    fun getPaymentById(id: Long): ResponsePaymentDto =
-        paymentMapper.toDto(financeValidationManager.getPaymentOperationIfExists(id))
+    fun getPaymentById(id: Long): Payment =
+        financeValidationManager.getPaymentOperationIfExists(id)
 
     @Transactional(readOnly = true)
-    fun getWalletTransferById(id: Long): ResponseTransferDto =
-        walletTransferMapper.toDto(financeValidationManager.getWalletTransferOperationIfExists(id))
+    fun getWalletTransferById(id: Long): WalletTransfer =
+        financeValidationManager.getWalletTransferOperationIfExists(id)
 }

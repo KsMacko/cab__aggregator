@@ -1,6 +1,8 @@
 package com.internship.financeservice.controller.command
 
 import com.internship.commonevents.event.ConfirmedPaymentRequest
+import com.internship.financeservice.dto.mapper.PaymentMapper
+import com.internship.financeservice.dto.mapper.WalletTransferMapper
 import com.internship.financeservice.dto.request.RequestWalletTransferDto
 import com.internship.financeservice.dto.response.ResponsePaymentDto
 import com.internship.financeservice.dto.response.ResponseTransferDto
@@ -19,13 +21,17 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 @RequestMapping("api/v1/finance")
 class CommandFinanceController (
     private val commandFinanceOperationService: CommandFinanceOperationService,
-    private val walletService: WalletService
+    private val walletService: WalletService,
+    private val paymentMapper: PaymentMapper,
+    private val walletTransferMapper: WalletTransferMapper
 ){
     @PostMapping("/payment")
     private fun createCardPayment(
         @RequestBody payment: ConfirmedPaymentRequest
-    ):ResponsePaymentDto{
-        return commandFinanceOperationService.createPaymentByCard(payment)
+    ):ResponseEntity<ResponsePaymentDto>{
+        return ResponseEntity.ok(
+            paymentMapper.toDto(commandFinanceOperationService.createPaymentByCard(payment))
+        )
     }
     @PostMapping("/wallet-transfer")
     private fun createWalletTransfer(
@@ -39,7 +45,7 @@ class CommandFinanceController (
             .toUri()
         return ResponseEntity
             .created(location)
-            .body(walletTransfer)
+            .body(walletTransferMapper.toDto(walletTransfer))
     }
     @PostMapping("/wallet/driver/{id}")
     fun createWallet(@PathVariable id:Long): ResponseEntity<Void> {

@@ -37,6 +37,6 @@ class ReadCardService(
     }
 
     @Transactional(readOnly = true)
-    fun findCardById(id: Long): ResponseCardDto =
-        cardMapper.toDto(cardValidationManager.getCardIfExists(id))
+    fun findCardById(id: Long): Card =
+        cardValidationManager.getCardIfExists(id)
 }

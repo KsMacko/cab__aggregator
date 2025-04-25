@@ -20,9 +20,9 @@ class WalletService(
     private val walletMapper: WalletMapper
 ): PageableObjectCreator() {
     @Transactional
-    fun createWallet(driverId:Long): WalletDto {
+    fun createWallet(driverId:Long): DriverWallet {
         val wallet = DriverWallet(driverId);
-        return walletMapper.toDto(walletRepo.save(wallet))
+        return walletRepo.save(wallet)
     }
     @Transactional
     fun deleteWallet(id: Long) {
@@ -50,6 +50,6 @@ class WalletService(
     }
 
     @Transactional(readOnly = true)
-    fun getWalletById(id: Long): WalletDto =
-        walletMapper.toDto(walletValidatorManager.getWalletIfExistsByDriverId(id))
+    fun getWalletById(id: Long): DriverWallet =
+        walletValidatorManager.getWalletIfExistsByDriverId(id)
 }
