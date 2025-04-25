@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "passenger-service", url = "http://localhost:8081/api/v1/rates")
+@FeignClient(name = "passenger-service")
 public interface PassengerFeignClient {
     @PostMapping("/author/driver")
     ResponseRateDto setRateToPassenger(@RequestBody RequestRateDto requestRateDto);

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(name = "finance-service", url = "http://localhost:8084/api/v1/finance")
+@FeignClient(name = "finance-service")
 public interface FinanceFeignClient {
     @PostMapping("/wallet/driver/{id}")
     ResponseEntity<Void> createWallet(@PathVariable Long id);
