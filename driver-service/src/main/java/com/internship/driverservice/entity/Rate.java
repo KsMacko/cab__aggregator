@@ -16,6 +16,7 @@ import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -33,10 +34,12 @@ public class Rate {
     private Integer value;
     @Column(nullable = false)
     private Long authorId;
+    @Column(nullable = false)
+    private String rideId;
     @CreationTimestamp
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private OffsetDateTime updatedAt;
+    private LocalDateTime updatedAt;
     @ManyToOne
     @JoinColumn(name = "driver_profile_profile_id")
     private DriverProfile driver;

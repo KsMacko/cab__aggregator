@@ -14,5 +14,24 @@ spring:
   messages:
     basename: messages
     encoding: UTF-8
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: ride-status
+  artemis:
+    mode: native
+    user: admin
+    password: admin
+    broker-url: tcp://localhost:61616
+  cloud:
+    openfeign:
+      client:
+        config:
+          finance-service:
+            url: http://localhost:8084/api/v1/finance
+          passenger-service:
+            url: http://localhost:8081/api/v1/rates
+          ride-service:
+            url: http://localhost:8083/api/v1/rides
 server:
   port: 8082

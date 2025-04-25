@@ -47,12 +47,12 @@ public class ReadCarService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseCarDto getCurrentCarByProfileId(Long profileId) {
+    public Car getCurrentCarByProfileId(Long profileId) {
         profileValidationManager.checkIfProfileIdNotNull(profileId);
         DriverProfile driverProfile = profileValidationManager.getDriverProfile(profileId);
         Car car = carRepo.findByDriverProfileAndIsCurrent(driverProfile, true);
         carValidationManager.checkCarNotNull(car);
-        return carMapper.handleEntity(car);
+        return car;
     }
 
     private CarPackageDto createCarPackageDto(Page<Car> resultPage) {

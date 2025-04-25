@@ -14,13 +14,27 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface ProfileMapper {
 
     @Mapping(target = "profileId", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "rates", ignore = true)
+    @Mapping(target = "car", ignore = true)
+    @Mapping(target = "notifications", ignore = true)
+    @Mapping(target = "driverStatus", ignore = true)
     DriverProfile handleDto(RequestProfileDto dto);
 
+    @Mapping(target = "rate", ignore = true)
     ResponseProfileDto handleEntity(DriverProfile driverProfile, Integer rating);
 
-
+    @Mapping(target = "rate", ignore = true)
     ResponseProfileDto handleEntity(DriverProfile driverProfile);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "profileId", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "rates", ignore = true)
+    @Mapping(target = "car", ignore = true)
+    @Mapping(target = "notifications", ignore = true)
+    @Mapping(target = "driverStatus", ignore = true)
     void updateProfileFromDto(RequestProfileDto dto, @MappingTarget DriverProfile entity);
 }

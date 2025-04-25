@@ -6,6 +6,7 @@ import com.internship.driverservice.dto.transfer.DriverFilterRequest;
 import com.internship.driverservice.dto.transfer.ProfilePackageDto;
 import com.internship.driverservice.entity.DriverProfile;
 import com.internship.driverservice.enums.FieldFilter;
+import com.internship.driverservice.enums.OrderDirection;
 import com.internship.driverservice.repo.DriverProfileRepo;
 import com.internship.driverservice.repo.RateRepo;
 import com.internship.driverservice.service.specification.DriverSpecificationService;
@@ -64,8 +65,7 @@ public class ReadDriverProfileService {
     }
 
     private Pageable createPageableObject(DriverFilterRequest filterRequest) {
-        if (isNull(filterRequest.getSortBy())) filterRequest.setSortBy(FieldFilter.FIRST_NAME.getFieldName());
-
+        if (isNull(filterRequest.getSortBy())) filterRequest.setSortBy(FieldFilter.FIRST_NAME.toString());
         Sort sort = Sort.by(Sort.Direction.fromString(
                         filterRequest.getOrder()),
                 FieldFilter.valueOf(filterRequest.getSortBy()).getFieldName());

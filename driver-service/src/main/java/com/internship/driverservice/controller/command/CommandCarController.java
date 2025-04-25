@@ -1,6 +1,7 @@
 package com.internship.driverservice.controller.command;
 
 import com.internship.driverservice.controller.doc.CarCommandDoc;
+import com.internship.driverservice.dto.mapper.CarMapper;
 import com.internship.driverservice.dto.request.RequestCarDto;
 import com.internship.driverservice.dto.response.ResponseCarDto;
 import com.internship.driverservice.service.command.CommandCarService;
@@ -16,15 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CommandCarController implements CarCommandDoc {
     private final CommandCarService commandCarService;
+    private final CarMapper carMapper;
 
     @Override
-    public ResponseCarDto setCurrentCar(@PathVariable Long id) {
-        return commandCarService.setCurrentCar(id);
+    public ResponseEntity<ResponseCarDto> setCurrentCar(@PathVariable Long id) {
+        return ResponseEntity.ok(carMapper.handleEntity(commandCarService.setCurrentCar(id)));
     }
 
     @Override
-    public ResponseCarDto addNewCar(@RequestBody RequestCarDto carDto) {
-        return commandCarService.addNewCar(carDto);
+    public ResponseEntity<ResponseCarDto> addNewCar(@RequestBody RequestCarDto carDto) {
+        return ResponseEntity.ok(carMapper.handleEntity(commandCarService.addNewCar(carDto)));
     }
 
     @Override

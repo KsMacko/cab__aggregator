@@ -1,5 +1,6 @@
 package com.internship.driverservice.controller.doc;
 
+import com.internship.commonevents.event.ChangeRideStatusEvent;
 import com.internship.driverservice.dto.request.RequestProfileDto;
 import com.internship.driverservice.dto.request.RequestRateDto;
 import com.internship.driverservice.dto.response.ResponseProfileDto;
@@ -16,13 +17,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import static com.internship.driverservice.utils.validation.ValidationConstants.RIDE_STATUS_PATTERN;
 
 @Tag(
         name = "Operations for managing driver profiles",
@@ -49,7 +55,7 @@ public interface ProfileCommandDoc {
     @PostMapping
     ResponseEntity<ResponseProfileDto> createProfile(
             @Parameter(description = "Driver profile data to create", required = true)
-            @Valid
+            @Validated
             @RequestBody
             RequestProfileDto profileDto);
 
@@ -75,9 +81,10 @@ public interface ProfileCommandDoc {
             )
     })
     @PutMapping("/{id}")
-    ResponseProfileDto updateProfile(
+    ResponseEntity<ResponseProfileDto> updateProfile(
             @Parameter(description = "Updated driver profile data", required = true)
             @PathVariable Long id,
+            @Validated
             @RequestBody RequestProfileDto profileDto);
 
     @Operation(
@@ -111,53 +118,11 @@ public interface ProfileCommandDoc {
             summary = "Set a rate for a driver",
             description = "Sets a new rate for a driver based on the provided data"
     )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "Rate set successfully",
-                    content = @Content(schema = @Schema(implementation = ResponseRateDto.class))
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid input data",
-                    content = @Content(schema = @Schema(implementation = BaseValidationException.class))
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Occurs when the driver or rate is not found",
-                    content = @Content(schema = @Schema(implementation = BaseException.class))
-            )
-    })
-    @PostMapping("/rates")
-    ResponseRateDto setRateToDriver(
-            @Parameter(description = "Rate data to set for the driver", required = true)
-            @Valid
-            @RequestBody RequestRateDto rateDto);
 
-    @Operation(
-            summary = "Delete a rate from a driver",
-            description = "Deletes a specific rate associated with a driver"
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "Rate deleted successfully"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Occurs when the rate is not found",
-                    content = @Content(schema = @Schema(implementation = BaseException.class))
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid input parameters",
-                    content = @Content(schema = @Schema(implementation = BaseException.class))
-            )
-    })
-    @DeleteMapping("/rates/{id}")
-    ResponseEntity<Void> deleteRateFromDriver(
-            @Parameter(description = "Unique identifier of the rate", example = "1", required = true)
-            @PositiveOrZero(message = "id.positive")
-            @Max(value = ValidationConstants.MAX_ID_VALUE, message = "id.maxValue")
-            @PathVariable Long id);
+    @PostMapping("/ride/update-status")
+    ResponseEntity<ChangeRideStatusEvent> updateCurrentRideStatus(
+            @RequestParam String rideId,
+            @Valid
+            @Pattern(regexp = RIDE_STATUS_PATTERN, message = "ride.status.invalidInput")
+            @RequestParam String status);
 }

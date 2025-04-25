@@ -21,13 +21,9 @@ public record RequestProfileDto(
         @NotBlank(message = "lastName.notBlank")
         String lastName,
 
-        @Pattern(regexp = FARE_TYPE_PATTERN, message = "fareType.invalidInput")
-        @NotBlank(message = "fareType.notBlank")
+        @Pattern(regexp = FARE_TYPE_PATTERN, message = "fare.type.invalidInput")
+        @NotBlank(message = "fare.type.notBlank")
         String fareType,
-
-        @Pattern(regexp = DRIVER_STATUS_PATTERN, message = "driverStatus.invalidInput")
-        @NotBlank(message = "driverStatus.notBlank")
-        String driverStatus,
 
         @Pattern(regexp = PHONE_PATTERN, message = "phone.invalidInput")
         @NotBlank(message = "phone.notBlank")
