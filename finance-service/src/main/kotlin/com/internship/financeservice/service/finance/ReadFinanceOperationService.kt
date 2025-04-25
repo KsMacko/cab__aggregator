@@ -15,7 +15,7 @@ import com.internship.financeservice.repo.WalletTransferRepo
 import com.internship.financeservice.service.PageableObjectCreator
 import com.internship.financeservice.service.specification.PaymentSpecification
 import com.internship.financeservice.service.specification.WalletTransferSpecification
-import com.internship.financeservice.utils.FinanceValidationManager
+import com.internship.financeservice.utils.validation.FinanceValidationManager
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

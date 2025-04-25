@@ -1,8 +1,10 @@
 package com.internship.financeservice.service.finance
 
 import com.internship.commonevents.event.ConfirmedPaymentRequest
+import com.internship.financeservice.dto.mapper.PaymentMapper
 import com.internship.financeservice.dto.request.RequestWalletTransferDto
 import com.internship.financeservice.dto.mapper.WalletTransferMapper
+import com.internship.financeservice.dto.response.ResponsePaymentDto
 import com.internship.financeservice.dto.response.ResponseTransferDto
 import com.internship.financeservice.entity.FinancialOperation
 import com.internship.financeservice.entity.Payment
@@ -11,9 +13,9 @@ import com.internship.financeservice.repo.DriverWalletRepo
 import com.internship.financeservice.repo.FinancialOperationRepo
 import com.internship.financeservice.repo.PaymentRepo
 import com.internship.financeservice.repo.WalletTransferRepo
-import com.internship.financeservice.utils.Constants.Companion.SALARY_PERCENT
-import com.internship.financeservice.utils.FinanceValidationManager
-import com.internship.financeservice.utils.WalletValidationManager
+import com.internship.financeservice.utils.validation.Constants.Companion.SALARY_PERCENT
+import com.internship.financeservice.utils.validation.FinanceValidationManager
+import com.internship.financeservice.utils.validation.WalletValidationManager
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
@@ -26,15 +28,16 @@ class CommandFinanceOperationService (
     private val walletTransferRepo: WalletTransferRepo,
     private val financialOperationRepo: FinancialOperationRepo,
     private val walletValidationManager: WalletValidationManager,
-    private val walletRepo: DriverWalletRepo
+    private val walletRepo: DriverWalletRepo,
+    private val paymentMapper: PaymentMapper
 ) {
     @Transactional
     fun createPaymentByCash(event: ConfirmedPaymentRequest){
         createPayment(PaymentType.CASH, event)
     }
     @Transactional
-    fun createPaymentByCard(event: ConfirmedPaymentRequest){
-        createPayment(PaymentType.CARD, event)
+    fun createPaymentByCard(event: ConfirmedPaymentRequest): ResponsePaymentDto{
+        return createPayment(PaymentType.CARD, event)
     }
 
     @Transactional
@@ -51,12 +54,13 @@ class CommandFinanceOperationService (
     private fun createFinancialOperation(amount: BigDecimal): FinancialOperation =
         financialOperationRepo.save(FinancialOperation(amount))
 
-    private fun createPayment(paymentType: PaymentType, event: ConfirmedPaymentRequest) {
+    private fun createPayment(paymentType: PaymentType, event: ConfirmedPaymentRequest):ResponsePaymentDto {
         val financialOperation = createFinancialOperation(event.amount)
         val payment = Payment(event.passengerId, paymentType, financialOperation)
         calculateDriverDeduction(event.amount, event.driverId)
         financialOperationRepo.save(financialOperation)
-        paymentRepo.save(payment)
+        return paymentMapper.toDto(paymentRepo.save(payment))
+
     }
     private fun calculateDriverDeduction(amount: BigDecimal, driverId: Long){
         val driverWallet = walletValidationManager.getWalletIfExistsByDriverId(driverId)

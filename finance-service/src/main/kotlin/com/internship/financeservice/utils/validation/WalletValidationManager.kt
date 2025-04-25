@@ -1,8 +1,9 @@
-package com.internship.financeservice.utils
+package com.internship.financeservice.utils.validation
 
-import com.internship.financeservice.dto.response.WalletDto
 import com.internship.financeservice.entity.DriverWallet
 import com.internship.financeservice.repo.DriverWalletRepo
+import com.internship.financeservice.utils.exceptions.ExceptionCodes
+import com.internship.financeservice.utils.exceptions.ResourceNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -12,6 +13,6 @@ class WalletValidationManager @Autowired constructor(
 ) {
     fun getWalletIfExistsByDriverId(driverId: Long): DriverWallet {
         return walletRepo.findByDriverId(driverId)
-            ?: throw RuntimeException("wallet.notFound")
+            ?: throw ResourceNotFoundException(ExceptionCodes.WALLET_NOT_FOUND.getCode())
     }
 }

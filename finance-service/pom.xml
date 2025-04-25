@@ -14,6 +14,7 @@
 
     <properties>
         <kotlin.version>1.9.25</kotlin.version>
+        <common-events.version>0.0.1-SNAPSHOT</common-events.version>
     </properties>
     <dependencies>
         <dependency>
@@ -36,7 +37,7 @@
         <dependency>
             <groupId>com.internship</groupId>
             <artifactId>common-events</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${common-events.version}</version>
         </dependency>
     </dependencies>
 

@@ -2,6 +2,7 @@ package com.internship.financeservice.controller.command
 
 import com.internship.commonevents.event.ConfirmedPaymentRequest
 import com.internship.financeservice.dto.request.RequestWalletTransferDto
+import com.internship.financeservice.dto.response.ResponsePaymentDto
 import com.internship.financeservice.dto.response.ResponseTransferDto
 import com.internship.financeservice.service.finance.CommandFinanceOperationService
 import com.internship.financeservice.service.wallet.WalletService
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 
 @RestController
 @RequestMapping("api/v1/finance")
@@ -22,15 +24,22 @@ class CommandFinanceController (
     @PostMapping("/payment")
     private fun createCardPayment(
         @RequestBody payment: ConfirmedPaymentRequest
-    ):ResponseEntity<Void>{
-        commandFinanceOperationService.createPaymentByCard(payment)
-        return ResponseEntity.ok().build()
+    ):ResponsePaymentDto{
+        return commandFinanceOperationService.createPaymentByCard(payment)
     }
     @PostMapping("/wallet-transfer")
     private fun createWalletTransfer(
         @RequestBody requestWalletTransferDto: RequestWalletTransferDto
-    ):ResponseTransferDto{
-        return commandFinanceOperationService.createWalletTransfer(requestWalletTransferDto)
+    ):ResponseEntity<ResponseTransferDto>{
+        val  walletTransfer = commandFinanceOperationService.createWalletTransfer(requestWalletTransferDto)
+        val location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(walletTransfer.id)
+            .toUri()
+        return ResponseEntity
+            .created(location)
+            .body(walletTransfer)
     }
     @PostMapping("/wallet/driver/{id}")
     fun createWallet(@PathVariable id:Long): ResponseEntity<Void> {

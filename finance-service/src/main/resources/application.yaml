@@ -17,5 +17,8 @@ spring:
     broker-url: tcp://localhost:61616
     user: admin
     password: admin
+  messages:
+    basename: messages
+    encoding: UTF-8
 server:
   port: 8084

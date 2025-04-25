@@ -8,7 +8,7 @@ import com.internship.financeservice.entity.Card
 import com.internship.financeservice.repo.CardRepo
 import com.internship.financeservice.service.PageableObjectCreator
 import com.internship.financeservice.service.specification.CardSpecification
-import com.internship.financeservice.utils.CardValidationManager
+import com.internship.financeservice.utils.validation.CardValidationManager
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

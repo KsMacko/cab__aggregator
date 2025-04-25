@@ -8,11 +8,10 @@ import com.internship.financeservice.entity.DriverWallet
 import com.internship.financeservice.repo.DriverWalletRepo
 import com.internship.financeservice.service.PageableObjectCreator
 import com.internship.financeservice.service.specification.DriverWalletSpecification
-import com.internship.financeservice.utils.WalletValidationManager
+import com.internship.financeservice.utils.validation.WalletValidationManager
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.math.BigDecimal
 
 @Service
 class WalletService(

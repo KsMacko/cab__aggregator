@@ -1,4 +1,4 @@
-package com.internship.financeservice.utils
+package com.internship.financeservice.utils.validation
 
 import java.math.BigDecimal
 
