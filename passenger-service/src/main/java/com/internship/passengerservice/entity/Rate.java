@@ -33,6 +33,8 @@ public class Rate {
     private Byte value;
     @Column(nullable = false)
     private Long authorId;
+    @Column(nullable = false)
+    private String rideId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

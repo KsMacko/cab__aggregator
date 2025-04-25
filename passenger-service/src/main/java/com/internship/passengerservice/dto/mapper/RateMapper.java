@@ -1,5 +1,6 @@
 package com.internship.passengerservice.dto.mapper;
 
+import com.internship.passengerservice.dto.request.RequestRateDto;
 import com.internship.passengerservice.dto.response.ResponseRateDto;
 import com.internship.passengerservice.entity.Rate;
 import org.mapstruct.Mapper;
@@ -12,7 +13,7 @@ public interface RateMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "passenger", ignore = true)
-    Rate handleDto(ResponseRateDto dto);
-
+    Rate handleDto(RequestRateDto dto);
+    @Mapping(target = "recipientId", source = "passenger.profileId")
     ResponseRateDto handleEntity(Rate entity);
 }

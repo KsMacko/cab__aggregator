@@ -1,5 +1,6 @@
 package com.internship.passengerservice.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +36,6 @@ public class PassengerProfile {
     private String email;
     @Column(nullable = false, unique = true)
     private String phone;
-    private String activatedPromoCodeId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -43,6 +43,6 @@ public class PassengerProfile {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "passenger")
+    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rate> rates;
 }

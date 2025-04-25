@@ -1,6 +1,7 @@
 package com.internship.passengerservice.service;
 
 import com.internship.passengerservice.dto.request.RequestProfileDto;
+import com.internship.passengerservice.dto.request.RequestRateDto;
 import com.internship.passengerservice.dto.response.ResponseProfileDto;
 import com.internship.passengerservice.dto.response.ResponseRateDto;
 import com.internship.passengerservice.dto.mapper.ProfileMapper;
@@ -33,13 +34,13 @@ public class CommandPassengerProfileService {
     }
 
     @Transactional
-    public ResponseProfileDto updatePassengerProfile(Long profileId, RequestProfileDto profileDto) {
+    public PassengerProfile updatePassengerProfile(Long profileId, RequestProfileDto profileDto) {
         profileValidationManager.checkProfileToUpdate(profileDto);
         profileValidationManager.checkIfProfileExists(profileId);
         PassengerProfile existingProfile = profileValidationManager.getProfileByIdIfExists(profileId);
         profileMapper.updateEntity(profileDto, existingProfile);
 
-        return profileMapper.handleEntity(passengerProfileRepo.save(existingProfile));
+        return passengerProfileRepo.save(existingProfile);
     }
 
     @Transactional
@@ -50,14 +51,14 @@ public class CommandPassengerProfileService {
     }
 
     @Transactional
-    public ResponseRateDto setNewRate(ResponseRateDto rateDto) {
-        profileValidationManager.checkIfProfileExists(rateDto.id());
+    public ResponseRateDto setNewRate(RequestRateDto rateDto) {
+        profileValidationManager.checkIfProfileExists(rateDto.recipientId());
         return rateMapper.handleEntity(rateRepo.save(rateMapper.handleDto(rateDto)));
     }
 
     @Transactional
-    public void deleteRate(Long rateId) {
-        rateValidationManager.checkIfRateExists(rateId);
+    public void deleteRate(Long driverId, Long rateId) {
+        rateValidationManager.checkRateAuthor(driverId, rateId);
         rateRepo.deleteById(rateId);
     }
 }

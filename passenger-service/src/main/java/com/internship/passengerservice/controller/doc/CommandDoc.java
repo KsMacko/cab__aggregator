@@ -1,6 +1,7 @@
 package com.internship.passengerservice.controller.doc;
 
 import com.internship.passengerservice.dto.request.RequestProfileDto;
+import com.internship.passengerservice.dto.response.ResponseRateDto;
 import com.internship.passengerservice.utils.exceptions.BaseException;
 import com.internship.passengerservice.utils.exceptions.BaseValidationException;
 import com.internship.passengerservice.dto.response.ResponseProfileDto;
@@ -15,6 +16,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,12 +71,12 @@ public interface CommandDoc {
             )
     })
     @PutMapping("/{id}")
-    ResponseProfileDto updatePassenger(
+    ResponseEntity<ResponseProfileDto> updatePassenger(
             @Parameter(description = "Unique identifier of the passenger", example = "1", required = true)
             @Positive(message = "id.positive")
             @Max(value = MAX_ID_VALUE, message = "profile.id.maxValue")
             @PathVariable Long id,
-            @Valid
+            @Validated
             @RequestBody RequestProfileDto profileDto);
 
     @Operation(
@@ -99,7 +101,7 @@ public interface CommandDoc {
             )
     })
     @DeleteMapping("/{id}")
-    void deletePassenger(
+    ResponseEntity<Void> deletePassenger(
             @Parameter(description = "Unique identifier of the passenger", example = "1", required = true)
             @Positive(message = "id.positive")
             @Max(value = MAX_ID_VALUE, message = "profile.id.maxValue")

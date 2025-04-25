@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public record ResponseProfileDto(
         Long profileId,
         String firstName,
-        String activatedPromoCodeId,
         String email,
         String phone,
         LocalDateTime createdAt,

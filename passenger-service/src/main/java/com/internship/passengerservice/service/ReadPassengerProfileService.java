@@ -33,9 +33,8 @@ public class ReadPassengerProfileService {
     private final ProfileMapper profileMapper;
 
     @Transactional(readOnly = true)
-    public ResponseProfileDto readPassengerProfile(Long id) {
-        PassengerProfile passengerProfile = validationManager.getProfileByIdIfExists(id);
-        return profileMapper.handleEntity(passengerProfile);
+    public PassengerProfile readPassengerProfile(Long id) {
+        return validationManager.getProfileByIdIfExists(id);
     }
 
     @Transactional(readOnly = true)

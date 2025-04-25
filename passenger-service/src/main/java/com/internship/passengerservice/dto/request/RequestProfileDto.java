@@ -15,7 +15,6 @@ public record RequestProfileDto(
         @Size(max = MAX_NAME_LENGTH, message = "firstName.size")
         @NotBlank(message = "firstName.notBlank")
         String firstName,
-        String activatedPromoCodeId,
         @Pattern(regexp = EMAIL_PATTERN, message = "email.invalidInput")
         @Size(max = MAX_EMAIL_LENGTH, message = "email.invalidSize")
         @NotBlank(message = "email.notBlank")
